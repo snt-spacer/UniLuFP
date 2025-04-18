@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="levion_arm_materials">
+  <xacro:macro name="levion_black">
+    <material name="levion_black">
+      <color rgba="0.3 0.3 0.3 1.0"/>
+      <!-- <texture filename="$(find levion_arm_ros2_control)/description/config/levion_black.png"/> -->
+    </material>
+  </xacro:macro>
+</robot>

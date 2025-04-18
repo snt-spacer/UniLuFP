@@ -1,0 +1,12 @@
+---
+; Use Google style as a base
+BasedOnStyle: Google
+
+; Overwrite column max length
+ColumnLimit: 100
+
+; Overwrite access modifier like "private", "public" by ROS style
+AccessModifierOffset: -2 
+
+; Make new line after the template statement
+BreakBeforeBraces: Allman

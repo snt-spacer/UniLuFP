@@ -1,0 +1,21 @@
+# Configuration file for joint limit calibration
+# This file is used to define the joint limits for the Levion Arm.
+
+joint_names:
+  - ak80-8
+
+effort_thresholds:
+  - 0.5  # Threshold to detect collision
+
+joint_limits:
+  - 0.349 # 20 degrees
+
+can_bus:
+  - can0
+
+can_ids:
+  - 104
+
+# calibration_parameters:
+#   tolerance: 0.01  # Tolerance for calibration in radians
+#   max_attempts: 5  # Maximum number of calibration attempts

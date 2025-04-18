@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- include macros -->
+<xacro:include filename="$(find levion_arm_ros2_control)/config/ak80_8.macros.xacro"/>
+<xacro:include filename="$(find levion_arm_ros2_control)/config/ak80_8.property.xacro"/>
+
+<ros2_control name="ak80_8" type="system">
+  <hardware>
+    <plugin>cubemars_hardware/CubeMarsSystemHardware</plugin>
+    <param name="can_interface">can0</param>
+  </hardware>
+
+  <xacro:ak80_8_ros2_control
+    joint_name="ak_80_8"
+    can_id="104"
+    pos_min="${shoulder_joint_pos_limit_min}"
+    pos_max="${shoulder_joint_pos_limit_max}"
+    vel_limit="${default_joint_velocity_limit}"
+    effort_limit="${default_joint_effort_limit}"/>
+</ros2_control>
+</robot>

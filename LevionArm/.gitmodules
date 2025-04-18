@@ -1,0 +1,3 @@
+[submodule "cubemars_hardware"]
+	path = cubemars_hardware
+	url = git@github.com:aky-u/cubemars_hardware.git
