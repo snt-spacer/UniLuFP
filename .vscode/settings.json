@@ -1,10 +1,14 @@
 {
   "cSpell.words": [
+    "BOOTPROTO",
     "bringup",
     "colcon",
     "cubemars",
     "Holybro",
+    "Jetson",
     "levion",
+    "microsd",
+    "Pixhawk",
     "rclcpp",
     "rosdep",
     "rviz",
