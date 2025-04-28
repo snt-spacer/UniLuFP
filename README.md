@@ -19,6 +19,7 @@ Install QGC (default) from [here](https://docs.qgroundcontrol.com/master/en/qgc-
 ## Jetson setup
 
 Currently, using personal Android as a wi-fi rooter. TODO: Need to update ssh to use in ZeoG.
+Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard.html#jetson-network-ssh-login).
 
 ```host PC
 ssh spacer@192.168.236.210
@@ -26,8 +27,12 @@ ssh spacer@192.168.236.210
 
 Change Ethernet name from enP8p1s0 to eth0 (not permanent. Edit rules later.)
 
-```bash
+```bash spacer@jetson-pix
 sudo ip link set enP8p1s0 down
 sudo ip link set enP8p1s0 name eth0
 sudo ip link set eth0 up
+```
+
+```bash spacer@jetson-pix
+ping 10.41.10.2
 ```
