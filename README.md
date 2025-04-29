@@ -36,3 +36,25 @@ sudo ip link set eth0 up
 ```bash spacer@jetson-pix
 ping 10.41.10.2
 ```
+
+```bash
+sudo hostnamectl set-hostname spacer
+```
+
+### Set the hostname
+
+```bash
+sudo vim /etc/hosts
+```
+
+```/etc/hosts
+127.0.0.1 localhost
+127.0.1.1 spacer
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+```
