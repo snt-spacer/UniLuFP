@@ -2,6 +2,8 @@
 
 ## Pixhawk setup
 
+Flash Pixhawk following the instructions from [here](https://atmos.discower.io/pages/PX4/).
+
 TODO: Currently using default instead of space
 Install QGC (default) from [here](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/releases/daily_builds.html).
 
@@ -18,6 +20,8 @@ Install QGC (default) from [here](https://docs.qgroundcontrol.com/master/en/qgc-
 
 ## Jetson setup
 
+### Connect via SSH
+
 Currently, using personal Android as a wi-fi rooter. TODO: Need to update ssh to use in ZeoG.
 Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard.html#jetson-network-ssh-login).
 
@@ -26,6 +30,8 @@ ssh spacer@192.168.236.210
 ```
 
 ### Set up ethernet
+
+Inherited from [here](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard.html#ethernet-setup-using-netplan).
 
 ```bash
 sudo nano /etc/netplan/01-netcfg.yaml
@@ -84,4 +90,39 @@ fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
+```
+
+### Add Rules
+
+```bash
+sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/rules/* /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+### Mavlink
+
+```bash
+sudo apt install git meson ninja-build pkg-config gcc g++ systemd
+sudo pip3 install meson
+git clone git@github.com:mavlink-router/mavlink-router.git ~/mavlink_router
+cd ~/mavlink_router
+git submodule update --init --recursive
+meson setup build .
+sudo ninja -C build install
+sudo mkdir -p /etc/mavlink-router/
+sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/mavlink.conf/* /etc/mavlink-router/
+```
+
+### Add the startup service
+
+```bash
+sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable px4_comm
+sudo systemctl start px4_comm
+sudo systemctl enable vehicle_mocap_odom
+sudo systemctl start vehicle_mocap_odom
+sudo systemctl enable mavlink_router
+sudo systemctl start mavlink_router
 ```
