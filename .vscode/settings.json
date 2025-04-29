@@ -18,7 +18,8 @@
     "routerd",
     "rviz",
     "URDF",
-    "xacro"
+    "xacro",
+    "xrce"
   ],
   "files.associations": {
     "limits": "cpp",

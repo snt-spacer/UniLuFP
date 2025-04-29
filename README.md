@@ -18,6 +18,10 @@ Install QGC (default) from [here](https://docs.qgroundcontrol.com/master/en/qgc-
 > echo DNS=10.41.10.254 > /fs/microsd/net.cfg
 > ```
 
+```nsh
+param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
+```
+
 ## Jetson setup
 
 ### Connect via SSH
