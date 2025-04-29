@@ -1,0 +1,10 @@
+[Unit]
+Description=MAVLink Router
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/mavlink-routerd -c /etc/mavlink-router/main.conf
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -25,7 +25,34 @@ Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_p
 ssh spacer@192.168.236.210
 ```
 
-Change Ethernet name from enP8p1s0 to eth0 (not permanent. Edit rules later.)
+### Set up ethernet
+
+```bash
+sudo nano /etc/netplan/01-netcfg.yaml
+```
+
+```sh
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enP8p1s0:
+      dhcp4: no
+      addresses:
+        - 10.41.10.1/24
+      routes:
+        - to: 0.0.0.0/0
+          via: 10.41.10.254
+      nameservers:
+        addresses:
+          - 10.41.10.254
+```
+
+```bash
+sudo netplan apply
+```
+
+Change Ethernet name from enP8p1s0 to eth0 (not permanent. Maybe not needed.)
 
 ```bash spacer@jetson-pix
 sudo ip link set enP8p1s0 down
