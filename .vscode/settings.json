@@ -15,6 +15,7 @@
     "Pixhawk",
     "rclcpp",
     "rosdep",
+    "routerd",
     "rviz",
     "URDF",
     "xacro"

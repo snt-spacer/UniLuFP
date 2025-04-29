@@ -92,12 +92,10 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ```
 
-### Add Rules
+### Download repository
 
 ```bash
-sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/rules/* /etc/udev/rules.d/
-sudo udevadm control --reload-rules
-sudo udevadm trigger
+chmod +x /home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/px4_comm.sh
 ```
 
 ### Mavlink
@@ -112,6 +110,14 @@ meson setup build .
 sudo ninja -C build install
 sudo mkdir -p /etc/mavlink-router/
 sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/mavlink.conf/* /etc/mavlink-router/
+```
+
+### Add Rules
+
+```bash
+sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/rules/* /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger
 ```
 
 ### Add the startup service
