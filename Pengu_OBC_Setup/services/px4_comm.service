@@ -1,0 +1,11 @@
+[Unit]
+Description=Communicate with PX4
+
+[Service]
+ExecStart=/home/spacer/UniLuFP/Pengu_OBC_Setup/scripts/px4_comm.sh
+User=spacer
+Type=forking
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target

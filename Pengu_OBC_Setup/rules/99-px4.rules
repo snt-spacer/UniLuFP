@@ -1,0 +1,1 @@
+SUBSYSTEM=="tty", ATTRS{idVendor}=="3185", ATTRS{idProduct}=="0035", SYMLINK+="ttyPX4", MODE="0666"
