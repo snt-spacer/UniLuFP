@@ -65,17 +65,17 @@ cansend can0 000005CC#01 # 204
 
 ```bash
 source install/setup.bash
-ros2 launch levion_arm_ros2_control ak80_8..launch.py # launch single motor controller with default type = position
+ros2 launch levion_arm_ros2_control ak80_8.launch.py # launch single motor controller with default type = position
 ```
 
 ```bash
 source install/setup.bash
-ros2 launch levion_arm_ros2_control ak80_8..launch.py controller_type:=forward_velocity_controller # launch velocity controller
+ros2 launch levion_arm_ros2_control ak80_8.launch.py controller_type:=forward_velocity_controller # launch velocity controller
 ```
 
 ```bash
 source install/setup.bash
-ros2 launch levion_arm_ros2_control ak80_8..launch.py controller_type:=forward_effort_controller # launch effort controller
+ros2 launch levion_arm_ros2_control ak80_8.launch.py controller_type:=forward_effort_controller # launch effort controller
 ```
 
 ### Launch the arm

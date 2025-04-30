@@ -10,12 +10,6 @@ param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
 
 ## Jetson setup
 
-First clone this repo at your home directory.
-
-```bash
-git clone 
-```
-
 ### Connect via SSH
 
 Currently, using personal Android as a wi-fi rooter. TODO: Set static IP through ZeroG wi-fi.
@@ -24,6 +18,19 @@ Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_p
 ```host PC
 ssh spacer@192.168.177.210 # "177" can be changed.
 ```
+
+### Clone the repo
+
+First clone this repo at into home directory.
+
+```bash
+git clone --recurse-submodules https://github.com/snt-spacer/UniLuFP.git
+```
+
+> [!NOTE]
+> If you have cloned without submodules, use the following command to clone submodules.
+>
+> `git submodule update --init --recursive`
 
 ### Setup ethernet
 
