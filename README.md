@@ -54,9 +54,16 @@ sudo netplan apply
 ```
 
 >[!Note]
+> If you have internet connection error after configuring ether net, change the priority.
 >
 > ```bash
 > sudo nano /etc/systemd/resolved.conf
+> ```
+>
+> ```ini
+> [Resolve]
+> DNS=8.8.8.8
+> FallbackDNS=1.1.1.1
 > ```
 
 ```bash spacer@jetson-pix
