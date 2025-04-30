@@ -1,0 +1,11 @@
+[Unit]
+Description=Setup CAN interface can0
+After=network.target
+
+[Service]
+ExecStart=/home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/can0_setup.sh
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
