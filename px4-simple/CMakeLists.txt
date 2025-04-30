@@ -27,7 +27,7 @@ include_directories(
 # )
 
 # ----------------------- Python settings -----------------------
-# ament_python_install_package(${PROJECT_NAME})
+ament_python_install_package(${PROJECT_NAME})
 
 # # install Python executables
 # install(PROGRAMS
