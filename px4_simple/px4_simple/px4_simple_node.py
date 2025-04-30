@@ -102,7 +102,7 @@ class MinimalPublisherPX4(Node):
         self.publisher_offboard_mode.publish(offboard_msg)
 
         u_command = np.zeros((1, 12))
-        u_command[0, 0] = 1.0
+        u_command[0, 3] = 1.0
         self.publish_direct_actuator_setpoint(u_command)
 
 
