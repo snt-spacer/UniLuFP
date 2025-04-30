@@ -19,7 +19,7 @@ Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_p
 ssh spacer@192.168.177.210 # "177" can be changed.
 ```
 
-### Clone the repo
+### Clone UniFP repository
 
 First clone this repo at into home directory.
 
@@ -111,13 +111,9 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ```
 
-### Download repository
+### Setup Mavlink
 
-```bash
-chmod +x /home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/px4_comm.sh
-```
-
-### Mavlink
+Download and build Mavlink.
 
 ```bash
 sudo apt install git meson ninja-build pkg-config gcc g++ systemd
@@ -146,6 +142,10 @@ sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable px4_comm
 sudo systemctl start px4_comm
+sudo systemctl start arms_comm.sh
+sudo systemctl enable arms_comm.sh 
+sudo systemctl start can0_setup.sh
+sudo systemctl enable can0_setup.sh
 sudo systemctl enable mavlink_router
 sudo systemctl start mavlink_router
 ```
