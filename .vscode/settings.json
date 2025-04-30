@@ -20,6 +20,7 @@
     "Pingu",
     "Pixhawk",
     "rclcpp",
+    "rclpy",
     "rosdep",
     "routerd",
     "rviz",
