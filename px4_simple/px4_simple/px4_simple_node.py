@@ -16,6 +16,8 @@ class MinimalPublisherPX4(Node):
 
     def __init__(self):
         super().__init__('minimal_publisher_to_px4')
+        self.namespace_prefix = '/spacer'
+        
         
         # QoS profiles
         qos_profile_pub = QoSProfile(
