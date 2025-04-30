@@ -2,7 +2,7 @@
 
 ## Pixhawk setup
 
-Flash Pixhawk following the instructions from [here](https://atmos.discower.io/pages/PX4/).
+Inherited from [here](https://atmos.discower.io/pages/PX4/).
 
 ```nsh
 param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
@@ -10,13 +10,19 @@ param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
 
 ## Jetson setup
 
+First clone this repo at your home directory.
+
+```bash
+git clone 
+```
+
 ### Connect via SSH
 
 Currently, using personal Android as a wi-fi rooter. TODO: Set static IP through ZeroG wi-fi.
 Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard.html#jetson-network-ssh-login).
 
 ```host PC
-ssh spacer@192.168.xxx.210 # xxx changes every time.
+ssh spacer@192.168.177.210 # "177" can be changed.
 ```
 
 ### Setup ethernet
@@ -53,6 +59,12 @@ Then apply settings.
 sudo netplan apply
 ```
 
+Check connection between Pixhawk.
+
+```bash spacer@jetson-pix
+ping 10.41.10.2
+```
+
 >[!Note]
 > If you have internet connection error after configuring ether net, change the priority.
 >
@@ -65,16 +77,16 @@ sudo netplan apply
 > DNS=8.8.8.8
 > FallbackDNS=1.1.1.1
 > ```
+>
+> ```bash
+> ping google.com
+> ```
 
-```bash spacer@jetson-pix
-ping 10.41.10.2
-```
+### Set the hostname
 
 ```bash
 sudo hostnamectl set-hostname spacer
 ```
-
-### Set the hostname
 
 ```bash
 sudo vim /etc/hosts
@@ -129,4 +141,11 @@ sudo systemctl enable px4_comm
 sudo systemctl start px4_comm
 sudo systemctl enable mavlink_router
 sudo systemctl start mavlink_router
+```
+
+### Levion arm setting
+
+```bash
+cd fp_ws/src
+ln -s ~/UniLuFP/LevionArm/
 ```
