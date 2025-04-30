@@ -10,4 +10,4 @@ source /opt/ros/humble/setup.bash
 
 # Launch the ros2 control with default controller
 source /home/spacer/fp_ws/install/setup.bash
-ros2 launch /home/spacer/fp_ws/levion_arm_ros2_control ak80_8.launch.py
+ros2 launch levion_arm_ros2_control ak80_8.launch.py

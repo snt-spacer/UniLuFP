@@ -138,14 +138,18 @@ sudo udevadm trigger
 ### Add the startup service
 
 ```bash
+chmod +x /home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/**
+```
+
+```bash
 sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable px4_comm
 sudo systemctl start px4_comm
-sudo systemctl start arms_comm.sh
-sudo systemctl enable arms_comm.sh 
-sudo systemctl start can0_setup.sh
-sudo systemctl enable can0_setup.sh
+sudo systemctl start can0_setup
+sudo systemctl enable can0_setup
+sudo systemctl start arms_comm
+sudo systemctl enable arms_comm
 sudo systemctl enable mavlink_router
 sudo systemctl start mavlink_router
 ```
