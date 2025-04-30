@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'px4_simple_node = px4_simple.px4_simple_node:main',
+            'px4_simple_node = px4-simple.px4_simple_node:main',
         ],
     },
 )
