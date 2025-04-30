@@ -4,20 +4,6 @@
 
 Flash Pixhawk following the instructions from [here](https://atmos.discower.io/pages/PX4/).
 
-TODO: Currently using default instead of space
-Install QGC (default) from [here](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/releases/daily_builds.html).
-
-> FIXME: I could not change pixhawk network setting by the following steps. ([Reference](https://docs.px4.io/main/en/advanced_config/ethernet_setup.html))
->
-> ```MAVLink Console (QGC > Analyze Tools)
-> echo DEVICE=enP8p1s0 > /fs/microsd/net.cfg
-> echo BOOTPROTO=fallback > /fs/microsd/net.cfg
-> echo IPADDR=10.41.10.2 > /fs/microsd/net.cfg
-> echo NETMASK=255.255.255.0 > /fs/microsd/net.cfg
-> echo ROUTER=10.41.10.254 > /fs/microsd/net.cfg
-> echo DNS=10.41.10.254 > /fs/microsd/net.cfg
-> ```
-
 ```nsh
 param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
 ```
@@ -26,16 +12,19 @@ param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
 
 ### Connect via SSH
 
-Currently, using personal Android as a wi-fi rooter. TODO: Need to update ssh to use in ZeoG.
+Currently, using personal Android as a wi-fi rooter. TODO: Set static IP through ZeroG wi-fi.
 Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard.html#jetson-network-ssh-login).
 
 ```host PC
-ssh spacer@192.168.236.210
+ssh spacer@192.168.xxx.210 # xxx changes every time.
 ```
 
-### Set up ethernet
+### Setup ethernet
 
 Inherited from [here](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard.html#ethernet-setup-using-netplan).
+
+You need to setup ethernet communication between Pixhawk and Jetson.
+Make config file using the following command, and copy the setting below. The default IP is `10.41.10.1`.
 
 ```bash
 sudo nano /etc/netplan/01-netcfg.yaml
@@ -58,17 +47,17 @@ network:
           - 10.41.10.254
 ```
 
+Then apply settings.
+
 ```bash
 sudo netplan apply
 ```
 
-Change Ethernet name from enP8p1s0 to eth0 (not permanent. Maybe not needed.)
-
-```bash spacer@jetson-pix
-sudo ip link set enP8p1s0 down
-sudo ip link set enP8p1s0 name eth0
-sudo ip link set eth0 up
-```
+>[!Note]
+>
+> ```bash
+> sudo nano /etc/systemd/resolved.conf
+> ```
 
 ```bash spacer@jetson-pix
 ping 10.41.10.2
@@ -131,8 +120,6 @@ sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable px4_comm
 sudo systemctl start px4_comm
-sudo systemctl enable vehicle_mocap_odom
-sudo systemctl start vehicle_mocap_odom
 sudo systemctl enable mavlink_router
 sudo systemctl start mavlink_router
 ```

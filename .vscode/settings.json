@@ -9,6 +9,7 @@
     "levion",
     "Mavlink",
     "microsd",
+    "mocap",
     "netcfg",
     "netplan",
     "Pingu",
@@ -17,6 +18,7 @@
     "rosdep",
     "routerd",
     "rviz",
+    "udevadm",
     "URDF",
     "xacro",
     "xrce"
