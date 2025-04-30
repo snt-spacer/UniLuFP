@@ -148,10 +148,10 @@ sudo systemctl enable px4_comm
 sudo systemctl start px4_comm
 sudo systemctl start can0_setup
 sudo systemctl enable can0_setup
-sudo systemctl start arms_comm
-sudo systemctl enable arms_comm
 sudo systemctl enable mavlink_router
 sudo systemctl start mavlink_router
+sudo systemctl start arms_comm # FIXME: Has error
+sudo systemctl enable arms_comm # FIXME: Has error
 ```
 
 ### Levion arm setting
