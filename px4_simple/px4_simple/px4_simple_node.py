@@ -2,7 +2,12 @@ import rclpy
 import numpy as np
 from rclpy.node import Node
 from rclpy.clock import Clock
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy, QoSDurabilityPolicy
+from rclpy.qos import (
+    QoSProfile,
+    QoSReliabilityPolicy,
+    QoSHistoryPolicy,
+    QoSDurabilityPolicy,
+)
 
 from nav_msgs.msg import Path, Odometry
 from geometry_msgs.msg import PoseStamped
@@ -11,52 +16,79 @@ from visualization_msgs.msg import Marker
 from px4_msgs.msg import OffboardControlMode
 from px4_msgs.msg import VehicleStatus
 from px4_msgs.msg import ActuatorMotors
+from px4_msgs.msg import VehicleCommand
+
 
 class MinimalPublisherPX4(Node):
 
     def __init__(self):
-        super().__init__('minimal_publisher_to_px4')
-        self.namespace_prefix = '/spacer'
-        
-        
+        super().__init__("minimal_publisher_to_px4")
+        self.namespace_prefix = "/spacer"
+
         # QoS profiles
         qos_profile_pub = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
             history=QoSHistoryPolicy.KEEP_LAST,
-            depth=0
+            depth=0,
         )
 
         qos_profile_sub = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             durability=QoSDurabilityPolicy.VOLATILE,
             history=QoSHistoryPolicy.KEEP_LAST,
-            depth=0
+            depth=0,
         )
 
         self.status_sub = self.create_subscription(
             VehicleStatus,
-            f'{self.namespace_prefix}/fmu/out/vehicle_status',
+            f"{self.namespace_prefix}/fmu/out/vehicle_status",
             self.vehicle_status_callback,
-            qos_profile_sub)
-        
+            qos_profile_sub,
+        )
+
+        self.publisher_vehicle_command = self.create_publisher(
+            VehicleCommand,
+            f"{self.namespace_prefix}/fmu/in/vehicle_command",
+            qos_profile_pub,
+        )
+
         self.publisher_offboard_mode = self.create_publisher(
             OffboardControlMode,
-            f'{self.namespace_prefix}/fmu/in/offboard_control_mode',
-            qos_profile_pub)
-        
+            f"{self.namespace_prefix}/fmu/in/offboard_control_mode",
+            qos_profile_pub,
+        )
+
         self.publisher_direct_actuator = self.create_publisher(
             ActuatorMotors,
-            f'{self.namespace_prefix}/fmu/in/actuator_motors',
-            qos_profile_pub)
-        
+            f"{self.namespace_prefix}/fmu/in/actuator_motors",
+            qos_profile_pub,
+        )
+
         timer_period = 0.1  # seconds
         self.timer = self.create_timer(timer_period, self.cmdloop_callback)
 
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
 
+        # Enable arm
+        self.arm()
+
     def vehicle_status_callback(self, msg):
         self.nav_state = msg.nav_state
+
+    def arm(self):
+        msg = VehicleCommand()
+        msg.timestamp = int(Clock().now().nanoseconds / 1000)
+        msg.param1 = 1.0  # 1 to arm
+        msg.param2 = 0.0
+        msg.command = VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM
+        msg.target_system = 1
+        msg.target_component = 1
+        msg.source_system = 1
+        msg.source_component = 1
+        msg.from_external = True
+        self.publisher_vehicle_command.publish(msg)
+        self.get_logger().info("Sent arm command")
 
     def publish_direct_actuator_setpoint(self, u_command):
         actuator_outputs_msg = ActuatorMotors()
@@ -88,7 +120,6 @@ class MinimalPublisherPX4(Node):
         actuator_outputs_msg.control = thrust_command.flatten()
         self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
-
     def cmdloop_callback(self):
         # Publish offboard control modes
         offboard_msg = OffboardControlMode()
@@ -106,7 +137,6 @@ class MinimalPublisherPX4(Node):
         self.publish_direct_actuator_setpoint(u_command)
 
 
-
 def main(args=None):
     rclpy.init(args=args)
 
@@ -117,5 +147,5 @@ def main(args=None):
     rclpy.shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
