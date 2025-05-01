@@ -154,6 +154,15 @@ sudo systemctl start arms_comm # FIXME: Has error
 sudo systemctl enable arms_comm # FIXME: Has error
 ```
 
+### Install ros2 humble
+
+Follow instruction.
+
+```bash
+echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+echo "source /home/spacer/fp_ws/install/setup.bash" >> ~/.bashrc
+```
+
 ### Levion arm setting
 
 ```bash
