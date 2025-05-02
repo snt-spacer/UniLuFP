@@ -70,25 +70,64 @@ class MinimalPublisherPX4(Node):
 
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
 
+        # Enable direct actuator mode
+        self.enable_offboard_control()
+
         # Enable arm
         self.arm()
+
+    def arm(self):
+        self.get_logger().info("Arming vehicle")
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM, 1.0, 0.0
+        )
+
+    def enable_offboard_control(self):
+        self.get_logger().info("Enabling offboard control")
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_DO_SET_MODE,
+            1.0,
+            6.0,  # Offboard mode
+        )
+
+    def enable_direct_actuator_mode(self):
+        self.get_logger().info("Enabling direct actuator mode")
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_DO_SET_MODE,
+            1.0,
+            7.0,  # Direct actuator mode
+        )
 
     def vehicle_status_callback(self, msg):
         self.nav_state = msg.nav_state
 
-    def arm(self):
+    def publish_vehicle_command(self, command, param1=0.0, param2=0.0):
         msg = VehicleCommand()
         msg.timestamp = int(Clock().now().nanoseconds / 1000)
-        msg.param1 = 1.0  # 1 to arm
-        msg.param2 = 0.0
-        msg.command = VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM
-        msg.target_system = 1
+        msg.command = command
+        msg.param1 = param1
+        msg.param2 = param2
+        msg.target_system = 2
         msg.target_component = 1
-        msg.source_system = 1
-        msg.source_component = 1
+        msg.source_system = 1  # your node ID
+        msg.source_component = 100  # your component ID
         msg.from_external = True
         self.publisher_vehicle_command.publish(msg)
-        self.get_logger().info("Sent arm command")
+        self.get_logger().info(
+            f"Sent command: {command}, param1: {param1}, param2: {param2}"
+        )
+
+    def publish_direct_actuator_mode(self):
+        offboard_msg = OffboardControlMode()
+        offboard_msg.timestamp = int(Clock().now().nanoseconds / 1000)
+        offboard_msg.position = False
+        offboard_msg.velocity = False
+        offboard_msg.acceleration = False
+        offboard_msg.attitude = False
+        offboard_msg.body_rate = False
+        offboard_msg.direct_actuator = True
+        self.publisher_offboard_mode.publish(offboard_msg)
+        self.get_logger().info("Sent direct actuator mode")
 
     def publish_direct_actuator_setpoint(self, u_command):
         actuator_outputs_msg = ActuatorMotors()
@@ -121,20 +160,10 @@ class MinimalPublisherPX4(Node):
         self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
     def cmdloop_callback(self):
-        # Publish offboard control modes
-        offboard_msg = OffboardControlMode()
-        offboard_msg.timestamp = int(Clock().now().nanoseconds / 1000)
-        offboard_msg.position = False
-        offboard_msg.velocity = False
-        offboard_msg.acceleration = False
-        offboard_msg.attitude = False
-        offboard_msg.body_rate = False
-        offboard_msg.direct_actuator = True
-        self.publisher_offboard_mode.publish(offboard_msg)
-
-        u_command = np.zeros((1, 12))
-        u_command[0, 3] = 1.0
-        self.publish_direct_actuator_setpoint(u_command)
+        self.publish_direct_actuator_mode()
+        # u_command = np.zeros((1, 12))
+        # u_command[0, 3] = 1.0
+        # self.publish_direct_actuator_setpoint(u_command)
 
 
 def main(args=None):

@@ -139,9 +139,6 @@ sudo udevadm trigger
 
 ```bash
 chmod +x /home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/**
-```
-
-```bash
 sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable px4_comm
@@ -169,3 +166,15 @@ echo "source /home/spacer/fp_ws/install/setup.bash" >> ~/.bashrc
 cd fp_ws/src
 ln -s ~/UniLuFP/LevionArm/
 ```
+
+### Trouble shoot
+
+- After running high-freq (100Hz) topic to pixhawk, micro-xrce killed. Even after reboot, still not active (after reloading daemon, get active)
+
+```bash
+ros2 run px4_ros_com offboard_control \
+  --ros-args \
+  -r /fmu/in/offboard_control_mode:=/spacer/fmu/in/offboard_control_mode \
+  -r /fmu/in/trajectory_setpoint:=/spacer/fmu/in/trajectory_setpoint \
+  -r /fmu/in/vehicle_command:=/spacer/fmu/in/vehicle_command
+````
