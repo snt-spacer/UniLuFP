@@ -19,6 +19,9 @@ from px4_msgs.msg import ActuatorMotors
 from px4_msgs.msg import VehicleCommand
 
 
+import time
+
+
 class MinimalPublisherPX4(Node):
 
     def __init__(self):
@@ -71,10 +74,13 @@ class MinimalPublisherPX4(Node):
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
 
         # Enable direct actuator mode
-        self.enable_offboard_control()
+        # self.enable_offboard_control()
+        self.enable_direct_actuator_mode()
 
         # Enable arm
         self.arm()
+
+        self.curr_time = 0
 
     def arm(self):
         self.get_logger().info("Arming vehicle")
@@ -160,9 +166,20 @@ class MinimalPublisherPX4(Node):
         self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
     def cmdloop_callback(self):
+        start = time.time()
+        print(start - self.curr_time)
         self.publish_direct_actuator_mode()
+        # if start - self.curr_time > 0.5:
+        #     u_command = np.zeros((1, 8))
+        #     u_command[0, 3] = 1.0
+        #     self.publish_direct_actuator_setpoint(u_command)
+        #     self.curr_time = start
+        # elif start - self.curr_time > 1.0:
+        #     u_command = np.zeros((1, 8))
+        #     u_command[0, 3] = 0.0
+        #     self.publish_direct_actuator_setpoint(u_command)
         u_command = np.zeros((1, 8))
-        u_command[0, 3] = 1.0
+        u_command[0, 3] = 0.0
         self.publish_direct_actuator_setpoint(u_command)
 
 

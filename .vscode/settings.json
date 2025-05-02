@@ -105,5 +105,15 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp"
-  }
+  },
+  "python.autoComplete.extraPaths": [
+    "/home/akiyoshi/work/fp_ws/build/px4_simple",
+    "/home/akiyoshi/work/fp_ws/install/px4_simple/lib/python3.10/site-packages",
+    "/home/akiyoshi/work/fp_ws/install/px4_msgs/local/lib/python3.10/dist-packages",
+    "/home/akiyoshi/work/fp_ws/install/px4-simple/lib/python3.10/site-packages",
+    "/home/akiyoshi/work/fp_ws/build/joy_gui",
+    "/home/akiyoshi/work/fp_ws/install/joy_gui/lib/python3.10/site-packages",
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ]
 }
