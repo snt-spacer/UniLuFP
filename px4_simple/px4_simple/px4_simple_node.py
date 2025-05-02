@@ -43,6 +43,7 @@ class MinimalPublisherPX4(Node):
             depth=0,
         )
 
+        # Subscrivers
         self.status_sub = self.create_subscription(
             VehicleStatus,
             f"{self.namespace_prefix}/fmu/out/vehicle_status",
@@ -50,6 +51,7 @@ class MinimalPublisherPX4(Node):
             qos_profile_sub,
         )
 
+        # Publishers
         self.publisher_vehicle_command = self.create_publisher(
             VehicleCommand,
             f"{self.namespace_prefix}/fmu/in/vehicle_command",
@@ -166,21 +168,13 @@ class MinimalPublisherPX4(Node):
         self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
     def cmdloop_callback(self):
-        start = time.time()
-        print(start - self.curr_time)
+    
         self.publish_direct_actuator_mode()
-        # if start - self.curr_time > 0.5:
-        #     u_command = np.zeros((1, 8))
-        #     u_command[0, 3] = 1.0
-        #     self.publish_direct_actuator_setpoint(u_command)
-        #     self.curr_time = start
-        # elif start - self.curr_time > 1.0:
-        #     u_command = np.zeros((1, 8))
-        #     u_command[0, 3] = 0.0
-        #     self.publish_direct_actuator_setpoint(u_command)
+
         u_command = np.zeros((1, 8))
         u_command[0, 3] = 0.0
-        self.publish_direct_actuator_setpoint(u_command)
+        if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
+            self.publish_direct_actuator_setpoint(u_command)
 
 
 def main(args=None):
