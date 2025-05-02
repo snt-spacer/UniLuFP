@@ -161,9 +161,9 @@ class MinimalPublisherPX4(Node):
 
     def cmdloop_callback(self):
         self.publish_direct_actuator_mode()
-        # u_command = np.zeros((1, 12))
-        # u_command[0, 3] = 1.0
-        # self.publish_direct_actuator_setpoint(u_command)
+        u_command = np.zeros((1, 8))
+        u_command[0, 3] = 1.0
+        self.publish_direct_actuator_setpoint(u_command)
 
 
 def main(args=None):
