@@ -115,9 +115,9 @@ class MinimalPublisherPX4(Node):
         msg.command = command
         msg.param1 = param1
         msg.param2 = param2
-        msg.target_system = 2
+        msg.target_system = 1
         msg.target_component = 1
-        msg.source_system = 1  # your node ID
+        msg.source_system = 110  # your node ID
         msg.source_component = 100  # your component ID
         msg.from_external = True
         self.publisher_vehicle_command.publish(msg)

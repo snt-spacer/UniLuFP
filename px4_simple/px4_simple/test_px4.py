@@ -155,8 +155,8 @@ class OffboardControl(Node):
         """Callback function for the timer."""
         self.publish_offboard_control_heartbeat_signal()
 
-        self.get_logger().info(f"Board: {VehicleStatus.NAVIGATION_STATE_OFFBOARD}")
-        self.get_logger().info(f"State: {self.vehicle_status.nav_state}")
+        # self.get_logger().info(f"Board: {VehicleStatus.NAVIGATION_STATE_OFFBOARD}")
+        # self.get_logger().info(f"State: {self.vehicle_status.nav_state}")
         # self.get_logger().info(f"{self.offboard_setpoint_counter}")
         if self.offboard_setpoint_counter == 10:
             self.engage_offboard_mode()
@@ -168,7 +168,7 @@ class OffboardControl(Node):
 
         if self.vehicle_status.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
             u_command = np.zeros((1, 12))
-            u_command[0, 0] = 1.0
+            u_command[0, 0] = -0.3
             self.publish_direct_actuator_setpoint(u_command)
             # self.publish_position_setpoint(0.0, 0.0, self.takeoff_height)
 
@@ -176,7 +176,7 @@ class OffboardControl(Node):
             self.land()
             exit(0)
 
-        if self.offboard_setpoint_counter < 100:
+        if self.offboard_setpoint_counter < 21:
             self.offboard_setpoint_counter += 1
 
 
