@@ -26,7 +26,7 @@ class MinimalPublisherPX4(Node):
 
     def __init__(self):
         super().__init__("minimal_publisher_to_px4")
-        self.namespace_prefix = "/spacer"
+        self.namespace_prefix = ""
 
         # QoS profiles
         qos_profile_pub = QoSProfile(
@@ -76,8 +76,8 @@ class MinimalPublisherPX4(Node):
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
 
         # Enable direct actuator mode
-        # self.enable_offboard_control()
-        self.enable_direct_actuator_mode()
+        self.enable_offboard_control()
+        # self.enable_direct_actuator_mode()
 
         # Enable arm
         self.arm()
