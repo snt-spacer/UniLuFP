@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'px4_simple_node = px4_simple.px4_simple_node:main',
+            'px4_test_solenoid_valve = px4_simple.test_solenodi_valve_connection:main',
         ],
     },
 )
