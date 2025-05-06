@@ -177,4 +177,15 @@ ros2 run px4_ros_com offboard_control \
   -r /fmu/in/offboard_control_mode:=/spacer/fmu/in/offboard_control_mode \
   -r /fmu/in/trajectory_setpoint:=/spacer/fmu/in/trajectory_setpoint \
   -r /fmu/in/vehicle_command:=/spacer/fmu/in/vehicle_command
-````
+```
+
+## Docker setup
+```
+cd ~/UniLuFP
+./docker/build.sh
+```
+
+## Getting Started
+```
+./docker/run.sh
+```
