@@ -188,4 +188,5 @@ cd ~/UniLuFP
 ## Getting Started
 ```
 ./docker/run.sh
+ ros2 run px4_simple test_solenoid_valve_connection --ros-args --param namespace:=spacer
 ```

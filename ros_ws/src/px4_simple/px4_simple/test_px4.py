@@ -2,7 +2,12 @@
 
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
+from rclpy.qos import (
+    QoSProfile,
+    QoSReliabilityPolicy,
+    QoSHistoryPolicy,
+    QoSDurabilityPolicy,
+)
 from px4_msgs.msg import OffboardControlMode, TrajectorySetpoint, VehicleCommand, VehicleLocalPosition, VehicleStatus, ActuatorMotors
 import numpy as np
 
@@ -14,9 +19,9 @@ class OffboardControl(Node):
 
         # Configure QoS profile for publishing and subscribing
         qos_profile = QoSProfile(
-            reliability=ReliabilityPolicy.BEST_EFFORT,
-            durability=DurabilityPolicy.TRANSIENT_LOCAL,
-            history=HistoryPolicy.KEEP_LAST,
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
+            history=QoSHistoryPolicy.KEEP_LAST,
             depth=1
         )
 
@@ -48,6 +53,8 @@ class OffboardControl(Node):
 
         # Create a timer to publish control commands
         self.timer = self.create_timer(0.1, self.timer_callback)
+
+        # self.engage_offboard_mode()
 
     def vehicle_local_position_callback(self, vehicle_local_position):
         """Callback function for vehicle_local_position topic subscriber."""
@@ -158,17 +165,17 @@ class OffboardControl(Node):
         # self.get_logger().info(f"Board: {VehicleStatus.NAVIGATION_STATE_OFFBOARD}")
         # self.get_logger().info(f"State: {self.vehicle_status.nav_state}")
         # self.get_logger().info(f"{self.offboard_setpoint_counter}")
-        if self.offboard_setpoint_counter == 10:
-            self.engage_offboard_mode()
-        if self.offboard_setpoint_counter == 20:
-            self.arm()
+        # if self.offboard_setpoint_counter == 10:
+            # self.engage_offboard_mode()
+        # if self.offboard_setpoint_counter == 20:
+            # self.arm()
         # elif self.offboard_setpoint_counter == 90:
         #     self.disarm()
         #     exit(0)
 
         if self.vehicle_status.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
             u_command = np.zeros((1, 12))
-            u_command[0, 0] = -0.3
+            u_command[0, 0] = 0.0
             self.publish_direct_actuator_setpoint(u_command)
             # self.publish_position_setpoint(0.0, 0.0, self.takeoff_height)
 
