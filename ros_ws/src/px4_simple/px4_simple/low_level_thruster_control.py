@@ -55,6 +55,13 @@ class MinimalPublisherPX4(Node):
             qos_profile_sub,
         )
 
+        self.cmd_vel_sub = self.create_subscription(
+            Twist,
+            '/cmd_vel',  # Change this if you're using a different topic
+            self.cmd_vel_callback,
+            0
+        )
+
         # Publishers
         self.publisher_vehicle_command = self.create_publisher(
             VehicleCommand,
@@ -74,12 +81,9 @@ class MinimalPublisherPX4(Node):
             qos_profile_pub,
         )
 
-        self.cmd_vel_sub = self.create_subscription(
-            Twist,
-            '/cmd_vel',  # Change this if you're using a different topic
-            self.cmd_vel_callback,
-            0
-        )
+        timer_period = 0.1  # seconds
+        self.timer = self.create_timer(timer_period, self.loop_callback)
+
 
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
 
@@ -124,7 +128,7 @@ class MinimalPublisherPX4(Node):
         offboard_msg.body_rate = False
         offboard_msg.direct_actuator = True
         self.publisher_offboard_mode.publish(offboard_msg)
-        self.get_logger().info(f"Publishing direct to: {self.namespace_prefix}")
+        # self.get_logger().info(f"Publishing direct to: {self.namespace_prefix}")
 
 
     def publish_vehicle_command(self, command, **params) -> None:
@@ -144,14 +148,25 @@ class MinimalPublisherPX4(Node):
         msg.source_component = 1
         msg.from_external = True
         self.publisher_vehicle_command.publish(msg)
-        self.get_logger().info(f"Publishing offboard to: {self.namespace_prefix}")
+        # self.get_logger().info(
+        #     f"Sent command: {command}, \
+        #     param1: {params.get('param1', 0.0)}, \
+        #     param2: {params.get('param2', 0.0)}, \
+        #     param3: {params.get('param3', 0.0)}, \
+        #     param4: {params.get('param4', 0.0)}, \
+        #     param5: {params.get('param5', 0.0)}, \
+        #     param6: {params.get('param6', 0.0)}, \
+        #     param7: {params.get('param7', 0.0)}"
+        # )
 
     def run(self):
-        """Call offboard msg every 0.1 seconds"""
         wait_rate = self.create_rate(1.0)
         while rclpy.ok():
-            self.publish_direct_actuator_mode()
+            # self.publish_direct_actuator_mode()
             wait_rate.sleep()
+
+    def loop_callback(self):
+        self.publish_direct_actuator_mode()
 
     def cmd_vel_callback(self, msg: Twist):
         self.get_logger().info(
@@ -159,10 +174,19 @@ class MinimalPublisherPX4(Node):
             f'angular=({msg.angular.x}, {msg.angular.y}, {msg.angular.z})'
         )
 
+        thrust_command = np.zeros(12, dtype=np.float32)
+        thrust_command[0] = 1
+
+        actuator_outputs_msg = ActuatorMotors()
+        actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
+        actuator_outputs_msg.control = thrust_command.flatten()
+        self.publisher_direct_actuator.publish(actuator_outputs_msg)
+
+
     def on_interupt(self) -> None:
-        wait_rate = self.create_rate(2.0)
-        self.enable_mannual_mode()
-        wait_rate.sleep()
+        # wait_rate = self.create_rate(2.0)
+        # self.enable_mannual_mode()
+        # wait_rate.sleep()
         self.clean_termination()
 
 

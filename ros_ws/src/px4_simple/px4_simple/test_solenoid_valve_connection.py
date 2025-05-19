@@ -94,14 +94,6 @@ class MinimalPublisherPX4(Node):
 
         # time.sleep(1)
 
-        # Delay for PX4 to receive OffboardControlMode + ActuatorMotors for at least 0.5s
-        for _ in range(10):  # 1 second at 10 Hz
-            self.publish_direct_actuator_mode()
-            self.publish_direct_actuator_setpoint(np.zeros((1, 8)))  # neutral command
-            time.sleep(0.1)
-
-
-
         # Enable direct actuator mode
         self.enable_offboard_control()
         # self.enable_direct_actuator_mode()
@@ -231,7 +223,7 @@ class MinimalPublisherPX4(Node):
         self.publish_direct_actuator_mode()
 
         u_command = np.zeros((1, 8))
-        u_command[0, 3] = 0.0
+        u_command[0, 3] = 1.0
         if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
             self.publish_direct_actuator_setpoint(u_command)
 
