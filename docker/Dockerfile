@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     ros-humble-joy \
     ros-humble-ackermann-msgs \
     ros-humble-hardware-interface \
+    ros-humble-teleop-twist-keyboard \
     ffmpeg \
     vim \
     git \

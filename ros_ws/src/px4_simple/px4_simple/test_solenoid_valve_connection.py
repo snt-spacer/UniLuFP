@@ -20,6 +20,7 @@ from px4_msgs.msg import VehicleCommand
 
 
 import time
+import threading
 
 
 class MinimalPublisherPX4(Node):
@@ -73,10 +74,33 @@ class MinimalPublisherPX4(Node):
             qos_profile_pub,
         )
 
+        self.shutdown_requested = False
         timer_period = 0.1  # seconds
         self.timer = self.create_timer(timer_period, self.cmdloop_callback)
 
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
+
+        # time.sleep(1)
+        # self.get_logger().info("manual")
+        # self.enable_mannual_mode()
+
+        # time.sleep(1)
+        # self.get_logger().info("arm")
+        # self.arm()
+
+        # time.sleep(5)
+        # self.get_logger().info("offboard")
+        # self.enable_offboard_control()
+
+        # time.sleep(1)
+
+        # Delay for PX4 to receive OffboardControlMode + ActuatorMotors for at least 0.5s
+        for _ in range(10):  # 1 second at 10 Hz
+            self.publish_direct_actuator_mode()
+            self.publish_direct_actuator_setpoint(np.zeros((1, 8)))  # neutral command
+            time.sleep(0.1)
+
+
 
         # Enable direct actuator mode
         self.enable_offboard_control()
@@ -98,12 +122,27 @@ class MinimalPublisherPX4(Node):
             param2 = 0.0
         )
 
+    def disarm(self):
+        self.get_logger().info("Disarming vehicle")
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM,
+            param1 = 0.0
+        )
+
     def enable_offboard_control(self):
         self.get_logger().info("Enabling offboard control")
         self.publish_vehicle_command(
             VehicleCommand.VEHICLE_CMD_DO_SET_MODE,
             param1 = 1.0,
             param2 = 6.0,  # Offboard mode
+        )
+
+    def enable_mannual_mode(self):
+        self.get_logger().info("Enabling manual mode")
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_DO_SET_MODE,
+            param1=1.0,  # Custom mode
+            param2=1.0   # PX4 manual mode (main mode = 1)
         )
 
     def enable_direct_actuator_mode(self):
@@ -134,16 +173,16 @@ class MinimalPublisherPX4(Node):
         msg.source_component = 1
         msg.from_external = True
         self.publisher_vehicle_command.publish(msg)
-        self.get_logger().info(
-            f"Sent command: {command}, \
-            param1: {params.get('param1', 0.0)}, \
-            param2: {params.get('param2', 0.0)}, \
-            param3: {params.get('param3', 0.0)}, \
-            param4: {params.get('param4', 0.0)}, \
-            param5: {params.get('param5', 0.0)}, \
-            param6: {params.get('param6', 0.0)}, \
-            param7: {params.get('param7', 0.0)}"
-        )
+        # self.get_logger().info(
+        #     f"Sent command: {command}, \
+        #     param1: {params.get('param1', 0.0)}, \
+        #     param2: {params.get('param2', 0.0)}, \
+        #     param3: {params.get('param3', 0.0)}, \
+        #     param4: {params.get('param4', 0.0)}, \
+        #     param5: {params.get('param5', 0.0)}, \
+        #     param6: {params.get('param6', 0.0)}, \
+        #     param7: {params.get('param7', 0.0)}"
+        # )
 
     def publish_direct_actuator_mode(self):
         offboard_msg = OffboardControlMode()
@@ -155,7 +194,7 @@ class MinimalPublisherPX4(Node):
         offboard_msg.body_rate = False
         offboard_msg.direct_actuator = True
         self.publisher_offboard_mode.publish(offboard_msg)
-        self.get_logger().info("Sent direct actuator mode")
+        # self.get_logger().info(f"Sent direct actuator mode: {self.namespace_prefix}")
 
     def publish_direct_actuator_setpoint(self, u_command):
         actuator_outputs_msg = ActuatorMotors()
@@ -171,42 +210,64 @@ class MinimalPublisherPX4(Node):
         thrust = u_command[0, :] / 1.5  # normalizes w.r.t. max thrust
         # print("Thrust rates: ", thrust[0:4])
 
-        # thrust_command = np.zeros(12, dtype=np.float32)
-        # thrust_command[0] = 0.0 if thrust[0] <= 0.0 else thrust[0]
-        # thrust_command[1] = 0.0 if thrust[0] >= 0.0 else -thrust[0]
-
-        # thrust_command[2] = 0.0 if thrust[1] <= 0.0 else thrust[1]
-        # thrust_command[3] = 0.0 if thrust[1] >= 0.0 else -thrust[1]
-
-        # thrust_command[4] = 0.0 if thrust[2] <= 0.0 else thrust[2]
-        # thrust_command[5] = 0.0 if thrust[2] >= 0.0 else -thrust[2]
-
-        # thrust_command[6] = 0.0 if thrust[3] <= 0.0 else thrust[3]
-        # thrust_command[7] = 0.0 if thrust[3] >= 0.0 else -thrust[3]
-
         thrust_command = np.zeros(12, dtype=np.float32)
+        thrust_command[0] = 0.0 if thrust[0] <= 0.0 else thrust[0]
+        thrust_command[1] = 0.0 if thrust[0] >= 0.0 else -thrust[0]
+
+        thrust_command[2] = 0.0 if thrust[1] <= 0.0 else thrust[1]
+        thrust_command[3] = 0.0 if thrust[1] >= 0.0 else -thrust[1]
+
+        thrust_command[4] = 0.0 if thrust[2] <= 0.0 else thrust[2]
+        thrust_command[5] = 0.0 if thrust[2] >= 0.0 else -thrust[2]
+
+        thrust_command[6] = 0.0 if thrust[3] <= 0.0 else thrust[3]
+        thrust_command[7] = 0.0 if thrust[3] >= 0.0 else -thrust[3]
+
         actuator_outputs_msg.control = thrust_command.flatten()
-        self.publisher_direct_actuator.publish(actuator_outputs_msg)
+        # self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
     def cmdloop_callback(self):
     
         self.publish_direct_actuator_mode()
 
         u_command = np.zeros((1, 8))
-        u_command[0, 0] = 1.0
+        u_command[0, 3] = 0.0
         if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
             self.publish_direct_actuator_setpoint(u_command)
 
+        # Begin disarm sequence on external trigger
+        if self.shutdown_requested:
+            self.shutdown_counter += 1
+
+            if self.shutdown_counter == 5:
+                self.enable_mannual_mode()
+
+            elif self.shutdown_counter == 10:
+                self.disarm()
+
+            elif self.shutdown_counter > 20:
+                self.get_logger().info("Shutting down...")
+                rclpy.shutdown()
+
+    def initiate_shutdown(self):
+        if not self.shutdown_requested:
+            self.get_logger().info("Shutdown requested, starting disarm sequence...")
+            self.shutdown_requested = True
+            self.shutdown_counter = 0
 
 def main(args=None):
     rclpy.init(args=args)
 
     spacecraft_mpc = MinimalPublisherPX4()
+
+    def shutdown_trigger():
+        input("Press [Enter] to disarm and shutdown...\n")
+        spacecraft_mpc.initiate_shutdown()
+
+    threading.Thread(target=shutdown_trigger).start()
+
     rclpy.spin(spacecraft_mpc)
     spacecraft_mpc.destroy_node()
-
-    rclpy.shutdown()
-
 
 if __name__ == "__main__":
     main()
