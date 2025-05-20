@@ -93,8 +93,19 @@ class MinimalPublisherPX4(Node):
         # Must be called before arming
         self.publish_direct_actuator_mode()
 
+        # Enable arm
+        self.arm()
+
     def vehicle_status_callback(self, msg):
         self.nav_state = msg.nav_state
+
+    def arm(self):
+        self.get_logger().info("Arming vehicle")
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM,
+            param1 = 1.0,
+            param2 = 0.0
+        )
 
     def disarm(self):
         self.get_logger().info("Disarming vehicle")
@@ -174,13 +185,14 @@ class MinimalPublisherPX4(Node):
             f'angular=({msg.angular.x}, {msg.angular.y}, {msg.angular.z})'
         )
 
-        thrust_command = np.zeros(12, dtype=np.float32)
-        thrust_command[0] = 1
+        if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
+            thrust_command = np.zeros(12, dtype=np.float32)
+            thrust_command[0] = 1.0
 
-        actuator_outputs_msg = ActuatorMotors()
-        actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
-        actuator_outputs_msg.control = thrust_command.flatten()
-        self.publisher_direct_actuator.publish(actuator_outputs_msg)
+            actuator_outputs_msg = ActuatorMotors()
+            actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
+            actuator_outputs_msg.control = thrust_command.flatten()
+            self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
 
     def on_interupt(self) -> None:
