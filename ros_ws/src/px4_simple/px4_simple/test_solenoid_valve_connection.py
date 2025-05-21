@@ -212,9 +212,7 @@ class MinimalPublisherPX4(Node):
 
         u_command = np.zeros((1, 8))
         u_command[0, 3] = 0.0
-        self.get_logger().info("Before the if")
         if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
-            self.get_logger().info("After the if")
             self.publish_direct_actuator_setpoint(u_command)
 
 
