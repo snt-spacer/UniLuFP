@@ -1,0 +1,13 @@
+[Unit]
+Description=Communicate robotics arms
+After=can0_setup.service
+Requires=can0_setup.service
+
+[Service]
+ExecStart=/home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/arms_comm.sh
+User=spacer
+Type=forking
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target
