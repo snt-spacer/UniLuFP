@@ -80,20 +80,6 @@ class MinimalPublisherPX4(Node):
 
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
 
-        # time.sleep(1)
-        # self.get_logger().info("manual")
-        # self.enable_mannual_mode()
-
-        # time.sleep(1)
-        # self.get_logger().info("arm")
-        # self.arm()
-
-        # time.sleep(5)
-        # self.get_logger().info("offboard")
-        # self.enable_offboard_control()
-
-        # time.sleep(1)
-
         # Enable direct actuator mode
         self.enable_offboard_control()
         # self.enable_direct_actuator_mode()
@@ -102,7 +88,7 @@ class MinimalPublisherPX4(Node):
         self.publish_direct_actuator_mode()
 
         # Enable arm
-        self.arm()
+        # self.arm()
 
         self.curr_time = 0
 
@@ -146,6 +132,7 @@ class MinimalPublisherPX4(Node):
         )
 
     def vehicle_status_callback(self, msg):
+        # self.get_logger().info(msg.nav_state)
         self.nav_state = msg.nav_state
 
     def publish_vehicle_command(self, command, **params) -> None:
@@ -186,7 +173,7 @@ class MinimalPublisherPX4(Node):
         offboard_msg.body_rate = False
         offboard_msg.direct_actuator = True
         self.publisher_offboard_mode.publish(offboard_msg)
-        # self.get_logger().info(f"Sent direct actuator mode: {self.namespace_prefix}")
+        # self.get_logger().info("Sent direct actuator mode")
 
     def publish_direct_actuator_setpoint(self, u_command):
         actuator_outputs_msg = ActuatorMotors()
@@ -216,30 +203,34 @@ class MinimalPublisherPX4(Node):
         thrust_command[7] = 0.0 if thrust[3] >= 0.0 else -thrust[3]
 
         actuator_outputs_msg.control = thrust_command.flatten()
-        # self.publisher_direct_actuator.publish(actuator_outputs_msg)
+        # self.get_logger().info(actuator_outputs_msg)
+        self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
     def cmdloop_callback(self):
     
         self.publish_direct_actuator_mode()
 
         u_command = np.zeros((1, 8))
-        u_command[0, 3] = 1.0
+        u_command[0, 3] = 0.0
+        self.get_logger().info("Before the if")
         if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
+            self.get_logger().info("After the if")
             self.publish_direct_actuator_setpoint(u_command)
 
-        # Begin disarm sequence on external trigger
-        if self.shutdown_requested:
-            self.shutdown_counter += 1
 
-            if self.shutdown_counter == 5:
-                self.enable_mannual_mode()
+        # # Begin disarm sequence on external trigger
+        # if self.shutdown_requested:
+        #     self.shutdown_counter += 1
 
-            elif self.shutdown_counter == 10:
-                self.disarm()
+        #     if self.shutdown_counter == 5:
+        #         self.enable_mannual_mode()
 
-            elif self.shutdown_counter > 20:
-                self.get_logger().info("Shutting down...")
-                rclpy.shutdown()
+        #     elif self.shutdown_counter == 10:
+        #         self.disarm()
+
+        #     elif self.shutdown_counter > 20:
+        #         self.get_logger().info("Shutting down...")
+        #         rclpy.shutdown()
 
     def initiate_shutdown(self):
         if not self.shutdown_requested:
