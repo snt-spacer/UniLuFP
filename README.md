@@ -1,5 +1,8 @@
 # UniLuFP
 
+[Notion](https://www.notion.so/Pingu-FP-1c7aaf8bff7f8098a08bc9bdcd53db11)
+
+
 ## Pixhawk setup
 
 Inherited from [here](https://atmos.discower.io/pages/PX4/).
