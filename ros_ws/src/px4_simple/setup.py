@@ -23,7 +23,8 @@ setup(
             'px4_simple_node = px4_simple.px4_simple_node:main',
             'test_px4 = px4_simple.test_px4:main',
             'test_solenoid_valve_connection = px4_simple.test_solenoid_valve_connection:main',
-            'low_level_thruster_control = px4_simple.low_level_thruster_control:main'
+            'low_level_thruster_control = px4_simple.low_level_thruster_control:main',
+            'twist_thruster_actuator = px4_simple.twist_thruster_actuator:main',
         ],
     },
 )
