@@ -9,13 +9,17 @@
   <xacro:include filename="$(find rw_ros2_control)/urdf/rw.macro.xacro" />
   
   <!-- Import RW ros2 control description -->
-  <!-- <xacro:include filename="$(find rw_ros2_control)/description/urdf/rw.ros2_control.xacro" /> -->
+  <xacro:include filename="$(find rw_ros2_control)/ros2_control/rw.ros2_control.xacro" />
 
   <!-- Used for fixing robot -->
   <link name="world"/>
 
+  <!-- RW description -->
   <xacro:rw parent="world" prefix="$(arg prefix)">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:rw>
+
+  <!-- RW ros2 control description -->
+  <xacro:rw_system name="RwSystem" prefix="$(arg prefix)"/>
 
 </robot>
