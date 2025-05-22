@@ -42,7 +42,7 @@ install(
     description/launch 
     # description/mesh 
     description/ros2_control 
-    # description/rviz 
+    description/rviz 
     description/urdf
   DESTINATION share/${PROJECT_NAME}
 )
