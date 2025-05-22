@@ -7,6 +7,7 @@
 
       <hardware>
         <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
+        <param name="can">can0</param>
       </hardware>
 
       <joint name="${prefix}rw_joint">
@@ -14,7 +15,10 @@
           <param name="min">-1</param>
           <param name="max">1</param>
         </command_interface>
+
         <state_interface name="position"/>
+
+        <param name="node_id">0</param>
       </joint>
     </ros2_control>
 
