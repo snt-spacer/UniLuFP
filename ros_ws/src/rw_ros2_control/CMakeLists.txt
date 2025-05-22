@@ -5,12 +5,20 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# find dependencies
-find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+########### Find dependencies ###########
+set(THIS_PACKAGE_INCLUDE_DEPENDS
+  ament_cmake
+  hardware_interface
+  pluginlib
+  rclcpp
+  rclcpp_lifecycle
+)
 
+foreach(THIS_PACKAGE_INCLUDE_DEPEND ${THIS_PACKAGE_INCLUDE_DEPENDS})
+  find_package(${THIS_PACKAGE_INCLUDE_DEPEND} REQUIRED)
+endforeach()
+
+########### For debugging purposes ###########
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -22,5 +30,21 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+########### Install ###########
+install(
+  DIRECTORY bringup/config bringup/launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY 
+    description/launch 
+    # description/mesh 
+    description/ros2_control 
+    # description/rviz 
+    description/urdf
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
