@@ -28,6 +28,15 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "prefix",
+            default_value='""',
+            description="Prefix of the joint names, useful for \
+        multi-robot setup. If changed than also joint names in the controllers' configuration \
+        have to be updated.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "controller_type",
             default_value="forward_position_controller",
             description="Controller type to use.",
@@ -36,14 +45,19 @@ def generate_launch_description():
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
+    prefix = LaunchConfiguration("prefix")
     controller_type = LaunchConfiguration("controller_type")
 
+    # Get URDF via xacro
     # Get URDF via xacro
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution([package, "urdf", "rw.urdf.xacro"]),
+            " ",
+            "prefix:=",
+            prefix,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -84,10 +98,6 @@ def generate_launch_description():
         condition=IfCondition(gui),
     )
 
-    joint_state_pub_gui = Node(
-        package="joint_state_publisher_gui", executable="joint_state_publisher_gui"
-    )
-
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -118,7 +128,6 @@ def generate_launch_description():
     nodes = [
         control_node,
         robot_state_pub_node,
-        # joint_state_pub_gui,
         controller_spawner,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
