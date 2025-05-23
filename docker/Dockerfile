@@ -36,6 +36,7 @@ RUN vcs import --input repositories.yaml --recursive .
 RUN git clone https://github.com/aky-u/LevionArm.git \
  && cd LevionArm \
  && git submodule set-url cubemars_hardware https://github.com/aky-u/cubemars_hardware.git \
+ && git submodule set-url leptrino_force_torque https://github.com/aky-u/leptrino_force_torque.git \
  && git submodule update --init --recursive
 
 # Source ROS2 setup
