@@ -11,14 +11,19 @@
   <!-- Import RW ros2 control description -->
   <xacro:include filename="$(find rw_ros2_control)/ros2_control/rw.ros2_control.xacro" />
 
+  <!-- Import arm description -->
+    <!-- Include materials -->
+  <xacro:include filename="$(find levion_arm_ros2_control)/config/material.macros.xacro"/>
+  <xacro:include filename="$(find levion_arm_ros2_control)/urdf/levion_arm.macros.xacro"/>
+
   <!-- Base description -->
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.4 0.4 0.6"/>
       </geometry>
-      <material name="blue">
-        <color rgba="0 0 1 1"/>
+      <material name="black_transparent">
+        <color rgba="0 0 0 0.5"/>
       </material>
     </visual>
     <collision>
@@ -40,6 +45,15 @@
   <xacro:rw parent="base_link" prefix="$(arg prefix)">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:rw>
+
+  <!-- Arm description -->
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:levion_arm>
+
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:levion_arm>
 
   <!-- RW ros2 control description -->
   <xacro:rw_system name="RwSystem" prefix="$(arg prefix)"/>
