@@ -12,9 +12,9 @@
   <xacro:include filename="$(find rw_ros2_control)/ros2_control/rw.ros2_control.xacro" />
 
   <!-- Import arm description -->
-    <!-- Include materials -->
   <xacro:include filename="$(find levion_arm_ros2_control)/config/material.macros.xacro"/>
   <xacro:include filename="$(find levion_arm_ros2_control)/urdf/levion_arm.macros.xacro"/>
+  <xacro:include filename="$(find levion_arm_ros2_control)/ros2_control/levion_arm.ros2_control.xacro"/>
 
   <!-- Base description -->
   <link name="base_link">
@@ -57,5 +57,8 @@
 
   <!-- RW ros2 control description -->
   <xacro:rw_system name="RwSystem" prefix="$(arg prefix)"/>
+
+  <!-- Arm ros2 control description -->
+  <xacro:levion_system name="levion_arm" prefix="$(arg prefix)" left_arm="true" right_arm="true"/>
 
 </robot>
