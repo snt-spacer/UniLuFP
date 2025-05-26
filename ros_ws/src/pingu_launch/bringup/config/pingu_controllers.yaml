@@ -16,6 +16,16 @@ controller_manager:
       type: forward_command_controller/ForwardCommandController
 
     # Arm controllers declaration
+    ## Dual arm controllers
+    dual_arm_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    dual_arm_velocity_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    dual_arm_effort_controller:
+      type: forward_command_controller/ForwardCommandController
+
     ## Lest arm
     left_arm_position_controller:
       type: forward_command_controller/ForwardCommandController
@@ -48,6 +58,34 @@ rw_effort_controller:
     interface_name: effort
 
 # Arm controllers configuration
+## Dual arm controllers
+dual_arm_position_controller:
+  ros__parameters:
+    joints:
+      - left_shoulder_joint
+      - left_elbow_joint
+      - right_shoulder_joint
+      - right_elbow_joint
+    interface_name: position
+
+dual_arm_velocity_controller:
+  ros__parameters:
+    joints:
+      - left_shoulder_joint
+      - left_elbow_joint
+      - right_shoulder_joint
+      - right_elbow_joint
+    interface_name: velocity
+
+dual_arm_effort_controller:
+  ros__parameters:
+    joints:
+      - left_shoulder_joint
+      - left_elbow_joint
+      - right_shoulder_joint
+      - right_elbow_joint
+    interface_name: effort
+
 ## Lest arm
 fts_broadcaster:
   ros__parameters:
