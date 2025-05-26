@@ -21,9 +21,11 @@ def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
-            "gui",
+            "joint_state_publisher_gui",
             default_value="true",
-            description="Start RViz2 automatically with this launch file.",
+            description="Start joint_state_publisher_gui automatically with this launch file. \
+        If set to false, joint topic should be published by real robot or \
+        simulated robot.",
         )
     )
     declared_arguments.append(
@@ -35,18 +37,10 @@ def generate_launch_description():
         have to be updated.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "controller_type",
-            default_value="forward_position_controller",
-            description="Controller type to use.",
-        )
-    )
 
     # Initialize Arguments
-    gui = LaunchConfiguration("gui")
+    joint_state_publisher_gui = LaunchConfiguration("joint_state_publisher_gui")
     prefix = LaunchConfiguration("prefix")
-    controller_type = LaunchConfiguration("controller_type")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -81,11 +75,15 @@ def generate_launch_description():
         name="rviz2",
         output="log",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(gui),
     )
 
     joint_state_pub_gui = Node(
-        package="joint_state_publisher_gui", executable="joint_state_publisher_gui"
+        package="joint_state_publisher_gui",
+        executable="joint_state_publisher_gui",
+        name="joint_state_publisher_gui",
+        output="log",
+        parameters=[robot_description],
+        condition=IfCondition(joint_state_publisher_gui),
     )
 
     nodes = [
