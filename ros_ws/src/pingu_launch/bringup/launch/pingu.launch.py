@@ -107,27 +107,14 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    # controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=[
-    #         controller_types,
-    #         "--param-file",
-    #         robot_controllers,
-    #         "--controller-manager",
-    #         "/controller_manager",
-    #     ],
-    #     output="screen",
-    # )
-
     controller_spawners = []
-    for controller_type in controller_types.split(","):
+    for controller_type in controller_types:
         controller_spawners.append(
             Node(
                 package="controller_manager",
                 executable="spawner",
                 arguments=[
-                    controller_type.strip(),
+                    controller_type,
                     "--param-file",
                     robot_controllers,
                 ],
