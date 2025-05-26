@@ -37,19 +37,10 @@ def generate_launch_description():
         have to be updated.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "controller_type",
-            default_value="left_arm_velocity_controller",
-            description="Controller type array to use." \
-            "check the pingu_controllers.yaml for available controllers.",
-        )
-    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
     prefix = LaunchConfiguration("prefix")
-    controller_type = LaunchConfiguration("controller_type")
 
     # Get URDF via xacro
     # Get URDF via xacro
@@ -107,11 +98,26 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[controller_type, "--param-file", robot_controllers],
-    )
+    #TODO Make is better
+    controller_spawners = [
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            arguments=["left_arm_velocity_controller", "--param-file", robot_controllers],
+        ),
+
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            arguments=["right_arm_velocity_controller", "--param-file", robot_controllers],
+        ),
+
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            arguments=["rw_velocity_controller", "--param-file", robot_controllers],
+        ),
+    ]
 
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
@@ -123,7 +129,7 @@ def generate_launch_description():
 
     delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
-            target_action=controller_spawner, # Wait for the last controller spawner
+            target_action=controller_spawners[-1], # Wait for the last controller spawner
             on_exit=[joint_state_broadcaster_spawner],
         )
     )
@@ -131,9 +137,11 @@ def generate_launch_description():
     nodes = [
         control_node,
         robot_state_pub_node,
-        controller_spawner,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
     ]
+
+    # Add controller spawners to the nodes list
+    nodes.extend(controller_spawners)
 
     return LaunchDescription(declared_arguments + nodes)
