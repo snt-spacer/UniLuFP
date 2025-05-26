@@ -16,13 +16,15 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     # Set package name
     package = FindPackageShare("pingu_launch")
+    arm_package = FindPackageShare("levion_arm_ros2_control")
+    rw_package = FindPackageShare("rw_ros2_control")
 
     # Declare arguments
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
             "gui",
-            default_value="true",
+            default_value="false",
             description="Start RViz2 automatically with this launch file.",
         )
     )
@@ -37,16 +39,17 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "controller_type",
-            default_value="forward_position_controller",
-            description="Controller type to use.",
+            "controller_types",
+            default_value="['rw_velocity_controller', 'left_arm_velocity_controller', 'right_arm_velocity_controller']",
+            description="Controller type array to use." \
+            "check the pingu_controllers.yaml for available controllers.",
         )
     )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
     prefix = LaunchConfiguration("prefix")
-    controller_type = LaunchConfiguration("controller_type")
+    controller_types = LaunchConfiguration("controller_types")
 
     # Get URDF via xacro
     # Get URDF via xacro
@@ -54,7 +57,7 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([package, "urdf", "rw.urdf.xacro"]),
+            PathJoinSubstitution([package, "urdf", "pingu.urdf.xacro"]),
             " ",
             "prefix:=",
             prefix,
@@ -66,7 +69,7 @@ def generate_launch_description():
         [
             package,
             "config",
-            "rw_controller.yaml",
+            "pingu_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
@@ -107,7 +110,14 @@ def generate_launch_description():
     controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=[controller_type, "--param-file", robot_controllers],
+        arguments=[
+            controller_types,
+            "--param-file",
+            robot_controllers,
+            "--controller-manager",
+            "/controller_manager",
+        ],
+        output="screen",
     )
 
     # Delay rviz start after `joint_state_broadcaster`
