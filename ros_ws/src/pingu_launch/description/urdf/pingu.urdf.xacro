@@ -26,17 +26,17 @@
       <material name="black_transparent">
         <color rgba="0 0 0 0.5"/>
       </material>
-      <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/4}"/>
     </visual>
     <collision>
       <geometry>
         <box size="0.4 0.4 0.6"/>
       </geometry>
-      <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/4}"/>
     </collision>
     <inertial>
       <mass value="1.0"/>
-      <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/4}"/>
       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
     </inertial>
   </link>
@@ -51,11 +51,11 @@
 
   <!-- Arm description -->
   <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
-    <origin xyz="0 0 0" rpy="0 0 ${-PI/2}" />
+    <origin xyz="${.28*SQRT2_2} ${.28*SQRT2_2} 0" rpy="0 0 ${PI/4}" />
   </xacro:levion_arm>
 
   <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
-    <origin xyz="0 0 0" rpy="0 0 ${PI/2}" />
+    <origin xyz="${.28*SQRT2_2} ${-.28*SQRT2_2} 0" rpy="0 0 ${-PI/4}" />
   </xacro:levion_arm>
 
   <!-- RW ros2 control description -->
