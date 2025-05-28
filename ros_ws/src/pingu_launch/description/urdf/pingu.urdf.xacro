@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
+
+  <!-- Enable setting arguments from the launch file -->
+  <xacro:arg name="prefix" default="" />
+
+  <!-- Import RW description -->
+  <xacro:include filename="$(find rw_ros2_control)/urdf/rw.macro.xacro" />
+  
+  <!-- Import RW ros2 control description -->
+  <xacro:include filename="$(find rw_ros2_control)/ros2_control/rw.ros2_control.xacro" />
+
+  <!-- Import arm description -->
+  <xacro:include filename="$(find levion_arm_ros2_control)/config/material.macros.xacro"/>
+  <xacro:include filename="$(find levion_arm_ros2_control)/config/levion.property.xacro"/>
+  <xacro:include filename="$(find levion_arm_ros2_control)/urdf/levion_arm.macros.xacro"/>
+  <xacro:include filename="$(find levion_arm_ros2_control)/ros2_control/levion_arm.ros2_control.xacro"/>
+
+  <!-- Base description -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.4 0.4 0.6"/>
+      </geometry>
+      <material name="black_transparent">
+        <color rgba="0 0 0 0.5"/>
+      </material>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/4}"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.4 0.4 0.6"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/4}"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/4}"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- Used for fixing robot -->
+  <!-- <link name="world"/> -->
+
+  <!-- RW description -->
+  <xacro:rw parent="base_link" prefix="$(arg prefix)">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:rw>
+
+  <!-- Arm description -->
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
+    <origin xyz="${.28*SQRT2_2} ${.28*SQRT2_2} 0" rpy="0 0 ${PI/4}" />
+  </xacro:levion_arm>
+
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
+    <origin xyz="${.28*SQRT2_2} ${-.28*SQRT2_2} 0" rpy="0 0 ${-PI/4}" />
+  </xacro:levion_arm>
+
+  <!-- RW ros2 control description -->
+  <xacro:rw_system name="RwSystem" prefix="$(arg prefix)"/>
+
+  <!-- Arm ros2 control description -->
+  <xacro:levion_system name="levion_arm" prefix="$(arg prefix)" left_arm="true" right_arm="true"/>
+
+</robot>

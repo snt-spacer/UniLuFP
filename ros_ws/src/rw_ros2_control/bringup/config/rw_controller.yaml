@@ -1,0 +1,36 @@
+controller_manager:
+
+# Do not forget to add prefix if you add it in launch file
+
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    rw_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    rw_velocity_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    rw_effort_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+rw_position_controller:
+  ros__parameters:
+    joints:
+      - rw_joint
+    interface_name: position
+
+rw_velocity_controller:
+  ros__parameters:
+    joints:
+      - rw_joint
+    interface_name: velocity
+
+rw_effort_controller:
+  ros__parameters:
+    joints:
+      - rw_joint
+    interface_name: effort
