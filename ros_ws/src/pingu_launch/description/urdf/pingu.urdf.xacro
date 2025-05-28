@@ -1,20 +1,28 @@
 <?xml version="1.0"?>
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pingu">
 
   <!-- Enable setting arguments from the launch file -->
   <xacro:arg name="prefix" default="" />
+  <xacro:arg name="ros2_control" default="true" /> <!-- Enable ros2 control -->
+  <xacro:arg name="left_arm" default="true" />     <!-- Enable left arm -->
+  <xacro:arg name="right_arm" default="true" />    <!-- Enable right arm -->
 
   <!-- Import RW description -->
   <xacro:include filename="$(find rw_ros2_control)/urdf/rw.macro.xacro" />
   
   <!-- Import RW ros2 control description -->
-  <xacro:include filename="$(find rw_ros2_control)/ros2_control/rw.ros2_control.xacro" />
+  <xacro:if value="$(arg ros2_control)">
+    <xacro:include filename="$(find rw_ros2_control)/ros2_control/rw.ros2_control.xacro" />
+  </xacro:if>
 
+  <!-- TODO: Make it possible to skip if not needed -->
   <!-- Import arm description -->
   <xacro:include filename="$(find levion_arm_ros2_control)/config/material.macros.xacro"/>
   <xacro:include filename="$(find levion_arm_ros2_control)/config/levion.property.xacro"/>
   <xacro:include filename="$(find levion_arm_ros2_control)/urdf/levion_arm.macros.xacro"/>
+
+  <!-- Import arm ros2 control -->
   <xacro:include filename="$(find levion_arm_ros2_control)/ros2_control/levion_arm.ros2_control.xacro"/>
 
   <!-- Base description -->
@@ -50,18 +58,21 @@
   </xacro:rw>
 
   <!-- Arm description -->
-  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
-    <origin xyz="${.28*SQRT2_2} ${.28*SQRT2_2} 0" rpy="0 0 ${PI/4}" />
-  </xacro:levion_arm>
+  <xacro:if value="$(arg left_arm)">
+    <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
+      <origin xyz="${.28*SQRT2_2} ${.28*SQRT2_2} 0" rpy="0 0 ${PI/4}" />
+    </xacro:levion_arm>
+  </xacro:if>
 
-  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
-    <origin xyz="${.28*SQRT2_2} ${-.28*SQRT2_2} 0" rpy="0 0 ${-PI/4}" />
-  </xacro:levion_arm>
+  <xacro:if value="$(arg right_arm)">
+    <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
+      <origin xyz="${.28*SQRT2_2} ${-.28*SQRT2_2} 0" rpy="0 0 ${-PI/4}" />
+    </xacro:levion_arm>
+  </xacro:if>
 
-  <!-- RW ros2 control description -->
-  <xacro:rw_system name="RwSystem" prefix="$(arg prefix)"/>
-
-  <!-- Arm ros2 control description -->
-  <xacro:levion_system name="levion_arm" prefix="$(arg prefix)" left_arm="true" right_arm="true"/>
-
+  <!-- Ros2 control description -->
+  <xacro:if value="$(arg ros2_control)">
+    <xacro:rw_system name="RwSystem" prefix="$(arg prefix)"/>
+    <xacro:levion_system name="levion_arm" prefix="$(arg prefix)" left_arm="true" right_arm="true"/> 
+  </xacro:if>
 </robot>

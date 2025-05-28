@@ -41,25 +41,35 @@ def resolve_package_uris_in_urdf(urdf_str):
     return re.sub(r'filename="package://([^"]+)"', replacer, urdf_str)
 
 def generate_launch_description():
-  # define file path
-  package = get_package_share_directory("pingu_launch")
-  xacro_path = os.path.join(package, "urdf", "pingu.urdf.xacro")
-  urdf_path = os.path.join(package, "urdf", "pingu.urdf")
+    # Set arguments TODO: make this a LaunchConfiguration
+    prefix = ''
+    ros2_control = 'false'
+    left_arm = 'false'
+    right_arm = 'false'
 
-  # load xacro
-  doc = xacro.process_file(xacro_path, mappings={'prefix': ''})
+    # define file path
+    package = get_package_share_directory("pingu_launch")
+    xacro_path = os.path.join(package, "urdf", "pingu.urdf.xacro")
+    urdf_path = os.path.join(package, "urdf", "pingu.urdf")
 
-  # make urdf
-  robot_desc = doc.toprettyxml(indent=' ')
+    # load xacro
+    doc = xacro.process_file(xacro_path, 
+        mappings={'prefix': prefix, 
+                  'ros2_control': ros2_control,
+                  'left_arm': left_arm,
+                  'right_arm': right_arm})
 
-  # resolve package URIs in the URDF
-  robot_desc = resolve_package_uris_in_urdf(robot_desc)
-  
-  # export urdf to urdf path
-  f = open(urdf_path, 'w')
-  f.write(robot_desc)
-  f.close()
+    # make urdf
+    robot_desc = doc.toprettyxml(indent=' ')
 
-  print(f"URDF exported to {urdf_path}")
+    # resolve package URIs in the URDF
+    robot_desc = resolve_package_uris_in_urdf(robot_desc)
 
-  return LaunchDescription()
+    # export urdf to urdf path
+    f = open(urdf_path, 'w')
+    f.write(robot_desc)
+    f.close()
+
+    print(f"URDF exported to {urdf_path}")
+
+    return LaunchDescription()
