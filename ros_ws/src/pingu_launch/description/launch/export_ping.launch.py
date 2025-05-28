@@ -44,8 +44,8 @@ def generate_launch_description():
     # Set arguments TODO: make this a LaunchConfiguration
     prefix = ''
     ros2_control = 'false'
-    left_arm = 'false'
-    right_arm = 'false'
+    left_arm = 'true'
+    right_arm = 'true'
 
     # define file path
     package = get_package_share_directory("pingu_launch")
