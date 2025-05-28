@@ -2,6 +2,10 @@
 
 ## Summary
 
+## Generate URDF
+
+Check [export_pingu.launch.py](ros_ws/src/pingu_launch/description/launch/export_ping.launch.py)
+
 ## Export Mujoco
 
 ```bash
