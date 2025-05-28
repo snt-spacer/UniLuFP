@@ -29,6 +29,21 @@ COPY ./requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
+## Install acados
+WORKDIR /UniLuFP
+RUN git clone https://github.com/acados/acados.git \
+ && cd acados \
+ && git submodule update --recursive --init \
+ && mkdir -p build \
+ && cd build \
+ && cmake -DACADOS_WITH_QPOASES=ON .. \
+ && make install -j4 \
+ && cd ../ \
+ && pip install ./interfaces/acados_template \
+ && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/UniLuFP/acados/lib" \
+ && export ACADOS_SOURCE_DIR="/UniLuFP/acados"
+
+## ROS packages
 WORKDIR /UniLuFP/ros_ws/src
 COPY ./repositories.yaml .
 RUN vcs import --input repositories.yaml --recursive .
