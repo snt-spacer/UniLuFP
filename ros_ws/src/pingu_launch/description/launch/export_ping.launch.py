@@ -1,4 +1,5 @@
 import os
+import re
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
@@ -15,6 +16,22 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 import xacro
 
+def resolve_package_uris_in_urdf(urdf_str):
+    """
+    Replace all 'package://' URIs in the URDF string with absolute paths.
+    """
+    def replacer(match):
+        package_uri = match.group(1)
+        parts = package_uri.split("/", 1)
+        if len(parts) != 2:
+            raise ValueError(f"Invalid package URI: package://{package_uri}")
+        package_name, relative_path = parts
+        pkg_path = get_package_share_directory(package_name)
+        abs_path = os.path.join(pkg_path, relative_path)
+        return f'filename="{abs_path}"'
+
+    return re.sub(r'filename="package://([^"]+)"', replacer, urdf_str)
+
 def generate_launch_description():
   # define file path
   package = get_package_share_directory("pingu_launch")
@@ -22,12 +39,19 @@ def generate_launch_description():
   urdf_path = os.path.join(package, "urdf", "pingu.urdf")
 
   # load xacro
-  doc = xacro.process_file(xacro_path)
+  doc = xacro.process_file(xacro_path, mappings={'prefix': ''})
+
   # make urdf
   robot_desc = doc.toprettyxml(indent=' ')
+
+  # resolve package URIs in the URDF
+  robot_desc = resolve_package_uris_in_urdf(robot_desc)
+  
   # export urdf to urdf path
   f = open(urdf_path, 'w')
   f.write(robot_desc)
   f.close()
+
+  print(f"URDF exported to {urdf_path}")
 
   return LaunchDescription()
