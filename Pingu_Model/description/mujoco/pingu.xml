@@ -1,0 +1,41 @@
+<mujoco model="pingu">
+  <compiler angle="radian"/>
+
+  <asset>
+    <mesh name="Link0" file="assets/Link0.STL"/>
+    <mesh name="Link1" file="assets/Link1.STL"/>
+    <mesh name="Link2" file="assets/Link2.STL"/>
+  </asset>
+
+  <worldbody>
+    <geom size="0.2 0.2 0.3" quat="0.92388 0 0 0.382683" type="box" rgba="0 0 0 0.5"/>
+    <geom size="0.1 0.1 0.025" type="box"/>
+    <geom pos="0.19799 0.19799 0" quat="0.92388 0 0 0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0"/>
+    <geom pos="0.19799 -0.19799 0" quat="0.92388 0 0 -0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0"/>
+    <body name="rw_rotor" pos="0 0 0.05">
+      <inertial pos="0 0 0" mass="1" diaginertia="0.0001 0.0001 0.0001"/>
+      <joint name="rw_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" actuatorfrcrange="-10 10" damping="0.5" frictionloss="0.5"/>
+      <geom size="0.1 0.025" type="cylinder"/>
+    </body>
+    <body name="left_link1" pos="0.19799 0.19799 0.0439" quat="0.92388 0 0 0.382683">
+      <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/>
+      <joint name="left_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10"/>
+      <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1"/>
+      <body name="left_link2" pos="0.32 0 0.04685">
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/>
+        <joint name="left_elbow_joint" pos="0 0 0" axis="0 0 1" range="-2.615 -0.349" actuatorfrcrange="-10 10"/>
+        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2"/>
+      </body>
+    </body>
+    <body name="right_link1" pos="0.19799 -0.19799 0.0439" quat="0.92388 0 0 -0.382683">
+      <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/>
+      <joint name="right_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10"/>
+      <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1"/>
+      <body name="right_link2" pos="0.32 0 0.04685">
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/>
+        <joint name="right_elbow_joint" pos="0 0 0" axis="0 0 1" range="0.349 2.615" actuatorfrcrange="-10 10"/>
+        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2"/>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

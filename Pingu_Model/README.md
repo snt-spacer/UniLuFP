@@ -1,6 +1,12 @@
 # Pingu_Model
 
-## Instruction
+## Summary
+
+## Export Mujoco
+
+```bash
+python3 -c "import mujoco; model = mujoco.MjModel.from_xml_path('pingu.urdf'); mujoco.mj_saveLastXML('pingu.xml', model)"
+```
 
 ## Reference
 
