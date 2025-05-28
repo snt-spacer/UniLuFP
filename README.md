@@ -228,4 +228,11 @@ RuntimeError: Rendering of main.in.c failed!
 Attempted to execute OS command:
 ~/acados/bin/t_renderer '/home/spacer/acados/interfaces/acados_template/acados_template/c_templates_tera/**/*' 'main.in.c' '/home/spacer/fp_ws/build/px4_mpc/px4_mpc/mpc_codegen/acados_ocp.json' 'main_spacecraft_direct_allocation_model.c'
 
+### 
+
+uild --verbose --release
+error: package `backtrace v0.3.75` cannot be built because it requires rustc 1.82.0 or newer, while the currently active rustc version is 1.75.0
+Either upgrade to rustc 1.82.0 or newer, or use
+cargo update backtrace@0.3.75 --precise ver
+where `ver` is the latest version of `backtrace` supporting rustc 1.75.0
 
