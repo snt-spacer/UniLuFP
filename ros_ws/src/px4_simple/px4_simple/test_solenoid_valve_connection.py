@@ -190,17 +190,18 @@ class MinimalPublisherPX4(Node):
         # print("Thrust rates: ", thrust[0:4])
 
         thrust_command = np.zeros(12, dtype=np.float32)
-        thrust_command[0] = 0.0 if thrust[0] <= 0.0 else thrust[0]
-        thrust_command[1] = 0.0 if thrust[0] >= 0.0 else -thrust[0]
+        thrust_command[6] = 1.0
+        # thrust_command[0] = 0.0 if thrust[0] <= 0.0 else thrust[0]
+        # thrust_command[1] = 0.0 if thrust[0] >= 0.0 else -thrust[0]
 
-        thrust_command[2] = 0.0 if thrust[1] <= 0.0 else thrust[1]
-        thrust_command[3] = 0.0 if thrust[1] >= 0.0 else -thrust[1]
+        # thrust_command[2] = 0.0 if thrust[1] <= 0.0 else thrust[1]
+        # thrust_command[3] = 0.0 if thrust[1] >= 0.0 else -thrust[1]
 
-        thrust_command[4] = 0.0 if thrust[2] <= 0.0 else thrust[2]
-        thrust_command[5] = 0.0 if thrust[2] >= 0.0 else -thrust[2]
+        # thrust_command[4] = 0.0 if thrust[2] <= 0.0 else thrust[2]
+        # thrust_command[5] = 0.0 if thrust[2] >= 0.0 else -thrust[2]
 
-        thrust_command[6] = 0.0 if thrust[3] <= 0.0 else thrust[3]
-        thrust_command[7] = 0.0 if thrust[3] >= 0.0 else -thrust[3]
+        # thrust_command[6] = 0.0 if thrust[3] <= 0.0 else thrust[3]
+        # thrust_command[7] = 0.0 if thrust[3] >= 0.0 else -thrust[3]
 
         actuator_outputs_msg.control = thrust_command.flatten()
         # self.get_logger().info(actuator_outputs_msg)
@@ -211,10 +212,8 @@ class MinimalPublisherPX4(Node):
         self.publish_direct_actuator_mode()
 
         u_command = np.zeros((1, 8))
-        u_command[0, 3] = 0.0
-        self.get_logger().info("Before the if")
+        u_command[0, 6] = 1.0
         if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
-            self.get_logger().info("After the if")
             self.publish_direct_actuator_setpoint(u_command)
 
 
