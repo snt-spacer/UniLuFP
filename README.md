@@ -196,43 +196,8 @@ cd ~/UniLuFP
 
 ## temp
 
-WARNING: Gauss-Newton Hessian approximation with EXTERNAL cost type not well defined!
-got cost_type EXTERNAL for cost_type_0, cost_type, cost_type_e, hessian_approx: 'GAUSS_NEWTON'.
-With this setting, acados will proceed computing the exact Hessian for the cost term and no Hessian contribution from constraints and dynamics.
-If the external cost is a linear least squares cost, this coincides with the Gauss-Newton Hessian.
-Note: There is also the option to use the external cost module with a numerical Hessian approximation (see `ext_cost_num_hess`).
-OR the option to provide a symbolic custom Hessian approximation (see `cost_expr_ext_cost_custom_hess`).
-
-sh: 1: /home/spacer/acados/bin/t_renderer: not found
-Traceback (most recent call last):
-  File "/home/spacer/fp_ws/install/px4_mpc/lib/px4_mpc/mpc_spacecraft", line 33, in <module>
-    sys.exit(load_entry_point('px4-mpc', 'console_scripts', 'mpc_spacecraft')())
-  File "/home/spacer/fp_ws/build/px4_mpc/px4_mpc/mpc_spacecraft.py", line 474, in main
-    spacecraft_mpc = SpacecraftMPC()
-  File "/home/spacer/fp_ws/build/px4_mpc/px4_mpc/mpc_spacecraft.py", line 125, in __init__
-    self.mpc = SpacecraftWrenchMPC(self.model)
-  File "/home/spacer/fp_ws/build/px4_mpc/px4_mpc/controllers/spacecraft_wrench_mpc.py", line 47, in __init__
-    self.ocp_solver, self.integrator = self.setup(self.x0, self.N, self.Tf)
-  File "/home/spacer/fp_ws/build/px4_mpc/px4_mpc/controllers/spacecraft_wrench_mpc.py", line 139, in setup
-    ocp_solver = AcadosOcpSolver(ocp, json_file=json_path)
-  File "/home/spacer/acados/interfaces/acados_template/acados_template/acados_ocp_solver.py", line 231, in __init__
-    self.generate(acados_ocp, json_file=acados_ocp.json_file, simulink_opts=simulink_opts, cmake_builder=cmake_builder, verbose=verbose)
-  File "/home/spacer/acados/interfaces/acados_template/acados_template/acados_ocp_solver.py", line 132, in generate
-    acados_ocp.render_templates(cmake_builder=cmake_builder)
-  File "/home/spacer/acados/interfaces/acados_template/acados_template/acados_ocp.py", line 1214, in render_templates
-    render_template(tup[0], tup[1], output_dir, json_path)
-  File "/home/spacer/acados/interfaces/acados_template/acados_template/utils.py", line 304, in render_template
-    raise RuntimeError(f'Rendering of {in_file} failed!\n\nAttempted to execute OS command:\n{os_cmd}\n\n')
-RuntimeError: Rendering of main.in.c failed!
-
-Attempted to execute OS command:
-~/acados/bin/t_renderer '/home/spacer/acados/interfaces/acados_template/acados_template/c_templates_tera/**/*' 'main.in.c' '/home/spacer/fp_ws/build/px4_mpc/px4_mpc/mpc_codegen/acados_ocp.json' 'main_spacecraft_direct_allocation_model.c'
-
-### 
-
-uild --verbose --release
-error: package `backtrace v0.3.75` cannot be built because it requires rustc 1.82.0 or newer, while the currently active rustc version is 1.75.0
-Either upgrade to rustc 1.82.0 or newer, or use
-cargo update backtrace@0.3.75 --precise ver
-where `ver` is the latest version of `backtrace` supporting rustc 1.75.0
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/home/spacer/acados/lib"
+export ACADOS_SOURCE_DIR="/home/spacer/acados"
+```
 
