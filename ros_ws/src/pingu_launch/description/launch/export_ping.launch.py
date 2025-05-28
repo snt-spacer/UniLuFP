@@ -16,6 +16,14 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 import xacro
 
+"""
+Export the URDF of the Pingu robot to a file after resolving package URIs.
+This script processes a XACRO file, generates a URDF, and replaces all 'package://' URIs
+with absolute paths in the URDF string. The resulting URDF is saved under an install directory.
+
+Note: The path depends on your ROS 2 workspace path.
+"""
+
 def resolve_package_uris_in_urdf(urdf_str):
     """
     Replace all 'package://' URIs in the URDF string with absolute paths.
