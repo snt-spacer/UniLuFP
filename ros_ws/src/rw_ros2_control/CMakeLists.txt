@@ -40,7 +40,7 @@ install(
 install(
   DIRECTORY 
     description/launch 
-    # description/mesh 
+    description/mesh 
     description/ros2_control 
     description/rviz 
     description/urdf
