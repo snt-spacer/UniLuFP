@@ -93,6 +93,9 @@ def export_mj_model(input_urdf, output_mjcf):
             angle = (i // 2) * (360 / edge_num)
             x = thrust_distance * math.cos(angle * math.pi / 180)
             y = thrust_distance * math.sin(angle * math.pi / 180)
+            # Flip the thrusters next to each other
+            if i % 2 == 1:
+                angle += 180
             site_name = f"thruster_{i+1}"
             ET.SubElement(first_body, "site", {
               "name": site_name,
@@ -111,12 +114,12 @@ def export_mj_model(input_urdf, output_mjcf):
     if actuators is None:
         actuators = ET.SubElement(root, "actuator")
     for i in range(thrust_num):
-        angle = i * (360 / thrust_num)
         actuator_name = f"thruster_{i+1}"
         ET.SubElement(actuators, "general", {
             "name": actuator_name,
             "site": f"thruster_{i+1}",
             "ctrlrange": "0 1",
+            "gear": "0 1",
         })
 
     # Add actuator for each joint
