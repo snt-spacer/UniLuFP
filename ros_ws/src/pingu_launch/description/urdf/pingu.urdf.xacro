@@ -60,13 +60,13 @@
   <!-- Arm description -->
   <xacro:if value="$(arg left_arm)">
     <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
-      <origin xyz="${.28*SQRT2_2} ${.28*SQRT2_2} .2875" rpy="0 0 ${PI/4}" />
+      <origin xyz="${.25*SQRT2_2} ${.25*SQRT2_2} .3475" rpy="0 0 ${PI/4}" />
     </xacro:levion_arm>
   </xacro:if>
 
   <xacro:if value="$(arg right_arm)">
     <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
-      <origin xyz="${.28*SQRT2_2} ${-.28*SQRT2_2} .2875" rpy="0 0 ${-PI/4}" />
+      <origin xyz="${.25*SQRT2_2} ${-.25*SQRT2_2} .3475" rpy="0 0 ${-PI/4}" />
     </xacro:levion_arm>
   </xacro:if>
 
