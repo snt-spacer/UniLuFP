@@ -20,7 +20,7 @@ def export_mj_model(input_urdf, output_mjcf):
     if asset is not None:
         for mesh in asset.findall("mesh"):
             old_file = mesh.get("file")
-            if old_file and old_file.endswith(".STL"):
+            if old_file and (old_file.endswith(".STL") or old_file.endswith(".stl")):
                 new_path = f"../urdf/{old_file}"
                 mesh.set("file", new_path)
 
