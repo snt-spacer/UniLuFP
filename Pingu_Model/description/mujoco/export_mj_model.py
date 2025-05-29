@@ -83,7 +83,8 @@ def export_mj_model(input_urdf, output_mjcf):
     first_body = worldbody.find("body")
     if first_body is not None:
         # Add site to put thrusters
-        
+        # Place at each corner of the base body
+        # Actuate into the direction of the circle        
         for i in range(thrust_num):
             ET.SubElement(first_body, "site", {
                 "name": f"thruster_{i+1}",
@@ -92,6 +93,8 @@ def export_mj_model(input_urdf, output_mjcf):
                 "type": "sphere",
                 "rgba": "1 0 0 1"
             })
+
+            # TODO: Add new line for visibility
     
     # Add actuators to sites
     actuators = root.find("actuator")
@@ -104,12 +107,15 @@ def export_mj_model(input_urdf, output_mjcf):
             "ctrlrange": "-1 1",
         })
 
-    # ET.SubElement(actuators, "position", {
-    #     "name": "act_joint1",
-    #     "joint": "joint1",  # ← your actual joint name
-    #     "ctrlrange": "-1 1",
-    #     "kp": "100"
-    # })
+    # Add actuator for each joint
+    for joint in root.findall(".//joint"):
+        if joint.get("name") and joint.get("type") != "free":
+            actuator_name = f"{joint.get('name')}_actuator"
+            ET.SubElement(actuators, "motor", {
+                "name": actuator_name,
+                "joint": joint.get("name"),
+                "ctrlrange": "-1 1",
+            })
 
     # Save the modified MJCF
     tree.write(output_mjcf)
