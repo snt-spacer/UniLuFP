@@ -43,6 +43,7 @@ def resolve_package_uris_in_urdf(urdf_str):
 def generate_launch_description():
     # Set arguments TODO: make this a LaunchConfiguration
     prefix = ''
+    floating_joint = 'true'
     ros2_control = 'false'
     left_arm = 'true'
     right_arm = 'true'
@@ -55,6 +56,7 @@ def generate_launch_description():
     # load xacro
     doc = xacro.process_file(xacro_path, 
         mappings={'prefix': prefix, 
+                  'floating_joint': floating_joint,
                   'ros2_control': ros2_control,
                   'left_arm': left_arm,
                   'right_arm': right_arm})
@@ -63,7 +65,7 @@ def generate_launch_description():
     robot_desc = doc.toprettyxml(indent=' ')
 
     # resolve package URIs in the URDF
-    robot_desc = resolve_package_uris_in_urdf(robot_desc)
+    # robot_desc = resolve_package_uris_in_urdf(robot_desc)
 
     # export urdf to urdf path
     f = open(urdf_path, 'w')

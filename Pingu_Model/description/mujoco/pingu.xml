@@ -2,6 +2,7 @@
   <compiler angle="radian" />
 
   <asset>
+    <mesh name="base_link" content_type="model/stl" file="../urdf/base_link.stl" />
     <mesh name="rw_base" content_type="model/stl" file="../urdf/rw_base.stl" />
     <mesh name="Link0" content_type="model/stl" file="../urdf/Link0.STL" />
     <mesh name="Link1" content_type="model/stl" file="../urdf/Link1.STL" />
@@ -9,33 +10,37 @@
   </asset>
 
   <worldbody>
-    <geom size="0.2 0.2 0.3276" pos="0 0 0.3276" quat="0.92388 0 0 0.382683" type="box" rgba="0 0 0 0.5" />
-    <geom pos="0 0 0.2875" quat="1 0 0 0" type="mesh" mesh="rw_base" />
-    <geom pos="0.176777 0.176777 0.3475" quat="0.92388 0 0 0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0" />
-    <geom pos="0.176777 -0.176777 0.3475" quat="0.92388 0 0 -0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0" />
-    <body name="rw_rotor" pos="0 0 0.3375">
-      <inertial pos="0 0 0" mass="1" diaginertia="0.0001 0.0001 0.0001" />
-      <joint name="rw_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" actuatorfrcrange="-10 10" damping="0.5" frictionloss="0.5" />
-      <geom size="0.1 0.025" type="cylinder" />
-    </body>
-    <body name="left_link1" pos="0.176777 0.176777 0.3914" quat="0.92388 0 0 0.382683">
-      <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
-      <joint name="left_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
-      <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1" />
-      <body name="left_link2" pos="0.32 0 0.04685">
-        <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
-        <joint name="left_elbow_joint" pos="0 0 0" axis="0 0 1" range="-2.615 -0.349" actuatorfrcrange="-10 10" />
-        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2" />
+    <body name="base_link" pos="0 0 0.2875">
+      <inertial pos="0.00735391 0 0.0254" quat="0.986705 0 0.16252 0" mass="25" diaginertia="0.742235 0.720831 0.547297" />
+      <joint name="base_joint" type="free" limited="false" actuatorfrclimited="false" />
+      <geom quat="0.92388 0 0 0.382683" type="mesh" rgba="0 0 0 0.5" mesh="base_link" />
+      <geom pos="0 0 0.2875" quat="1 0 0 0" type="mesh" mesh="rw_base" />
+      <geom pos="0.183848 0.183848 0.3475" quat="0.92388 0 0 0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0" />
+      <geom pos="0.183848 -0.183848 0.3475" quat="0.92388 0 0 -0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0" />
+      <body name="rw_rotor" pos="0 0 0.3375">
+        <inertial pos="0 0 0" mass="1" diaginertia="0.0001 0.0001 0.0001" />
+        <joint name="rw_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" actuatorfrcrange="-10 10" damping="0.5" frictionloss="0.5" />
+        <geom size="0.1 0.025" type="cylinder" />
       </body>
-    </body>
-    <body name="right_link1" pos="0.176777 -0.176777 0.3914" quat="0.92388 0 0 -0.382683">
-      <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
-      <joint name="right_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
-      <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1" />
-      <body name="right_link2" pos="0.32 0 0.04685">
-        <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
-        <joint name="right_elbow_joint" pos="0 0 0" axis="0 0 1" range="0.349 2.615" actuatorfrcrange="-10 10" />
-        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2" />
+      <body name="left_link1" pos="0.183848 0.183848 0.3914" quat="0.92388 0 0 0.382683">
+        <inertial pos="0.05 0 0" mass="0.6" diaginertia="0.0006 0.0006 0.0006" />
+        <joint name="left_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1" />
+        <body name="left_link2" pos="0.32 0 0.04685">
+          <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
+          <joint name="left_elbow_joint" pos="0 0 0" axis="0 0 1" range="-2.615 -0.349" actuatorfrcrange="-10 10" />
+          <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2" />
+        </body>
+      </body>
+      <body name="right_link1" pos="0.183848 -0.183848 0.3914" quat="0.92388 0 0 -0.382683">
+        <inertial pos="0.05 0 0" mass="0.6" diaginertia="0.0006 0.0006 0.0006" />
+        <joint name="right_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1" />
+        <body name="right_link2" pos="0.32 0 0.04685">
+          <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
+          <joint name="right_elbow_joint" pos="0 0 0" axis="0 0 1" range="0.349 2.615" actuatorfrcrange="-10 10" />
+          <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2" />
+        </body>
       </body>
     </body>
   <geom name="floor" type="plane" pos="0 0 0" size="5 5 0.1" rgba="0.8 0.9 0.8 1" contype="1" conaffinity="1" /><light name="main_light" pos="0 0 3" dir="0 0 -1" diffuse="1 1 1" specular="0.3 0.3 0.3" /></worldbody>
