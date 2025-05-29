@@ -40,7 +40,7 @@ install(
 install(
   DIRECTORY 
     description/launch 
-    # description/mesh 
+    description/mesh
     description/rviz 
     description/urdf
   DESTINATION share/${PROJECT_NAME}
