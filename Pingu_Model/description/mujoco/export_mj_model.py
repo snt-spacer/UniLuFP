@@ -107,14 +107,14 @@ def export_mj_model(input_urdf, output_mjcf):
     
     # Add actuators to sites
     thrust_mapping = {
-        "thruster_1": "1 0 0",
-        "thruster_2": "-1 0 0",
-        "thruster_3": "0 1 0",
-        "thruster_4": "0 -1 0",
-        "thruster_5": "-1 0 0",
-        "thruster_6": "1 0 0",
-        "thruster_7": "0 -1 0",
-        "thruster_8": "0 1 0",
+        "thruster_1": "1 0 0 0 0 0",
+        "thruster_2": "-1 0 0 0 0 0",
+        "thruster_3": "0 1 0 0 0 0",
+        "thruster_4": "0 -1 0 0 0 0",
+        "thruster_5": "-1 0 0 0 0 0",
+        "thruster_6": "1 0 0 0 0 0",
+        "thruster_7": "0 -1 0 0 0 0",
+        "thruster_8": "0 1 0 0 0 0",
     }
     actuators = root.find("actuator")
     if actuators is None:
