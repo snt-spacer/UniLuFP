@@ -87,6 +87,7 @@ def export_mj_model(input_urdf, output_mjcf):
         # Place at each corner of the base body
         # Actuate into the direction of the circle
         thrust_distance = 0.2  # Distance from the center of the base body
+        z = 0.3  # Height of the thruster sites above the base
         for i in range(thrust_num):
             angle = i * (360 / thrust_num)
             x = thrust_distance * math.cos(angle * math.pi / 180)
@@ -94,7 +95,7 @@ def export_mj_model(input_urdf, output_mjcf):
             site_name = f"thruster_{i+1}"
             ET.SubElement(first_body, "site", {
                 "name": site_name,
-                "pos": f"{x} {y} 0",
+                "pos": f"{x} {y} {z}",
                 "size": "0.05",
                 "type": "cylinder",
                 "rgba": "1 0 0 1",  # Red color for visibility
