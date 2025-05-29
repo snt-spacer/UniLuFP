@@ -54,7 +54,7 @@ def export_mj_model(input_urdf, output_mjcf):
         option = ET.SubElement(root, "option")
     option.set("integrator", "RK4")  # Set integrator to RK4
     option.set("timestep", "0.002")  # Set timestep to 0.002 seconds
-    option.set("gravity", "0 0 0")  # Set gravity to Earth's gravity
+    option.set("gravity", "0 0 -9.8")  # Set gravity to Earth's gravity
 
     # Remake body structure
     worldbody = root.find("worldbody")
@@ -67,7 +67,10 @@ def export_mj_model(input_urdf, output_mjcf):
             "size": "5 5 0.1",
             "rgba": "0.8 0.9 0.8 1",
             "contype": "1",
-            "conaffinity": "1"
+            "conaffinity": "1",
+            "friction": "0.0 0.0 0.0",
+            "solref": "0.01 1",
+            "solimp": "0.9 0.95 0.001"
         })
 
         # Add light
@@ -83,6 +86,14 @@ def export_mj_model(input_urdf, output_mjcf):
     thrust_num = 8
     first_body = worldbody.find("body")
     if first_body is not None:
+        # Rewrite contact parameters
+        geom = first_body.find("geom")
+        if geom is not None:
+            geom.set("friction", "0.0 0.0 0.0")
+            geom.set("solref", "0.01 1")
+            geom.set("solimp", "0.9 0.95 0.001")
+
+
         # Add site to put thrusters
         # Place at each corner of the base body
         # Actuate into the direction of the circle
