@@ -97,6 +97,7 @@ def export_mj_model(input_urdf, output_mjcf):
             ET.SubElement(first_body, "site", {
               "name": site_name,
               "pos": f"{x} {y} {z}",
+              "quat": f"{math.cos(angle * math.pi / 360)} {0} {0} {math.sin(angle * math.pi / 360)}",  # Quaternion for rotation
               "size": "0.02 0.04 0.01",
               "type": "box",
               "rgba": "1 0 0 0.8",  # Red color for visibility
@@ -106,27 +107,16 @@ def export_mj_model(input_urdf, output_mjcf):
 
     
     # Add actuators to sites
-    thrust_mapping = {
-        "thruster_1": "1 0 0 0 0 0",
-        "thruster_2": "-1 0 0 0 0 0",
-        "thruster_3": "0 1 0 0 0 0",
-        "thruster_4": "0 -1 0 0 0 0",
-        "thruster_5": "-1 0 0 0 0 0",
-        "thruster_6": "1 0 0 0 0 0",
-        "thruster_7": "0 -1 0 0 0 0",
-        "thruster_8": "0 1 0 0 0 0",
-    }
     actuators = root.find("actuator")
     if actuators is None:
         actuators = ET.SubElement(root, "actuator")
     for i in range(thrust_num):
         angle = i * (360 / thrust_num)
         actuator_name = f"thruster_{i+1}"
-        ET.SubElement(actuators, "motor", {
+        ET.SubElement(actuators, "general", {
             "name": actuator_name,
             "site": f"thruster_{i+1}",
             "ctrlrange": "0 1",
-            "gear": thrust_mapping[f"thruster_{i+1}"],
         })
 
     # Add actuator for each joint
