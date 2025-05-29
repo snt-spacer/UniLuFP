@@ -86,36 +86,47 @@ def export_mj_model(input_urdf, output_mjcf):
         # Add site to put thrusters
         # Place at each corner of the base body
         # Actuate into the direction of the circle
-        thrust_distance = 0.2  # Distance from the center of the base body
+        thrust_distance = 0.2 * math.sqrt(2) - 0.044  # Distance from the center of the base body
+        edge_num = 4
         z = 0.3  # Height of the thruster sites above the base
         for i in range(thrust_num):
-            angle = i * (360 / thrust_num)
+            angle = (i // 2) * (360 / edge_num)
             x = thrust_distance * math.cos(angle * math.pi / 180)
             y = thrust_distance * math.sin(angle * math.pi / 180)
             site_name = f"thruster_{i+1}"
             ET.SubElement(first_body, "site", {
-                "name": site_name,
-                "pos": f"{x} {y} {z}",
-                "size": "0.05",
-                "type": "cylinder",
-                "rgba": "1 0 0 1",  # Red color for visibility
+              "name": site_name,
+              "pos": f"{x} {y} {z}",
+              "size": "0.02 0.04 0.01",
+              "type": "box",
+              "rgba": "1 0 0 0.8",  # Red color for visibility
             })
 
             # TODO: Add new line for visibility
 
     
     # Add actuators to sites
+    thrust_mapping = {
+        "thruster_1": "1 0 0",
+        "thruster_2": "-1 0 0",
+        "thruster_3": "0 1 0",
+        "thruster_4": "0 -1 0",
+        "thruster_5": "-1 0 0",
+        "thruster_6": "1 0 0",
+        "thruster_7": "0 -1 0",
+        "thruster_8": "0 1 0",
+    }
     actuators = root.find("actuator")
     if actuators is None:
         actuators = ET.SubElement(root, "actuator")
     for i in range(thrust_num):
         angle = i * (360 / thrust_num)
-        actuator_name = f"thruster_{i+1}_actuator"
+        actuator_name = f"thruster_{i+1}"
         ET.SubElement(actuators, "motor", {
             "name": actuator_name,
             "site": f"thruster_{i+1}",
-            "ctrlrange": "-1 1",
-            # gear = "x y 0 0 0 0 0 0" # vertical to the norm to the center
+            "ctrlrange": "0 1",
+            "gear": thrust_mapping[f"thruster_{i+1}"],
         })
 
     # Add actuator for each joint
