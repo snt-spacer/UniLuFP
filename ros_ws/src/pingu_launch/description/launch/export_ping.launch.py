@@ -44,7 +44,8 @@ def generate_launch_description():
     # Set arguments TODO: make this a LaunchConfiguration
     prefix = ''
     floating_joint = 'true'
-    ros2_control = 'false'
+    ros2_control = 'true'
+    hw_plugin = 'mujoco'
     left_arm = 'true'
     right_arm = 'true'
 
@@ -58,6 +59,7 @@ def generate_launch_description():
         mappings={'prefix': prefix, 
                   'floating_joint': floating_joint,
                   'ros2_control': ros2_control,
+                  'hw_plugin': hw_plugin,
                   'left_arm': left_arm,
                   'right_arm': right_arm})
 
