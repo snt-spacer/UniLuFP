@@ -37,10 +37,17 @@ def generate_launch_description():
         have to be updated.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "hw_plugin",
+            default_value='real',
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
     prefix = LaunchConfiguration("prefix")
+    hw_plugin = LaunchConfiguration("hw_plugin")
 
     # Get URDF via xacro
     # Get URDF via xacro
@@ -52,7 +59,10 @@ def generate_launch_description():
             " ",
             "prefix:=",
             prefix,
-        ]
+            " ",
+            "hw_plugin:=",
+            hw_plugin,
+        ]   
     )
     robot_description = {"robot_description": robot_description_content}
 
