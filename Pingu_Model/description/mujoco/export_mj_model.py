@@ -82,6 +82,34 @@ def export_mj_model(input_urdf, output_mjcf):
             "specular": "0.3 0.3 0.3"
         })
 
+        # Add mocap body
+        mocap_body = ET.SubElement(worldbody, "body", {
+            "mocap": "true",
+            "name": "mocap",
+            "pos": "0.1 0.1 0.1"
+        })
+        ET.SubElement(mocap_body, "site", {
+            "pos": "0 0 0.075",
+            "size": "0.003 0.003 0.1",
+            "type": "box",
+            "name": "mocap_left_site1",
+            "rgba": "0 0 1 1"
+        })
+        ET.SubElement(mocap_body, "site", {
+            "pos": "0 0.075 0",
+            "size": "0.003 0.1 0.003",
+            "type": "box",
+            "name": "mocap_left_site2",
+            "rgba": "0 1 0 1"
+        })
+        ET.SubElement(mocap_body, "site", {
+            "pos": "0.075 0 0",
+            "size": "0.1 0.003 0.003",
+            "type": "box",
+            "name": "mocap_left_site3",
+            "rgba": "1 0 0 1"
+        })
+    
     # Add thrusters to the base body
     thrust_num = 8
     first_body = worldbody.find("body")
