@@ -3,7 +3,7 @@
 
   <xacro:macro name="rw" params="parent prefix *origin">
 
-  <joint name="${prefix}base_joint" type="fixed">
+  <joint name="${prefix}rw_base_joint" type="fixed">
     <xacro:insert_block name="origin" />
     <parent link="${parent}"/>
     <child link="${prefix}rw_base" />

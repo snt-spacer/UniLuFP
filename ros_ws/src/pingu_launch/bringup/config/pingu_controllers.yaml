@@ -49,12 +49,14 @@ controller_manager:
 # RW controllers configuration
 rw_velocity_controller:
   ros__parameters:
-    joint: rw_joint
+    joints:
+      - rw_joint
     interface_name: velocity
 
 rw_effort_controller:
   ros__parameters:
-    joint: rw_joint
+    joints:
+      - rw_joint
     interface_name: effort
 
 # Arm controllers configuration
