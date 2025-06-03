@@ -14,10 +14,13 @@ from rclpy.qos import (
 from std_msgs.msg import Int16MultiArray
 import numpy as np
 
-from px4_msgs.msg import OffboardControlMode
-from px4_msgs.msg import VehicleStatus
-from px4_msgs.msg import ActuatorMotors
-from px4_msgs.msg import VehicleCommand
+from px4_msgs.msg import (
+    OffboardControlMode,
+    VehicleControlMode,
+    VehicleStatus,
+    ActuatorMotors,
+    VehicleCommand,
+)
 
 class PinguDirectValveControl(Node):
     def __init__(self):
@@ -31,6 +34,8 @@ class PinguDirectValveControl(Node):
         self.namespace = self.get_param("namespace")
         self.namespace_prefix = f'/{self.namespace}' if self.namespace else ''
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
+        self.pingu_armed = False
+        self.armed_counter = 0
 
         # QoS profiles
         qos_profile_pub = QoSProfile(
@@ -46,17 +51,6 @@ class PinguDirectValveControl(Node):
             history=QoSHistoryPolicy.KEEP_LAST,
             depth=0,
         )
-
-        # Enable arm
-        self.pingu_armed = False
-        self.get_logger().info("Arming Pingu...")
-        wait_rate = self.create_rate(0.1)  # 10 Hz
-        while rclpy.ok():
-            if self.pingu_armed:
-                self.get_logger().info("Pingu armed successfully.")
-                break
-            self._arm()
-            wait_rate.sleep()
 
         # Publishers
         self.publisher_vehicle_command = self.create_publisher(
@@ -77,9 +71,6 @@ class PinguDirectValveControl(Node):
             qos_profile_pub,
         )
 
-        timer_period = 0.1  # seconds
-        self.timer = self.create_timer(timer_period, self.offboard_loop)
-
         # Subscribers
         self.status_sub = self.create_subscription(
             VehicleStatus,
@@ -87,17 +78,32 @@ class PinguDirectValveControl(Node):
             self.vehicle_status_callback,
             qos_profile_sub,
         )
+        self.vehicle_control_mode_sub = self.create_subscription(
+            VehicleControlMode,
+            f"{self.namespace_prefix}/fmu/out/vehicle_control_mode",
+            self.vehicle_control_mode_callback,
+            qos_profile_sub,
+        )
         self.subscriber = self.create_subscription(Int16MultiArray, self.get_param("topic_name"), self.valve_callback, 10)
 
+        timer_period = 0.1  # seconds
+        self.timer = self.create_timer(timer_period, self.offboard_loop)
 
 
-    
     def _arm(self):
         self.get_logger().info("Attempting to arm Pingu...")
         self.publish_vehicle_command(
             VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM,
             param1 = 1.0,
             param2 = 0.0
+        )
+
+    def enable_offboard_control(self):
+        # self.get_logger().info("Enabling offboard control")
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_DO_SET_MODE,
+            param1 = 1.0,
+            param2 = 6.0,  # Offboard mode
         )
 
     def register_param(self):
@@ -152,6 +158,7 @@ class PinguDirectValveControl(Node):
         """
         Publish offboard control mode.
         """
+        self.enable_offboard_control()
         offboard_msg = OffboardControlMode()
         offboard_msg.timestamp = int(Clock().now().nanoseconds / 1000)
         offboard_msg.position = False
@@ -161,6 +168,16 @@ class PinguDirectValveControl(Node):
         offboard_msg.body_rate = False
         offboard_msg.direct_actuator = True
         self.publisher_offboard_mode.publish(offboard_msg)
+        if not self.pingu_armed:
+            self._arm()
+            self.armed_counter += 1
+        if self.pingu_armed and self.armed_counter <= 1:
+            self.get_logger().info("Pingu is armed.")
+            self.armed_counter += 1
+            
+
+    def vehicle_control_mode_callback(self, msg):
+        self.pingu_armed = msg.flag_armed
 
     def valve_callback(self, msg):
         """
