@@ -25,7 +25,7 @@ from px4_msgs.msg import (
 class PinguDirectValveControl(Node):
     def __init__(self):
         """
-        Pins (List[int]): (bearing, thrusters(on/off), valve1, valve2, valve3, valve4, valve5, valve6, valve7, valve8)
+        Pins (List[int]): (bearing, thrusters(on/off), t1, t2, t3, t4, t5, t6, t7, t8)
         """
         super().__init__('pingu_valve_control_node')
         # Register parameter
@@ -174,10 +174,25 @@ class PinguDirectValveControl(Node):
         if self.pingu_armed and self.armed_counter <= 1:
             self.get_logger().info("Pingu is armed.")
             self.armed_counter += 1
+            self.publish_direct_actuator_msg([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # (bearing, thrusters(on/off), t1, t2, t3, t4, t5, t6, t7, t8)
             
 
     def vehicle_control_mode_callback(self, msg):
         self.pingu_armed = msg.flag_armed
+
+    def publish_direct_actuator_msg(self, command: List[float]) -> None:
+        """
+        Publish actuator motors message.
+        Args:
+            thrust_command (List[float]): List of thrust values for each actuator.
+        """
+        if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
+            thrust_command = np.zeros(12, dtype=np.float32)
+            thrust_command[:8] = np.array(command, dtype=np.float32)[2:] # # Skip first two elements (bearing and thrusters(on/off))
+            actuator_outputs_msg = ActuatorMotors()
+            actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
+            actuator_outputs_msg.control = thrust_command.flatten()
+            self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
     def valve_callback(self, msg):
         """
@@ -185,13 +200,8 @@ class PinguDirectValveControl(Node):
         Args:
             msg (std_msgs/Int16MultiArray): ros2 message.
         """
-        if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
-            thrust_command = np.zeros(12, dtype=np.float32)
-            thrust_command[:8] = np.array(list(msg.data), dtype=np.float32)[2:] # # Skip first two elements (bearing and thrusters(on/off))
-            actuator_outputs_msg = ActuatorMotors()
-            actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
-            actuator_outputs_msg.control = thrust_command.flatten()
-            self.publisher_direct_actuator.publish(actuator_outputs_msg)
+
+        self.publish_direct_actuator_msg(list(msg.data))
         
 
 def main(args=None):
