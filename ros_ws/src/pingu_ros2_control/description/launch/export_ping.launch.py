@@ -50,7 +50,7 @@ def generate_launch_description():
     right_arm = 'true'
 
     # define file path
-    package = get_package_share_directory("pingu_launch")
+    package = get_package_share_directory("pingu_ros2_control")
     xacro_path = os.path.join(package, "urdf", "pingu.urdf.xacro")
     urdf_path = os.path.join(package, "urdf", "pingu.urdf")
 

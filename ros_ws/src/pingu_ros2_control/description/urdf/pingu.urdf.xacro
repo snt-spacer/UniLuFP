@@ -40,7 +40,7 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <mesh filename="package://pingu_launch/mesh/base_link.stl" scale="1 1 1"/>
+        <mesh filename="package://pingu_ros2_control/mesh/base_link.stl" scale="1 1 1"/>
       </geometry>
       <material name="black_transparent">
         <color rgba="0 0 0 0.5"/>
@@ -49,7 +49,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://pingu_launch/mesh/base_link.stl" scale="1 1 1"/>
+        <mesh filename="package://pingu_ros2_control/mesh/base_link.stl" scale="1 1 1"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 ${PI/4}"/> <!-- 0 0 0.3276 for box -->
     </collision>

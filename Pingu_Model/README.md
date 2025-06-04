@@ -4,7 +4,7 @@
 
 ## Generate URDF
 
-Check [export_pingu.launch.py](ros_ws/src/pingu_launch/description/launch/export_ping.launch.py)
+Check [export_pingu.launch.py](ros_ws/src/pingu_ros2_control/description/launch/export_ping.launch.py)
 
 ## Export Mujoco
 

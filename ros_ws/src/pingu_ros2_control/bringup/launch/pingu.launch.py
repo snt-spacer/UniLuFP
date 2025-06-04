@@ -15,7 +15,7 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     # Set package name
-    package = FindPackageShare("pingu_launch")
+    package = FindPackageShare("pingu_ros2_control")
     arm_package = FindPackageShare("levion_arm_ros2_control")
     rw_package = FindPackageShare("rw_ros2_control")
 
