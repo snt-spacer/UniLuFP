@@ -11,7 +11,7 @@ from rclpy.qos import (
     QoSHistoryPolicy,
     QoSDurabilityPolicy,
 )
-from std_msgs.msg import Int16MultiArray
+from std_msgs.msg import Int16MultiArray, Float32MultiArray
 import numpy as np
 
 from px4_msgs.msg import (
@@ -36,6 +36,7 @@ class PinguDirectValveControl(Node):
         self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
         self.pingu_armed = False
         self.armed_counter = 0
+        self.thrust_command = np.zeros(12, dtype=np.float32)
 
         # QoS profiles
         qos_profile_pub = QoSProfile(
@@ -84,11 +85,10 @@ class PinguDirectValveControl(Node):
             self.vehicle_control_mode_callback,
             qos_profile_sub,
         )
-        self.subscriber = self.create_subscription(Int16MultiArray, self.get_param("topic_name"), self.valve_callback, 10)
+        self.subscriber = self.create_subscription(Float32MultiArray, self.get_param("topic_name"), self.valve_callback, 10)
 
-        timer_period = 0.1  # seconds
+        timer_period = 0.1  # seconds (10Hz)
         self.timer = self.create_timer(timer_period, self.offboard_loop)
-
 
     def _arm(self):
         self.get_logger().info("Attempting to arm Pingu...")
@@ -174,34 +174,36 @@ class PinguDirectValveControl(Node):
         if self.pingu_armed and self.armed_counter <= 1:
             self.get_logger().info("Pingu is armed.")
             self.armed_counter += 1
-            self.publish_direct_actuator_msg([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # (bearing, thrusters(on/off), t1, t2, t3, t4, t5, t6, t7, t8)
-            
 
-    def vehicle_control_mode_callback(self, msg):
-        self.pingu_armed = msg.flag_armed
-
-    def publish_direct_actuator_msg(self, command: List[float]) -> None:
-        """
-        Publish actuator motors message.
-        Args:
-            thrust_command (List[float]): List of thrust values for each actuator.
-        """
         if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
-            thrust_command = np.zeros(12, dtype=np.float32)
-            thrust_command[:8] = np.array(command, dtype=np.float32)[2:] # # Skip first two elements (bearing and thrusters(on/off))
             actuator_outputs_msg = ActuatorMotors()
             actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
-            actuator_outputs_msg.control = thrust_command.flatten()
+            actuator_outputs_msg.control = self.thrust_command.flatten()
+            # self.get_logger().info(f"Publishing direct actuator command: {actuator_outputs_msg}")
             self.publisher_direct_actuator.publish(actuator_outputs_msg)
+            
+    def vehicle_control_mode_callback(self, msg):
+        self.pingu_armed = msg.flag_armed
 
     def valve_callback(self, msg):
         """
         Subscriber callback function.
         Args:
-            msg (std_msgs/Int16MultiArray): ros2 message.
+            msg (std_msgs/Float32MultiArray): ros2 message.
         """
+        if len(msg.data) < 10:
+            self.get_logger().error("Received message with insufficient data.")
+            return
+        if not self.pingu_armed:
+            self.get_logger().warn("Pingu is not armed. Ignoring valve command.")
+            return
+        if self.nav_state != VehicleStatus.NAVIGATION_STATE_OFFBOARD:
+            self.get_logger().warn("Pingu is not in offboard mode. Ignoring valve command.")
+            return
+        self.get_logger().info(f"Received valve command: {msg.data}")
+        self.thrust_command = np.zeros(12, dtype=np.float32)
+        self.thrust_command[:8] = np.array(list(msg.data), dtype=np.float32)[2:]
 
-        self.publish_direct_actuator_msg(list(msg.data))
         
 
 def main(args=None):
@@ -213,7 +215,7 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
-        valve_control_node.on_shutdown()
+        # valve_control_node.on_shutdown()
         valve_control_node.destroy_node()
         rclpy.shutdown()
 
