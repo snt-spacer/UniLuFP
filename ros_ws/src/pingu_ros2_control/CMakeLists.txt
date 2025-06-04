@@ -24,13 +24,4 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(
-  DIRECTORY 
-    description/launch 
-    description/mesh
-    description/rviz 
-    description/urdf
-  DESTINATION share/${PROJECT_NAME}
-)
-
 ament_package()
