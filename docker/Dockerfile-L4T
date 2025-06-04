@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -q -y --no-install-recommends \
     unzip \
     vim \
     git \
+    usbutils \
+    joystick \
     && rm -rf /var/lib/apt/lists/*
 
 # install ros and build tools

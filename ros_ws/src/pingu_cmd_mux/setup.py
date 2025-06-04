@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'pingu_cmd_mux = pingu_cmd_mux.pingu_cmd_mux_node:main',
+            'pingu_manual_control = pingu_cmd_mux.pingu_manual_control_node:main',
         ],
     },
 )

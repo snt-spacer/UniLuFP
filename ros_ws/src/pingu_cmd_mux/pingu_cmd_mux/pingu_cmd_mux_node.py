@@ -36,7 +36,7 @@ class PinguCmdMux(Node):
         self._y = self._y_prev = 0
 
         # Modes
-        self._modes = ["manual", "autonomous"]
+        self._modes = ["joy", "manual", "autonomous"]
         self._modes_idx = 0
         self._current_mode = self.last_mode = self._modes[self._modes_idx] # Default mode is manual
         self.get_logger().info(f"Current mode: {self._current_mode}")

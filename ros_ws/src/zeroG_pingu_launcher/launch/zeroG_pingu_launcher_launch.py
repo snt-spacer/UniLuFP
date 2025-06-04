@@ -3,7 +3,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, TextSubstitution
 
 def generate_launch_description():
     ls = LaunchDescription()
@@ -37,8 +37,8 @@ def generate_launch_description():
         output='screen',
         parameters = [config], 
         remappings=[
-            (f"/{pingu_cmd_mux_ns}/joy_control_input", "/joy"),
-            (f"/{pingu_cmd_mux_ns}/input_valve_2", "/pingu_low_level_control/valves/input"),
+            ([TextSubstitution(text='/'), pingu_cmd_mux_ns, TextSubstitution(text='/joy_control_input')], '/joy'),
+            ([TextSubstitution(text='/'), pingu_cmd_mux_ns, TextSubstitution(text='/input_valve_2')], '/pingu_low_level_control/pingu_valves/input'),
         ],
     )
     ls.add_action(pingu_cmd_mux_node)
@@ -51,14 +51,14 @@ def generate_launch_description():
     )
     ls.add_action(pingu_manual_control_ns_arg)
     manual_control_node = Node(
-        package='pingu_manual_control',
+        package='pingu_cmd_mux',
         namespace=pingu_manual_control_ns,
         executable='pingu_manual_control',
         name='pingu_manual_control',
         output='screen',
         remappings=[
-            (f"/{pingu_manual_control_ns}/joy", "/joy"),
-            (f"/{pingu_manual_control_ns}/manual_control_output", "/fp_cmd_mux/manual_control_input"),
+            ([TextSubstitution(text='/'), pingu_manual_control_ns, TextSubstitution(text='/joy')], '/joy'),
+            ([TextSubstitution(text='/'), pingu_manual_control_ns, TextSubstitution(text='/manual_control_output')], '/pingu_cmd_mux/manual_control_input'),
         ],
     )
     ls.add_action(manual_control_node)

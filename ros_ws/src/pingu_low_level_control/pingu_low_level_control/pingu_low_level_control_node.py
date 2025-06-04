@@ -110,8 +110,8 @@ class PinguDirectValveControl(Node):
         """
         Register rosparams.
         """
-        self.declare_parameter('topic_name', rclpy.Parameter.Type.STRING)
-        self.declare_parameter('namespace', rclpy.Parameter.Type.STRING)
+        self.declare_parameter('topic_name', 'pingu_valves/input')
+        self.declare_parameter('namespace', '')
         self.declare_parameter('device', rclpy.Parameter.Type.STRING)
         self.declare_parameter('pins_ids', rclpy.Parameter.Type.INTEGER_ARRAY)
     
