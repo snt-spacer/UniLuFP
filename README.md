@@ -2,7 +2,6 @@
 
 [Notion](https://www.notion.so/Pingu-FP-1c7aaf8bff7f8098a08bc9bdcd53db11)
 
-
 ## Pixhawk setup
 
 Inherited from [here](https://atmos.discower.io/pages/PX4/).
@@ -183,21 +182,15 @@ ros2 run px4_ros_com offboard_control \
 ```
 
 ## Docker setup
+
 ```
 cd ~/UniLuFP
 ./docker/build.sh
 ```
 
 ## Getting Started
+
 ```
 ./docker/run.sh
  ros2 run px4_simple test_solenoid_valve_connection --ros-args --param namespace:=spacer
 ```
-
-## temp
-
-```
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/home/spacer/acados/lib"
-export ACADOS_SOURCE_DIR="/home/spacer/acados"
-```
-
