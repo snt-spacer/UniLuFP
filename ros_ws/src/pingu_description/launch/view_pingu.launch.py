@@ -15,7 +15,7 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     # Set package name
-    package = FindPackageShare("pingu_launch")
+    package = FindPackageShare("pingu_description")
 
     # Declare arguments
     declared_arguments = []

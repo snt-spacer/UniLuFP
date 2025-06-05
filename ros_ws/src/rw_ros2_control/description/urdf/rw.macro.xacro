@@ -3,7 +3,7 @@
 
   <xacro:macro name="rw" params="parent prefix *origin">
 
-  <joint name="${prefix}base_joint" type="fixed">
+  <joint name="${prefix}rw_base_joint" type="fixed">
     <xacro:insert_block name="origin" />
     <parent link="${parent}"/>
     <child link="${prefix}rw_base" />
@@ -14,20 +14,20 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.2 0.2 0.05"/>
+        <mesh filename="package://rw_ros2_control/mesh/rw_base.stl" scale="1 1 1"/>
       </geometry>
     </collision>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0.785"/>
       <geometry>
-        <box size="0.2 0.2 0.05"/>
+        <mesh filename="package://rw_ros2_control/mesh/rw_base.stl" scale="1 1 1"/>
       </geometry>
       <material name="orange"/>
     </visual>
 
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0.785"/>
       <mass value="1.0"/>
       <inertia
         ixx="0.0001" ixy="0.0" ixz="0.0"

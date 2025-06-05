@@ -15,7 +15,8 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     # Set package name
-    package = FindPackageShare("pingu_launch")
+    package = FindPackageShare("pingu_ros2_control")
+    description_package = FindPackageShare("pingu_description")
     arm_package = FindPackageShare("levion_arm_ros2_control")
     rw_package = FindPackageShare("rw_ros2_control")
 
@@ -37,10 +38,17 @@ def generate_launch_description():
         have to be updated.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "hw_plugin",
+            default_value='real',
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
     prefix = LaunchConfiguration("prefix")
+    hw_plugin = LaunchConfiguration("hw_plugin")
 
     # Get URDF via xacro
     # Get URDF via xacro
@@ -48,11 +56,14 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([package, "urdf", "pingu.urdf.xacro"]),
+            PathJoinSubstitution([description_package, "urdf", "pingu.urdf.xacro"]),
             " ",
             "prefix:=",
             prefix,
-        ]
+            " ",
+            "hw_plugin:=",
+            hw_plugin,
+        ]   
     )
     robot_description = {"robot_description": robot_description_content}
 
@@ -65,7 +76,7 @@ def generate_launch_description():
     )
     rviz_config_file = PathJoinSubstitution(
         [
-            package,
+            description_package,
             "rviz",
             "rw.rviz",
         ]

@@ -1,14 +1,22 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rw_system" params="name prefix">
+  <xacro:macro name="rw_system" params="name prefix hw_plugin:=real"> <!-- real/mujoco -->
 
     <ros2_control name="${name}" type="system">
 
-      <hardware>
-        <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
-        <param name="can">can0</param>
-      </hardware>
+      <!-- Chose hardware interfaces -->
+      <xacro:if value="${hw_plugin == 'real'}">
+        <hardware>
+          <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
+          <param name="can">can0</param>
+        </hardware>
+      </xacro:if>
+      <xacro:if value="${hw_plugin == 'mujoco'}">
+        <hardware>
+          <plugin>mujoco_ros2_control/MujocoSystem</plugin>
+        </hardware>
+      </xacro:if>
 
       <joint name="${prefix}rw_joint">
         <command_interface name="position">
