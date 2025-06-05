@@ -15,7 +15,7 @@
 
   <worldbody>
     <body name="base_link" pos="0 0 0.2875">
-      <inertial pos="0.00735391 0 0.0254" quat="0.986705 0 0.16252 0" mass="25" diaginertia="0.742235 0.720831 0.547297" />
+      <inertial pos="0.00735391 0 0.326792" quat="0.999937 0 0.01122 0" mass="25" diaginertia="0.736973 0.735536 0.567263" />
       <joint name="base_joint" type="free" limited="false" actuatorfrclimited="false" />
       <geom quat="0.92388 0 0 0.382683" type="mesh" rgba="0 0 0 0.5" mesh="base_link" friction="0.0 0.0 0.0" solref="0.01 1" solimp="0.9 0.95 0.001" />
       <geom pos="0 0 0.2875" quat="1 0 0 0" type="mesh" mesh="rw_base" />
@@ -23,7 +23,7 @@
       <geom pos="0.183848 -0.183848 0.3475" quat="0.92388 0 0 -0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0" />
       <body name="rw_rotor" pos="0 0 0.3375">
         <inertial pos="0 0 0" mass="1" diaginertia="0.0001 0.0001 0.0001" />
-        <joint name="rw_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" actuatorfrcrange="-10 10" damping="0.5" frictionloss="0.5" />
+        <joint name="rw_joint" pos="0 0 0" axis="0 0 1" range="-1000000000 1000000000" actuatorfrcrange="-10 10" damping="0.5" frictionloss="0.5" />
         <geom size="0.1 0.025" type="cylinder" />
       </body>
       <body name="left_link1" pos="0.183848 0.183848 0.3914" quat="0.92388 0 0 0.382683">
