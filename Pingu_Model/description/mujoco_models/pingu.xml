@@ -6,11 +6,11 @@
 <compiler angle="radian" />
 
   <asset>
-    <mesh name="base_link" content_type="model/stl" file="../urdf/base_link.stl" />
-    <mesh name="rw_base" content_type="model/stl" file="../urdf/rw_base.stl" />
-    <mesh name="Link0" content_type="model/stl" file="../urdf/Link0.STL" />
-    <mesh name="Link1" content_type="model/stl" file="../urdf/Link1.STL" />
-    <mesh name="Link2" content_type="model/stl" file="../urdf/Link2.STL" />
+    <mesh name="base_link" file="../urdf/base_link.stl" />
+    <mesh name="rw_base" file="../urdf/rw_base.stl" />
+    <mesh name="Link0" file="../urdf/Link0.STL" />
+    <mesh name="Link1" file="../urdf/Link1.STL" />
+    <mesh name="Link2" file="../urdf/Link2.STL" />
   </asset>
 
   <worldbody>
