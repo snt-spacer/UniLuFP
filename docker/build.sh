@@ -7,7 +7,7 @@ TAG="unilufp-ros-deploy"
 DOCKERFILE="${SCRIPT_DIR}/Dockerfile"
 
 DOCKER_BUILD_CMD=(docker build "${SCRIPT_DIR}" --tag ${TAG})
- 
+
 echo -e "\033[0;32m${DOCKER_BUILD_CMD[*]}\033[0m" | xargs
 
 # shellcheck disable=SC2068
