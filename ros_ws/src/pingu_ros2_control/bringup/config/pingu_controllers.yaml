@@ -10,13 +10,13 @@ controller_manager:
 
     # All actuator controllers
     actuators_position_controller:
-      type: forward_command_controller/forward_command_controller
+      type: forward_command_controller/ForwardCommandController
 
     actuators_velocity_controller:
-      type: forward_command_controller/forward_command_controller
+      type: forward_command_controller/ForwardCommandController
 
     actuators_effort_controller:
-      type: forward_command_controller/forward_command_controller
+      type: forward_command_controller/ForwardCommandController
 
     # RW controllers declaration
     rw_velocity_controller:
