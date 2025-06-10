@@ -109,7 +109,7 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    #TODO Make is better
+    #TODO Make is possible to select which controllers to spawn
     controller_spawners = [
         # Node(
         #     package="controller_manager",
