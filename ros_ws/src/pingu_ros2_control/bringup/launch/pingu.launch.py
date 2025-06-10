@@ -111,22 +111,28 @@ def generate_launch_description():
 
     #TODO Make is better
     controller_spawners = [
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["left_arm_velocity_controller", "--param-file", robot_controllers],
-        ),
+        # Node(
+        #     package="controller_manager",
+        #     executable="spawner",
+        #     arguments=["left_arm_velocity_controller", "--param-file", robot_controllers],
+        # ),
+
+        # Node(
+        #     package="controller_manager",
+        #     executable="spawner",
+        #     arguments=["right_arm_velocity_controller", "--param-file", robot_controllers],
+        # ),
+
+        # Node(
+        #     package="controller_manager",
+        #     executable="spawner",
+        #     arguments=["rw_velocity_controller", "--param-file", robot_controllers],
+        # ),
 
         Node(
             package="controller_manager",
             executable="spawner",
-            arguments=["right_arm_velocity_controller", "--param-file", robot_controllers],
-        ),
-
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["rw_velocity_controller", "--param-file", robot_controllers],
+            arguments=["actuators_velocity_controller", "--param-file", robot_controllers],
         ),
     ]
 

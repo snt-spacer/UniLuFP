@@ -8,6 +8,16 @@ controller_manager:
     fts_broadcaster:
       type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
 
+    # All actuator controllers
+    actuators_position_controller:
+      type: forward_command_controller/forward_command_controller
+
+    actuators_velocity_controller:
+      type: forward_command_controller/forward_command_controller
+
+    actuators_effort_controller:
+      type: forward_command_controller/forward_command_controller
+
     # RW controllers declaration
     rw_velocity_controller:
       type: forward_command_controller/ForwardCommandController
@@ -45,6 +55,37 @@ controller_manager:
 
     right_arm_effort_controller:
       type: forward_command_controller/ForwardCommandController
+
+# Actuators controllers configuration
+actuators_position_controller:
+  ros__parameters:
+    joints:
+      - rw_joint
+      - left_shoulder_joint
+      - left_elbow_joint
+      - right_shoulder_joint
+      - right_elbow_joint
+    interface_name: position
+
+actuators_velocity_controller:
+  ros__parameters:
+    joints:
+      - rw_joint
+      - left_shoulder_joint
+      - left_elbow_joint
+      - right_shoulder_joint
+      - right_elbow_joint
+    interface_name: velocity
+
+actuators_effort_controller:
+  ros__parameters:
+    joints:
+      - rw_joint
+      - left_shoulder_joint
+      - left_elbow_joint
+      - right_shoulder_joint
+      - right_elbow_joint
+    interface_name: effort
 
 # RW controllers configuration
 rw_velocity_controller:
