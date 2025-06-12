@@ -132,7 +132,7 @@ def generate_launch_description():
         Node(
             package="controller_manager",
             executable="spawner",
-            arguments=["actuators_velocity_controller", "--param-file", robot_controllers],
+            arguments=["actuators_position_controller", "--param-file", robot_controllers],
         ),
     ]
 
