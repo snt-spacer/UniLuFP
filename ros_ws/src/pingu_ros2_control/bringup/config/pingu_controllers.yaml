@@ -9,6 +9,7 @@ controller_manager:
       type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
 
     # All actuator controllers
+    ## Control all actuators using one controller
     actuators_position_controller:
       type: forward_command_controller/ForwardCommandController
 
@@ -58,6 +59,10 @@ controller_manager:
 
     right_arm_effort_controller:
       type: forward_command_controller/ForwardCommandController
+
+#-------------------------------------------------------------
+# Controllers configuration
+#-------------------------------------------------------------
 
 # Actuators controllers configuration
 actuators_position_controller:
