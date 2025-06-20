@@ -13,6 +13,7 @@ class PoseToTF(Node):
         mocap_qos.reliability = rclpy.qos.ReliabilityPolicy.BEST_EFFORT
 
         self.sub = self.create_subscription(PoseStamped, '/vrpn_mocap/RigidBody_005/pose', self.callback, mocap_qos)
+        self.z_offset = 0.67
 
     def callback(self, msg: PoseStamped):
         t = TransformStamped()
@@ -21,7 +22,7 @@ class PoseToTF(Node):
         t.child_frame_id = 'base_link'
         t.transform.translation.x = msg.pose.position.x
         t.transform.translation.y = msg.pose.position.y
-        t.transform.translation.z = msg.pose.position.z
+        t.transform.translation.z = msg.pose.position.z - self.z_offset
         t.transform.rotation = msg.pose.orientation
         self.br.sendTransform(t)
 

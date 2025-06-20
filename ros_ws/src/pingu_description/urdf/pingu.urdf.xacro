@@ -40,14 +40,23 @@
   
   </xacro:if>
 
+  <!-- Define base_joint -->
+  <link name="world"/>
   <xacro:if value="$(arg floating_joint)">
-    <link name="world"/>
     <joint name="base_joint" type="floating">
-      <origin xyz="0 0 .2875" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="world"/>
       <child link="base_link"/>
     </joint>
   </xacro:if>
+  <xacro:unless value="$(arg floating_joint)">
+    <joint name="base_joint" type="fixed">
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <parent link="world"/>
+      <child link="base_link"/>
+    </joint>
+  </xacro:unless>
+
 
   <!-- Base description -->
   <link name="base_link">
