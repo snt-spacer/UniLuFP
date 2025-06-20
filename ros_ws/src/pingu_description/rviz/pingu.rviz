@@ -5,12 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Grid1
-        - /RobotModel1
-        - /Wrench1
-        - /Wrench2
-        - /RobotModel2
       Splitter Ratio: 0.5
     Tree Height: 542
   - Class: rviz_common/Selection
@@ -139,7 +133,7 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
         base_link:
           Value: true
         left_link0:
@@ -165,7 +159,7 @@ Visualization Manager:
         world:
           Value: true
         zero_g:
-          Value: true
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: true
@@ -317,18 +311,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.3847274780273438
-        Y: -1.6170475482940674
-        Z: 1.4756617546081543
+        X: 2.3054721355438232
+        Y: -1.5047532320022583
+        Z: 1.2358288764953613
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5453979969024658
+      Pitch: 0.520397961139679
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.3953938484191895
+      Yaw: 2.185394525527954
     Saved: ~
 Window Geometry:
   Displays:
@@ -346,5 +340,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1294
-  X: 4665
-  Y: 97
+  X: 4633
+  Y: 65
