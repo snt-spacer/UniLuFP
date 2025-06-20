@@ -86,7 +86,7 @@ def export_mj_model(input_urdf, output_mjcf):
         mocap_body = ET.SubElement(worldbody, "body", {
             "mocap": "true",
             "name": "mocap",
-            "pos": "0.1 0.1 0.1"
+            "pos": "0 0 0"
         })
         ET.SubElement(mocap_body, "site", {
             "pos": "0 0 0.075",
@@ -128,12 +128,13 @@ def export_mj_model(input_urdf, output_mjcf):
         thrust_distance = 0.2 * math.sqrt(2) - 0.044  # Distance from the center of the base body
         edge_num = 4
         z = 0.3  # Height of the thruster sites above the base
+        flipped = [False, True, True, False, True, False, False, True]
         for i in range(thrust_num):
             angle = (i // 2) * (360 / edge_num)
             x = thrust_distance * math.cos(angle * math.pi / 180)
             y = thrust_distance * math.sin(angle * math.pi / 180)
             # Flip the thrusters next to each other
-            if i % 2 == 1:
+            if flipped[i]:
                 angle += 180
             site_name = f"thruster_{i+1}"
             ET.SubElement(first_body, "site", {
