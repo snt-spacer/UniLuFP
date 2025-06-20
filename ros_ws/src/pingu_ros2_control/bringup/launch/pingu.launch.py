@@ -61,6 +61,20 @@ def generate_launch_description():
         'real' uses the real hardware, while 'mujoco' uses the Mujoco"
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "left_arm",
+            default_value="true",
+            description="Enable left arm.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "right_arm",
+            default_value="true",
+            description="Enable right arm.",
+        )
+    )
 
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -75,6 +89,8 @@ def generate_launch_description():
     gui = LaunchConfiguration("gui")
     prefix = LaunchConfiguration("prefix")
     hw_plugin = LaunchConfiguration("hw_plugin")
+    left_arm = LaunchConfiguration("left_arm")
+    right_arm = LaunchConfiguration("right_arm")
     controllers = LaunchConfiguration("controllers")
 
     # Get URDF via xacro
@@ -90,6 +106,12 @@ def generate_launch_description():
             " ",
             "hw_plugin:=",
             hw_plugin,
+            " ",
+            "left_arm:=",
+            left_arm,
+            " ",
+            "right_arm:=",
+            right_arm,
         ]   
     )
     robot_description = {"robot_description": robot_description_content}
