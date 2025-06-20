@@ -10,6 +10,7 @@ Panels:
         - /RobotModel1
         - /Wrench1
         - /Wrench2
+        - /RobotModel2
       Splitter Ratio: 0.5
     Tree Height: 542
   - Class: rviz_common/Selection
@@ -163,6 +164,8 @@ Visualization Manager:
           Value: true
         world:
           Value: true
+        zero_g:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
@@ -184,6 +187,8 @@ Visualization Manager:
             rw_base:
               rw_rotor:
                 {}
+          zero_g:
+            {}
       Update Interval: 0
       Value: true
     - Accept NaN Values: false
@@ -224,6 +229,41 @@ Visualization Manager:
       Torque Arrow Scale: 1
       Torque Color: 204; 204; 51
       Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /zero_g_description
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zero_g:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 246; 245; 244
@@ -277,18 +317,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.427753210067749
-        Y: -0.9427355527877808
-        Z: 0.694454550743103
+        X: 2.3847274780273438
+        Y: -1.6170475482940674
+        Z: 1.4756617546081543
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5603983998298645
+      Pitch: 0.5453979969024658
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.220395565032959
+      Yaw: 2.3953938484191895
     Saved: ~
 Window Geometry:
   Displays:
@@ -306,5 +346,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1294
-  X: 4697
-  Y: 129
+  X: 4665
+  Y: 97

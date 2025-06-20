@@ -17,8 +17,6 @@ To launch, run the following command.
 ros2 launch pingu_ros2_control pingu.launch.py # option:=value controllers:=rw_velocity_controller,left_arm_position_controller
 ```
 
-options:
-
 | Option         | Default                       | Description                                            |
 |----------------|-------------------------------|--------------------------------------------------------|
 | `gui`          | false                         | Launch Rviz with controllers                           |
@@ -29,3 +27,16 @@ options:
 | `controllers`  | actuators_position_controller | Comma-separated list of controllers to spawn.          |
 
 See [`pingu_controllers.yaml`](ros_ws/src/pingu_ros2_control/bringup/config/pingu_controllers.yaml) for available controllers.
+
+## Launch Rviz
+
+The default viewer is placed under [`pingu_description`](ros_ws/src/pingu_description).
+To launch, run the following command.
+
+```bash
+ros2 launch pingu_description view_pingu.launch.py 
+```
+
+| Option                     | Default | Description                                               |
+|----------------------------|---------|-----------------------------------------------------------|
+| `joint_state_publisher_gui`| true    | Launch with virtual joint_state publisher for debug usage.|
