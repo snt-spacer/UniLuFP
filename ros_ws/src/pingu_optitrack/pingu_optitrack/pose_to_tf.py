@@ -17,7 +17,7 @@ class PoseToTF(Node):
 
     def callback(self, msg: PoseStamped):
         t = TransformStamped()
-        t.header.stamp = self.get_clock().now().to_msg()
+        t.header.stamp = msg.header.stamp
         t.header.frame_id = 'world'
         t.child_frame_id = 'base_link'
         t.transform.translation.x = msg.pose.position.x
