@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="zero_g">
+  <link name="world"/>
+
+  <joint name="zero_g_joint" type="fixed">
+    <origin xyz="2.5 -1.5 1.5" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="zero_g"/>
+  </joint>
+
+  <!-- Base description -->
+  <link name="zero_g">
+    <visual>
+      <geometry>
+        <box size="5 3 3"/>
+      </geometry>
+      <material name="black_transparent">
+        <color rgba="0 0 0 0.1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="5 3 3"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

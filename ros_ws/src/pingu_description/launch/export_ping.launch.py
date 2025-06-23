@@ -40,6 +40,29 @@ def resolve_package_uris_in_urdf(urdf_str):
 
     return re.sub(r'filename="package://([^"]+)"', replacer, urdf_str)
 
+def parse_xacro_file(xacro_path, urdf_path, mappings=None, use_abs_paths=False):
+    """
+    Parse a XACRO file and generate a URDF file.
+    """
+    if mappings is None:
+        mappings = {}
+
+    # Load the XACRO file
+    doc = xacro.process_file(xacro_path, mappings=mappings)
+
+    # Convert to URDF string
+    robot_desc = doc.toprettyxml(indent=' ')
+
+    # Resolve package URIs in the URDF
+    if use_abs_paths:
+      robot_desc = resolve_package_uris_in_urdf(robot_desc)
+
+    # Write the URDF to the specified path
+    with open(urdf_path, 'w') as f:
+        f.write(robot_desc)
+
+    print(f"URDF exported to {urdf_path}")
+
 def generate_launch_description():
     # Set arguments TODO: make this a LaunchConfiguration
     prefix = ''
@@ -55,25 +78,18 @@ def generate_launch_description():
     urdf_path = os.path.join(package, "urdf", "pingu.urdf")
 
     # load xacro
-    doc = xacro.process_file(xacro_path, 
-        mappings={'prefix': prefix, 
-                  'floating_joint': floating_joint,
-                  'ros2_control': ros2_control,
-                  'hw_plugin': hw_plugin,
-                  'left_arm': left_arm,
-                  'right_arm': right_arm})
-
-    # make urdf
-    robot_desc = doc.toprettyxml(indent=' ')
-
-    # resolve package URIs in the URDF
-    # robot_desc = resolve_package_uris_in_urdf(robot_desc)
-
-    # export urdf to urdf path
-    f = open(urdf_path, 'w')
-    f.write(robot_desc)
-    f.close()
-
-    print(f"URDF exported to {urdf_path}")
+    parse_xacro_file(
+        xacro_path,
+        urdf_path,
+        mappings={
+            'prefix': prefix,
+            'floating_joint': floating_joint,
+            'ros2_control': ros2_control,
+            'hw_plugin': hw_plugin,
+            'left_arm': left_arm,
+            'right_arm': right_arm
+        },
+        use_abs_paths=True
+    )
 
     return LaunchDescription()

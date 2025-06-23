@@ -2,6 +2,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
+from launch.actions import OpaqueFunction
 from launch.substitutions import (
     Command,
     FindExecutable,
@@ -12,6 +13,20 @@ from launch.substitutions import (
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+def parse_controller_names(context, controllers_str):
+    value = controllers_str.perform(context)
+    return [c.strip() for c in value.split(",") if c.strip()]
+
+def generate_controller_spawners(context, controllers_str, robot_controllers_path):
+    controllers = parse_controller_names(context, controllers_str)
+    return [
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            arguments=[controller, "--param-file", robot_controllers_path],
+            output="screen"
+        ) for controller in controllers
+    ]
 
 def generate_launch_description():
     # Set package name
@@ -42,6 +57,31 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "hw_plugin",
             default_value='real',
+            description="Hardware plugin to use. Options: 'real' or 'mujoco`. \
+        'real' uses the real hardware, while 'mujoco' uses the Mujoco"
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "left_arm",
+            default_value="true",
+            description="Enable left arm.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "right_arm",
+            default_value="true",
+            description="Enable right arm.",
+        )
+    )
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "controllers",
+            default_value="actuators_position_controller",
+            description="Comma-separated list of controllers to spawn. \
+        Check the `pingu_controllers.yaml` file for available controllers."
         )
     )
 
@@ -49,6 +89,9 @@ def generate_launch_description():
     gui = LaunchConfiguration("gui")
     prefix = LaunchConfiguration("prefix")
     hw_plugin = LaunchConfiguration("hw_plugin")
+    left_arm = LaunchConfiguration("left_arm")
+    right_arm = LaunchConfiguration("right_arm")
+    controllers = LaunchConfiguration("controllers")
 
     # Get URDF via xacro
     # Get URDF via xacro
@@ -63,6 +106,12 @@ def generate_launch_description():
             " ",
             "hw_plugin:=",
             hw_plugin,
+            " ",
+            "left_arm:=",
+            left_arm,
+            " ",
+            "right_arm:=",
+            right_arm,
         ]   
     )
     robot_description = {"robot_description": robot_description_content}
@@ -109,26 +158,13 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    #TODO Make is better
-    controller_spawners = [
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["left_arm_velocity_controller", "--param-file", robot_controllers],
-        ),
-
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["right_arm_velocity_controller", "--param-file", robot_controllers],
-        ),
-
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["rw_velocity_controller", "--param-file", robot_controllers],
-        ),
-    ]
+    controller_spawners = OpaqueFunction(
+        function=generate_controller_spawners,
+        kwargs={
+            'controllers_str': controllers,
+            'robot_controllers_path': robot_controllers
+        }
+    )
 
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
@@ -138,21 +174,12 @@ def generate_launch_description():
         )
     )
 
-    delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=controller_spawners[-1], # Wait for the last controller spawner
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
     nodes = [
         control_node,
         robot_state_pub_node,
-        delay_joint_state_broadcaster_after_robot_controller_spawner,
+        controller_spawners,
+        joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
     ]
-
-    # Add controller spawners to the nodes list
-    nodes.extend(controller_spawners)
 
     return LaunchDescription(declared_arguments + nodes)
