@@ -8,7 +8,7 @@
 
 ### Launch thrusters
 
-## Launch actuators
+### Launch actuators
 
 Actuators are controlled using [`ros2_control`](https://control.ros.org/humble/index.html).
 To launch, run the following command.
@@ -34,7 +34,7 @@ The default viewer is placed under [`pingu_description`](ros_ws/src/pingu_descri
 To launch, run the following command.
 
 ```bash
-ros2 launch pingu_description view_pingu.launch.py 
+ros2 launch pingu_description view_pingu.launch.py joint_state_publisher_gui:=false
 ```
 
 | Option                     | Default | Description                                               |
