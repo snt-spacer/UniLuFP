@@ -30,6 +30,13 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "zero_g",
+            default_value="true",
+            description="Start zero_g robot state publisher."
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "prefix",
             default_value='""',
             description="Prefix of the joint names, useful for \
@@ -40,6 +47,7 @@ def generate_launch_description():
 
     # Initialize Arguments
     joint_state_publisher_gui = LaunchConfiguration("joint_state_publisher_gui")
+    zero_g = LaunchConfiguration("zero_g")
     prefix = LaunchConfiguration("prefix")
 
     # Get URDF via xacro
@@ -85,6 +93,7 @@ def generate_launch_description():
             ("/robot_description", "/zero_g_description"),
         ],
         parameters=[zero_g_description],
+        condition=IfCondition(zero_g),
     )
     rviz_node = Node(
         package="rviz2",
