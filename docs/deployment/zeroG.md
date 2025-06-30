@@ -53,3 +53,8 @@ If you want to see the current pose of the platform in Rviz, run the following c
 ```bash
 ros2 run pingu_optitrack pose_to_tf 
 ```
+
+
+# Errors
+## Ubuntu 22.04 ros2 humble installing error GPG, libc-bin
+https://answers.ros.org/question/410123/

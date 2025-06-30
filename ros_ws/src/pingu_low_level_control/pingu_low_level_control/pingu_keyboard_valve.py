@@ -12,7 +12,7 @@ class KeyboardPublisher(Node):
     """
     def __init__(self):
         super().__init__('keyboard_publisher')
-        self.publisher_ = self.create_publisher(Float32MultiArray, 'pingu_low_level_control/pingu_valves/input', 10)
+        self.publisher_ = self.create_publisher(Float32MultiArray, 'spacer_pingu_floating_platform/pingu_valves/input', 10)
         self.timer = self.create_timer(1.0 / 50.0, self.timer_callback)  # 50Hz
 
         # Store key states
