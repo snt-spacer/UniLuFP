@@ -6,6 +6,12 @@
 
 ## Launch pingu
 
+### Launch optitrack
+
+```bash
+ros2 launch vrpn_mocap client.launch.yaml server:=192.168.88.13
+```
+
 ### Launch thrusters
 
 ### Launch actuators
