@@ -6,7 +6,7 @@
 
 Attach the force sensor like the following image. THE CABLE IS FRAGILE, WATCH OUT.
 
-![alt text](img/sensor_at_thruster.jpg){width=200}
+![alt text](img/sensor_at_thruster.jpg){ width=50% }
 
 ### Launch Leptrino
 
