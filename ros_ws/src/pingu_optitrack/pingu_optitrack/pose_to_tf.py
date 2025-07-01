@@ -12,7 +12,7 @@ class PoseToTF(Node):
         mocap_qos = rclpy.qos.QoSProfile(depth=10)
         mocap_qos.reliability = rclpy.qos.ReliabilityPolicy.BEST_EFFORT
 
-        self.sub = self.create_subscription(PoseStamped, '/vrpn_mocap/RigidBody_005/pose', self.callback, mocap_qos)
+        self.sub = self.create_subscription(PoseStamped, '/vrpn_mocap/RigidBody/pose', self.callback, mocap_qos)
         self.z_offset = 0.67
 
     def callback(self, msg: PoseStamped):
