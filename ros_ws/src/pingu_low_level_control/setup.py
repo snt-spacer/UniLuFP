@@ -25,6 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'pingu_low_level_control = pingu_low_level_control.pingu_low_level_control_node:main',
+            'pingu_keyboard_valve = pingu_low_level_control.pingu_keyboard_valve:main',
         ],
     },
 )

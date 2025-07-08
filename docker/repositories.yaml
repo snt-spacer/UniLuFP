@@ -3,6 +3,10 @@ repositories:
     type: git
     url: https://github.com/DISCOWER/px4_msgs.git
     version: main
+  px4_mpc:
+    type: git
+    url: https://github.com/DISCOWER/px4-mpc.git
+    version: master
   ros_odrive:
     type: git
     url: https://github.com/odriverobotics/ros_odrive.git

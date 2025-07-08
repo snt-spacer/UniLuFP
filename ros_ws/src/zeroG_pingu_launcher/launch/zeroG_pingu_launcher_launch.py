@@ -64,6 +64,7 @@ def generate_launch_description():
         name='pingu_manual_control',
         output='screen',
         remappings=[
+<<<<<<< HEAD
             # ([TextSubstitution(text='/'), pingu_manual_control_ns, TextSubstitution(text='/joy')], '/joy'),
             # ([TextSubstitution(text='/'), pingu_manual_control_ns, TextSubstitution(text='/manual_control_output')], '/pingu_cmd_mux/manual_control_input'),
 
@@ -73,6 +74,10 @@ def generate_launch_description():
             (TextSubstitution(text=pingu_manual_control_ns,
                               substitutions=[pingu_manual_control_ns, TextSubstitution(text="/manual_control_output")]),
              '/fp_cmd_mux/manual_control_input'),
+=======
+            ([TextSubstitution(text='/'), pingu_manual_control_ns, TextSubstitution(text='/joy')], '/joy'),
+            ([TextSubstitution(text='/'), pingu_manual_control_ns, TextSubstitution(text='/manual_control_output')], '/pingu_cmd_mux/manual_control_input'),
+>>>>>>> dev
         ],
     )
     ls.add_action(manual_control_node)
@@ -90,7 +95,11 @@ def generate_launch_description():
         executable='pingu_low_level_control',
         name='pingu_low_level_control',
         output='screen',
+<<<<<<< HEAD
         parameters = [config, {'namespace': pingu_low_level_control_ns}], 
+=======
+        parameters = [config], 
+>>>>>>> dev
     )
     ls.add_action(pingu_low_level_control_node)
     
