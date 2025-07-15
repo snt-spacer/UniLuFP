@@ -40,12 +40,12 @@ The default viewer is placed under [`pingu_description`](../../ros_ws/src/pingu_
 To launch, run the following command.
 
 ```bash
-ros2 launch pingu_description view_pingu.launch.py joint_state_publisher_gui:=false
+ros2 launch pingu_description view_pingu.launch.py # joint_state_publisher_gui:=true
 ```
 
 | Option                     | Default | Description                                               |
 |----------------------------|---------|-----------------------------------------------------------|
-| `joint_state_publisher_gui`| true    | Launch with virtual joint_state publisher for debug usage.|
+| `joint_state_publisher_gui`| false   | Launch with virtual joint_state publisher for debug usage.|
 | `zero_g`                   | true    | Visualize ZeroG lab in Rviz.                              |
 
 If you want to see the current pose of the platform in Rviz, run the following command to get the TF from optitrack. Do not forget to launch `vrpn_mocap` and match the topic name.
