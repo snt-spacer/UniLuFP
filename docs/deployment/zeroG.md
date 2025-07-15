@@ -34,6 +34,49 @@ ros2 launch pingu_ros2_control pingu.launch.py # option:=value controllers:=rw_v
 
 See [`pingu_controllers.yaml`](../../ros_ws/src/pingu_ros2_control/bringup/config/pingu_controllers.yaml) for available controllers.
 
+#### Examples 
+
+The default launch argument equals to running the same as the following command.
+
+```bash
+ros2 launch pingu_ros2_control pingu.launch.py controllers:=actuators_position_controller
+```
+
+This controller controls the position of all the actuators at the same time using the **5 doubles** in `std_msgs::Float64MultiArray` message like,
+
+```bash
+# rw,left shoulder,left elbow,right shoulder,right elbow
+ros2 topic pub /actuators_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+- 0.0   
+- 0.0   
+- -1.57 
+- 0.0   
+- 1.57" 
+```
+
+If you want to control each system separately, like velocity control for reaction wheel and position control for arms, check the example below.
+
+```bash
+ros2 launch pingu_ros2_control pingu.launch.py controllers:=rw_velocity_controller,dual_arm_position_controller
+```
+
+Then, you can send the command separately like,
+
+```bash
+# rw
+ros2 topic pub /rw_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
+- 5.0" 
+```
+
+```bash
+# left shoulder,left elbow,right shoulder,right elbow
+ros2 topic pub /dual_arm_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+- 0.0   
+- -1.57 
+- 0.0   
+- 1.57" 
+```
+
 ## Launch Rviz
 
 The default viewer is placed under [`pingu_description`](../../ros_ws/src/pingu_description).
