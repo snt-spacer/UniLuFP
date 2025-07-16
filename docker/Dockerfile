@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     git \
     byobu \
+    terminator \
     build-essential \
     python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
