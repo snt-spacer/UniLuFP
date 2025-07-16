@@ -11,3 +11,7 @@ repositories:
     type: git
     url: https://github.com/odriverobotics/ros_odrive.git
     version: main
+  ros2_control_gui:
+    type: git
+    url: https://github.com/aky-u/ros2_control_gui.git
+    version: main

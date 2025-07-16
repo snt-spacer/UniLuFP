@@ -22,6 +22,20 @@ RUN apt-get update && apt-get install -y \
     python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
 
+# Install QT dependencies
+RUN apt-get update && apt-get install -y \
+    libxcb-xinerama0 \
+    libxcb-cursor0 \
+    libxkbcommon-x11-0 \
+    libxcb-icccm4 \
+    libxcb-image0 \
+    libxcb-keysyms1 \
+    libxcb-randr0 \
+    libxcb-render-util0 \
+    libxcb-xkb1 \
+    libx11-xcb1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Source ROS 2 in every shell
 SHELL ["/bin/bash", "-c"]
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
