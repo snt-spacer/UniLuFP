@@ -4,6 +4,8 @@
 
 ### Calibrate optitrack
 
+TODO: How to setup the lab.
+
 ## Launch pingu
 
 ### Launch optitrack
@@ -13,6 +15,8 @@ ros2 launch vrpn_mocap client.launch.yaml server:=192.168.88.13
 ```
 
 ### Launch thrusters
+
+TODO: Add launch arg for low level.
 
 ### Launch actuators
 
@@ -76,6 +80,18 @@ ros2 topic pub /dual_arm_position_controller/commands std_msgs/msg/Float64MultiA
 - 0.0   
 - 1.57" 
 ```
+
+#### Controller GUI
+
+You can also use the [ros2_control_gui](https://github.com/aky-u/ros2_control_gui) package to command the ros2 controllers, even though it's still under development.
+
+After build the package using the `colcon build` command, launch it by the following command.
+
+```bash
+ros2 run ros2_control_gui joint_controller_gui
+```
+
+Then select the controller that you want to use.
 
 ## Launch Rviz
 
