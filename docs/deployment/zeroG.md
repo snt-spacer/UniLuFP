@@ -27,18 +27,19 @@ To launch, run the following command.
 ros2 launch pingu_ros2_control pingu.launch.py # option:=value controllers:=rw_velocity_controller,left_arm_position_controller
 ```
 
-| Option         | Default                       | Description                                            |
-|----------------|-------------------------------|--------------------------------------------------------|
-| `gui`          | false                         | Launch Rviz with controllers                           |
-| `prefix`       | ""                            | Prefix of the joint names                              |
-| `hw_plugin`    | real                          | Hardware plugin to use. Options: 'real' or 'mujoco`.   |
-| `left_arm`     | true                          | Enable left-arm                                        |
-| `right_arm`    | true                          | Enable right-arm                                       |
-| `controllers`  | actuators_position_controller | Comma-separated list of controllers to spawn.          |
+| Option           | Default                       | Description                                            |
+|------------------|-------------------------------|--------------------------------------------------------|
+| `gui`            | false                         | Launch Rviz with controllers                           |
+| `prefix`         | ""                            | Prefix of the joint names                              |
+| `hw_plugin`      | real                          | Hardware plugin to use. Options: 'real' or 'mujoco`.   |
+| `left_arm`       | true                          | Enable left-arm                                        |
+| `right_arm`      | true                          | Enable right-arm                                       |
+| `controllers`    | actuators_position_controller | Comma-separated list of controllers to spawn.          |
+| `controller_gui` | false                         | Launch controller gui for debug usage.                 |
 
 See [`pingu_controllers.yaml`](../../ros_ws/src/pingu_ros2_control/bringup/config/pingu_controllers.yaml) for available controllers.
 
-#### Examples 
+#### Examples
 
 The default launch argument equals to running the same as the following command.
 
@@ -85,13 +86,11 @@ ros2 topic pub /dual_arm_position_controller/commands std_msgs/msg/Float64MultiA
 
 You can also use the [ros2_control_gui](https://github.com/aky-u/ros2_control_gui) package to command the ros2 controllers, even though it's still under development.
 
-After build the package using the `colcon build` command, launch it by the following command.
+To launch it, enable `controller_gui` option as the following example.
 
 ```bash
-ros2 run ros2_control_gui joint_controller_gui
+ros2 launch pingu_ros2_control pingu.launch.py controller_gui:=true
 ```
-
-Then select the controller that you want to use.
 
 ## Launch Rviz
 
@@ -113,7 +112,8 @@ If you want to see the current pose of the platform in Rviz, run the following c
 ros2 run pingu_optitrack pose_to_tf 
 ```
 
-
 # Errors
+
 ## Ubuntu 22.04 ros2 humble installing error GPG, libc-bin
-https://answers.ros.org/question/410123/
+
+<https://answers.ros.org/question/410123/>
