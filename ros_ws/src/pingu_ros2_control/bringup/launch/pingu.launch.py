@@ -182,7 +182,9 @@ def generate_launch_description():
         executable="joint_controller_gui",
         name="joint_controller_gui",
         output="screen",
-        parameters=[robot_controllers],
+        parameters=[{
+            'config_file': robot_controllers,
+        }],
         condition=IfCondition(controller_gui)
     )
 
