@@ -41,7 +41,7 @@ See [`pingu_controllers.yaml`](../../ros_ws/src/pingu_ros2_control/bringup/confi
 
 #### Examples
 
-The default launch argument equals to running the same as the following command.
+The default startup arguments are equivalent to the following command:
 
 ```bash
 ros2 launch pingu_ros2_control pingu.launch.py controllers:=actuators_position_controller
@@ -84,7 +84,7 @@ ros2 topic pub /dual_arm_position_controller/commands std_msgs/msg/Float64MultiA
 
 #### Controller GUI
 
-You can also use the [ros2_control_gui](https://github.com/aky-u/ros2_control_gui) package to command the ros2 controllers, even though it's still under development.
+You can also use the [ros2_control_gui](https://github.com/aky-u/ros2_control_gui) package to command the ros2 controllers.
 
 To launch it, enable `controller_gui` option as the following example.
 
