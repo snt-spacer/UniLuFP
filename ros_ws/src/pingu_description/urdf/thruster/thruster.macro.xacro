@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="thruster" params="parent prefix xyz rpy">
+
+  <!-- Base Link -->
+  <link  name="${prefix}_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.006" length="0.055"/>
+      </geometry>
+      <material name="elec_blue"/>
+    </visual>
+    <parent link="${parent}"/>
+    <origin xyz="${xyz}" rpy="${rpy}"/>
+  </link>
+
+  <joint name="${prefix}_joint" type="fixed">
+    <parent link="${parent}"/>
+    <child link="${prefix}_link"/>
+    <origin xyz="${xyz}" rpy="${rpy}"/>
+  </joint>
+
+  </xacro:macro>
+
+</robot>

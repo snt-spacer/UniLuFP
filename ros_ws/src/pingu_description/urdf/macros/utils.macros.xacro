@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">  
+  <!-- Math -->
+  <xacro:property name="PI" value="3.1415926535"/>
+  <xacro:property name="PI_2" value="${PI/2}"/>
+  <xacro:property name="PI_4" value="${PI/4}"/>
+  <xacro:property name="SQRT2" value="1.4142135623"/>
+  <xacro:property name="SQRT2_2" value="${SQRT2/2}"/>
+  <xacro:property name="SQRT3" value="1.7320508076"/>
+  <xacro:property name="SQRT3_2" value="${SQRT3/2}"/>
+  <xacro:property name="SAFETY_OFFSET" value="0.01"/>
+  
+</robot>

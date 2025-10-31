@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    
+    <material name="levion_black">
+      <color rgba="0.3 0.3 0.3 1.0"/>
+    </material>
+
+    <material name="orange">
+      <color rgba="1.0 0.5 0.0 1.0"/>
+    </material>
+
+    <material name="elec_blue">
+      <color rgba="0.0 0.0 1.0 1.0"/>
+    </material>
+</robot>

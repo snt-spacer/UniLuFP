@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pingu_v2">
+
+  <!-- Enable setting arguments from the launch file -->
+  <xacro:arg name="prefix" default="" />
+
+  <!-- Include Macros -->
+  <xacro:include filename="macros/materials.macros.xacro"/>
+  <xacro:include filename="macros/utils.macros.xacro"/>
+
+  <!-- Import RW description and Ros2 Control-->
+  <xacro:include filename="rw/rw.macro.xacro" />
+  <xacro:include filename="rw/rw.ros2_control.xacro" />
+
+  <!-- Include Levion Arms Desciption and Ros2 Control-->
+  <xacro:include filename="arms/levion.property.xacro"/>
+  <xacro:include filename="arms/levion_arm.macros.xacro"/>
+  <xacro:include filename="arms/levion_arm.ros2_control.xacro"/>
+
+  <!-- World Link -->
+  <link name="world"/>
+
+  <!-- Joins and Links for Floating -->
+  <link name="anchor_link">
+    <visual>
+      <geometry>
+        <box size="0.001 0.001 0.001"></box>
+      </geometry>
+      <material name="levion_black"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.001 0.001 0.001"></box>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.0001"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="anchor_joint" type="fixed">
+    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="anchor_link"/>
+  </joint>
+
+  <link name="x_lock_link">
+    <visual>
+      <geometry>
+        <box size="0.001 0.001 0.001"></box>
+      </geometry>
+      <material name="levion_black"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.001 0.001 0.001"></box>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.0001"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="x_lock_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="anchor_link"/>
+    <child link="x_lock_link"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="10.0" lower="-10" upper="10" velocity="10"/>
+  </joint>
+
+  <link name="y_lock_link">
+    <visual>
+      <geometry>
+        <box size="0.001 0.001 0.001"></box>
+      </geometry>
+      <material name="levion_black"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.001 0.001 0.001"></box>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.0001"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="y_lock_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="x_lock_link"/>
+    <child link="y_lock_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10.0" lower="-10" upper="10" velocity="10"/>
+  </joint>
+  
+
+  <!-- Base Join and Link-->
+  <joint name="base_joint" type="revolute">
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <parent link="y_lock_link"/>
+    <child link="base_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-10" upper="10" velocity="10"/>
+    <!-- <dynamics damping="0.5" friction="0.0"/> -->
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/base_link.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="levion_black"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/base_link.stl" scale="1 1 1"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- 0 0 0.3276 for box -->
+    </collision>
+
+    <inertial>
+      <mass value="23.0"/>
+      <origin xyz="0 0 0.3276" rpy="0 0 0"/>
+      <inertia ixx="0.7" ixy="0" ixz="0" iyy="0.7" iyz="0" izz="0.5"/>
+    </inertial>
+  </link>
+
+  <!-- RW description -->
+  <xacro:rw parent="base_link" prefix="$(arg prefix)">
+    <origin xyz="0 0 .2875" rpy="0 0 0" />
+  </xacro:rw>
+
+  <!-- Left Arm description -->
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
+    <origin xyz="${.26*SQRT2_2} ${.26*SQRT2_2} .3475" rpy="0 0 ${PI/4}" />
+  </xacro:levion_arm>
+
+  <!-- Right Arm description -->
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
+    <origin xyz="${.26*SQRT2_2} ${-.26*SQRT2_2} .3475" rpy="0 0 ${-PI/4}" />
+  </xacro:levion_arm>
+
+</robot>

@@ -66,7 +66,7 @@ def parse_xacro_file(xacro_path, urdf_path, mappings=None, use_abs_paths=False):
 def generate_launch_description():
     # Set arguments TODO: make this a LaunchConfiguration
     prefix = ''
-    floating_joint = 'true'
+    floating_joint = 'false'
     ros2_control = 'true'
     hw_plugin = 'mujoco'
     left_arm = 'true'
@@ -74,8 +74,8 @@ def generate_launch_description():
 
     # define file path
     package = get_package_share_directory("pingu_description")
-    xacro_path = os.path.join(package, "urdf", "pingu.urdf.xacro")
-    urdf_path = os.path.join(package, "urdf", "pingu.urdf")
+    xacro_path = os.path.join(package, "urdf", "pingu_v3.urdf.xacro")
+    urdf_path = os.path.join(package, "urdf", "cubo.urdf")
 
     # load xacro
     parse_xacro_file(
@@ -89,7 +89,7 @@ def generate_launch_description():
             'left_arm': left_arm,
             'right_arm': right_arm
         },
-        use_abs_paths=True
+        use_abs_paths=False
     )
 
     return LaunchDescription()

@@ -48,11 +48,11 @@ WORKDIR /UniLuFP/ros_ws/src
 COPY ./repositories.yaml .
 RUN vcs import --input repositories.yaml --recursive .
 
-RUN git clone https://github.com/aky-u/LevionArm.git \
- && cd LevionArm \
- && git submodule set-url cubemars_hardware https://github.com/aky-u/cubemars_hardware.git \
- && git submodule set-url leptrino_force_torque https://github.com/aky-u/leptrino_force_torque.git \
- && git submodule update --init --recursive
+# RUN git clone https://github.com/aky-u/LevionArm.git \
+#  && cd LevionArm \
+#  && git submodule set-url cubemars_hardware https://github.com/aky-u/cubemars_hardware.git \
+#  && git submodule set-url leptrino_force_torque https://github.com/aky-u/leptrino_force_torque.git \
+#  && git submodule update --init --recursive
 
 RUN apt-get update && apt-get install -y \
  && rosdep install --from-paths . --ignore-src -r -y
@@ -65,8 +65,9 @@ WORKDIR /UniLuFP/ros_ws
 RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install
 RUN echo "source /UniLuFP/ros_ws/install/setup.bash" >> ~/.bashrc
 
-WORKDIR /UniLuFP/ros_ws
+# WORKDIR /
 # Default command
-COPY ./ros_entrypoint.sh /
-ENTRYPOINT ["/ros_entrypoint.sh"]
+# COPY ./ros_entrypoint.sh /
+# RUN chmod +x /ros_entrypoint.sh
+# ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]

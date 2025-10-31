@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="levion_arm" 
+      params="parent prefix *origin left_right:=left">
+
+  <xacro:include filename="arms/levion.property.xacro"/>
+
+  <xacro:if value="${left_right == 'left'}">
+    <xacro:property name="lr_shoulder_lower" default="${left_shoulder_lower}" />
+    <xacro:property name="lr_shoulder_upper" default="${left_shoulder_upper}" />
+    <xacro:property name="lr_shoulder_vel" default="${left_shoulder_velocity_limit}" />
+    <xacro:property name="lr_shoulder_effort" default="${left_shoulder_effort_limit}" />
+    <xacro:property name="lr_elbow_lower" default="${left_elbow_lower}" />
+    <xacro:property name="lr_elbow_upper" default="${left_elbow_upper}" />
+    <xacro:property name="lr_elbow_vel" default="${left_elbow_velocity_limit}" />
+    <xacro:property name="lr_elbow_effort" default="${left_elbow_effort_limit}" />
+  </xacro:if>
+  <xacro:if value="${left_right == 'right'}">
+    <xacro:property name="lr_shoulder_lower" default="${right_shoulder_lower}" />
+    <xacro:property name="lr_shoulder_upper" default="${right_shoulder_upper}" />
+    <xacro:property name="lr_shoulder_vel" default="${right_shoulder_velocity_limit}" />
+    <xacro:property name="lr_shoulder_effort" default="${right_shoulder_effort_limit}" />
+    <xacro:property name="lr_elbow_lower" default="${right_elbow_lower}" />
+    <xacro:property name="lr_elbow_upper" default="${right_elbow_upper}" />
+    <xacro:property name="lr_elbow_vel" default="${right_elbow_velocity_limit}" />
+    <xacro:property name="lr_elbow_effort" default="${right_elbow_effort_limit}" />
+  </xacro:if>
+
+  <joint name="${prefix}${left_right}_base_joint" type="fixed">
+    <xacro:insert_block name="origin" />
+    <parent link="${parent}"/>
+    <child link="${prefix}${left_right}_link0" />
+  </joint>
+
+  <link name="${prefix}${left_right}_link0">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/arm_link0.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="levion_black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/arm_link0.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.0005" ixy="0.0" ixz="0.0" iyy="0.0005" iyz="0.0" izz="0.0005"/>
+    </inertial>
+  </link>
+
+  <link name="${prefix}${left_right}_link1">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/arm_link1.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="levion_black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/arm_link1.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <mass value="0.6"/>
+      <inertia ixx="0.0006" ixy="0.0" ixz="0.0" iyy="0.0006" iyz="0.0" izz="0.0006"/>
+    </inertial>
+  </link>
+
+  <link name="${prefix}${left_right}_link2">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/arm_link2.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="levion_black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/arm_link2.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <link name="${prefix}${left_right}_tool_link">
+  </link>
+
+  <joint name="${prefix}${left_right}_shoulder_joint" type="revolute">
+    <origin xyz="0 0 0.0439" rpy="0 0 0"/>
+    <parent link="${prefix}${left_right}_link0"/>
+    <child link="${prefix}${left_right}_link1"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${lr_shoulder_lower}"
+      upper="${lr_shoulder_upper}" 
+      effort="${lr_shoulder_effort}" 
+      velocity="${lr_shoulder_vel}"/>
+  </joint>
+
+  <joint name="${prefix}${left_right}_elbow_joint" type="revolute">
+    <origin xyz="0.32 0 0.04685" rpy="0 0 0"/>
+    <parent link="${prefix}${left_right}_link1"/>
+    <child link="${prefix}${left_right}_link2"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${lr_elbow_lower}" 
+      upper="${lr_elbow_upper}" 
+      effort="${lr_elbow_effort}"
+      velocity="${lr_elbow_vel}"/>
+  </joint>
+
+  <joint name="${prefix}${left_right}_tool_joint" type="fixed">
+    <origin xyz=".255 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+    <parent link="${prefix}${left_right}_link2"/>
+    <child link="${prefix}${left_right}_tool_link"/>
+  </joint>
+  </xacro:macro>
+</robot>

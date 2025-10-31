@@ -64,63 +64,6 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        left_link0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        left_link1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        left_link2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        left_tool_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        right_link0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        right_link1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        right_link2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        right_tool_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rw_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rw_rotor:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        world:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
       Mass Properties:
         Inertia: false
         Mass: false
@@ -134,28 +77,6 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        base_link:
-          Value: true
-        left_link0:
-          Value: true
-        left_link1:
-          Value: true
-        left_link2:
-          Value: true
-        left_tool_link:
-          Value: true
-        right_link0:
-          Value: true
-        right_link1:
-          Value: true
-        right_link2:
-          Value: true
-        right_tool_link:
-          Value: true
-        rw_base:
-          Value: true
-        rw_rotor:
-          Value: true
         world:
           Value: true
         zero_g:
@@ -167,20 +88,6 @@ Visualization Manager:
       Show Names: false
       Tree:
         world:
-          base_link:
-            left_link0:
-              left_link1:
-                left_link2:
-                  left_tool_link:
-                    {}
-            right_link0:
-              right_link1:
-                right_link2:
-                  right_tool_link:
-                    {}
-            rw_base:
-              rw_rotor:
-                {}
           zero_g:
             {}
       Update Interval: 0
@@ -304,25 +211,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 7.877122402191162
+      Distance: 8.770691871643066
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.3054721355438232
-        Y: -1.5047532320022583
-        Z: 1.2358288764953613
+        X: 2.039961814880371
+        Y: -1.2935750484466553
+        Z: 1.5507302284240723
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.520397961139679
+      Pitch: 0.3103981018066406
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.185394525527954
+      Yaw: 2.2353947162628174
     Saved: ~
 Window Geometry:
   Displays:
@@ -340,5 +247,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1294
-  X: 4633
-  Y: 65
+  X: 63
+  Y: 461

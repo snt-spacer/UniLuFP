@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="rw" params="parent prefix *origin">
+
+  <!-- Base Link -->
+  <link name="${prefix}rw_base" />
+
+  <joint name="${prefix}rw_base_joint" type="fixed">
+    <xacro:insert_block name="origin" />
+    <parent link="${parent}"/>
+    <child link="${prefix}rw_base" />
+  </joint>
+
+  <!-- Middle Link -->
+  <link name="${prefix}rw_rotor">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.008"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia
+        ixx="0.06" ixy="0.0" ixz="0.0"
+        iyy="0.06" iyz="0.0"
+        izz="0.1"/>
+    </inertial>
+  </link>
+
+  <joint name="${prefix}rw_revolute_joint" type="revolute">
+    <parent link="${prefix}rw_base"/>
+    <child link="${prefix}rw_rotor"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-1e9" upper="1e9" velocity="100"/>
+    <dynamics damping="0.5" friction="0.5"/>
+  </joint>
+
+  <!-- Middle Fix Link -->
+  <!-- <link name="${prefix}rw_fixed_rotor"></link>
+
+  <joint name="${prefix}rw_fixed_joint" type="fixed">
+    <parent link="${prefix}rw_base"/>
+    <child link="${prefix}rw_fixed_rotor"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-1e9" upper="1e9" velocity="100"/>
+    <dynamics damping="0.5" friction="0.5"/>
+  </joint> -->
+
+  </xacro:macro>
+
+</robot>
