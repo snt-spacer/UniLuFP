@@ -21,61 +21,25 @@
   <xacro:include filename="thruster/thruster.macro.xacro"/>
 
   <!-- Defaults -->
+   <xacro:property name="HEIGHT_FROM_GROUND" value="0.05"/>
   <xacro:property name="THRUSTER_OFFSET" value="0.168"/>
   <xacro:property name="THRUSTER_TOP" value="0.305"/>
   <xacro:property name="THRUSTER_BOTTOM" value="0.295"/>
+  <xacro:property name="Z_OFFSET" value="0.3"/>
 
   <!-- World Link -->
   <link name="world"/>
 
   <!-- Joins and Links for Floating -->
-  <link name="anchor_link">
-    <visual>
-      <geometry>
-        <box size="0.001 0.001 0.001"></box>
-      </geometry>
-      <material name="levion_black"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.001 0.001 0.001"></box>
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </collision>
-    <inertial>
-      <mass value="0.0001"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
-    </inertial>
-  </link>
+  <link name="anchor_link"/>
 
   <joint name="anchor_joint" type="fixed">
-    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+    <origin xyz="0 0 ${HEIGHT_FROM_GROUND}" rpy="0 0 0"/>
     <parent link="world"/>
     <child link="anchor_link"/>
   </joint>
 
-  <link name="x_lock_link">
-    <visual>
-      <geometry>
-        <box size="0.001 0.001 0.001"></box>
-      </geometry>
-      <material name="levion_black"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.001 0.001 0.001"></box>
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </collision>
-    <inertial>
-      <mass value="0.0001"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
-    </inertial>
-  </link>
+  <link name="x_lock_link"/>
 
   <joint name="x_lock_joint" type="prismatic">
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -85,26 +49,7 @@
     <limit effort="10.0" lower="-10" upper="10" velocity="10"/>
   </joint>
 
-  <link name="y_lock_link">
-    <visual>
-      <geometry>
-        <box size="0.001 0.001 0.001"></box>
-      </geometry>
-      <material name="levion_black"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.001 0.001 0.001"></box>
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </collision>
-    <inertial>
-      <mass value="0.0001"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
-    </inertial>
-  </link>
+  <link name="y_lock_link"/>
 
   <joint name="y_lock_joint" type="prismatic">
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -116,8 +61,31 @@
   
 
   <!-- Base Join and Link-->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="levion_black"/>
+      <origin xyz="0 0 0" rpy="0 0 ${-PI/2}"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0  ${-PI/2}"/> <!-- 0 0 0.3276 for box -->
+    </collision>
+
+    <inertial>
+      <mass value="23.0"/>
+      <origin xyz="0 0 0.3276" rpy="0 0  ${-PI/2}"/>
+      <inertia ixx="0.7" ixy="0" ixz="0" iyy="0.7" iyz="0" izz="0.5"/>
+    </inertial>
+  </link>
+
   <joint name="base_joint" type="revolute">
-    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="y_lock_link"/>
     <child link="base_link"/>
     <axis xyz="0 0 1"/>
@@ -125,43 +93,20 @@
     <!-- <dynamics damping="0.5" friction="0.0"/> -->
   </joint>
 
-  <link name="base_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://pingu_description/mesh/base_link.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="levion_black"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </visual>
-
-    <collision>
-      <geometry>
-        <mesh filename="package://pingu_description/mesh/base_link.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- 0 0 0.3276 for box -->
-    </collision>
-
-    <inertial>
-      <mass value="23.0"/>
-      <origin xyz="0 0 0.3276" rpy="0 0 0"/>
-      <inertia ixx="0.7" ixy="0" ixz="0" iyy="0.7" iyz="0" izz="0.5"/>
-    </inertial>
-  </link>
-
   <!-- RW description -->
   <xacro:rw parent="base_link" prefix="$(arg prefix)">
     <origin xyz="0 0 .2875" rpy="0 0 0" />
   </xacro:rw>
 
   <!-- Left Arm description -->
-  <!-- <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="left">
     <origin xyz="0.26 0 .3475" rpy="0 0 0" />
-  </xacro:levion_arm> -->
+  </xacro:levion_arm>
 
   <!-- Right Arm description -->
-  <!-- <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
+  <xacro:levion_arm parent="base_link" prefix="$(arg prefix)" left_right="right">
     <origin xyz="0 -0.26 .3475" rpy="0 0 ${-PI/2}" />
-  </xacro:levion_arm> -->
+  </xacro:levion_arm>
 
   <!-- Thrusters description -->
   <xacro:thruster prefix="thruster_1" 
@@ -170,11 +115,11 @@
 
   <xacro:thruster prefix="thruster_2" 
                   parent="base_link" 
-                  xyz="-${THRUSTER_OFFSET} ${THRUSTER_OFFSET} ${THRUSTER_TOP}" rpy="${PI/2} 0 ${-PI/4}"/>
+                  xyz="-${THRUSTER_OFFSET} ${THRUSTER_OFFSET} ${THRUSTER_TOP}" rpy="${-PI/2} 0 ${PI/4}"/>
 
   <xacro:thruster prefix="thruster_3" 
                   parent="base_link" 
-                  xyz="${THRUSTER_OFFSET} ${THRUSTER_OFFSET} ${THRUSTER_BOTTOM}" rpy="${PI/2} 0 ${PI/4}"/>
+                  xyz="${THRUSTER_OFFSET} ${THRUSTER_OFFSET} ${THRUSTER_BOTTOM}" rpy="${-PI/2} 0 ${-PI/4}"/>
 
   <xacro:thruster prefix="thruster_4" 
                   parent="base_link" 
@@ -182,7 +127,7 @@
 
   <xacro:thruster prefix="thruster_5" 
                   parent="base_link" 
-                  xyz="${THRUSTER_OFFSET} -${THRUSTER_OFFSET} ${THRUSTER_TOP}" rpy="${PI/2} 0 ${-PI/4}"/>
+                  xyz="${THRUSTER_OFFSET} -${THRUSTER_OFFSET} ${THRUSTER_TOP}" rpy="${-PI/2} 0 ${PI/4}"/>
 
   <xacro:thruster prefix="thruster_6" 
                   parent="base_link" 
@@ -194,6 +139,6 @@
 
   <xacro:thruster prefix="thruster_8" 
                   parent="base_link" 
-                  xyz="-${THRUSTER_OFFSET} -${THRUSTER_OFFSET} ${THRUSTER_BOTTOM}" rpy="${PI/2} 0 ${PI/4}"/>
+                  xyz="-${THRUSTER_OFFSET} -${THRUSTER_OFFSET} ${THRUSTER_BOTTOM}" rpy="${-PI/2} 0 ${-PI/4}"/>
 
 </robot>

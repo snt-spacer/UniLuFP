@@ -3,7 +3,7 @@
 
   <xacro:macro name="thruster" params="parent prefix xyz rpy">
 
-  <!-- Base Link -->
+  <!-- Thruster Link -->
   <link  name="${prefix}_link">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>

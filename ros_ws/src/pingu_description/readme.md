@@ -19,4 +19,8 @@ Open IsaacLab and import the URDF to convert it into USD ([Docs](https://isaac-s
 
 Remove Drive and Joint State from all the joints. Set the limits and break force to inf.
 
-Add a fixed joint between empty and the world xform
+Add a fixed joint between empty and the world 
+
+remove articulation root from world and add it to default prim
+
+Check that the thrusters in the usd are in the same rpy than the urdf.xacro

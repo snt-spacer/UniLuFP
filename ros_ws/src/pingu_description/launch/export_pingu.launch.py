@@ -75,7 +75,7 @@ def generate_launch_description():
     # define file path
     package = get_package_share_directory("pingu_description")
     xacro_path = os.path.join(package, "urdf", "pingu_v3.urdf.xacro")
-    urdf_path = os.path.join(package, "urdf", "cubo.urdf")
+    urdf_path = os.path.join(package, "urdf", "pingu.urdf")
 
     # load xacro
     parse_xacro_file(
