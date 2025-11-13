@@ -8,6 +8,8 @@ Inherited from [here](https://atmos.discower.io/pages/PX4/).
 
 ```nsh
 param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
+
+# Pingu: 192.168.88.159 -> 3232258207
 ```
 
 ## Jetson setup
