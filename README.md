@@ -6,6 +6,8 @@
 
 Inherited from [here](https://atmos.discower.io/pages/PX4/).
 
+Build QGC from [daily](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/releases/daily_builds.html#daily-builds)
+
 ```nsh
 param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
 
