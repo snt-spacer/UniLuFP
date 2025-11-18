@@ -144,8 +144,10 @@ sudo udevadm trigger
 ### Add the startup service
 
 ```bash
-chmod +x /home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/**
-sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
+chmod +x ~/UniLuFP/Pingu_OBC_Setup/scripts/**
+find ~/UniLuFP/Pingu_OBC_Setup/scripts -type f -exec chmod +x {} +
+sudo cp ~/UniLuFP/Pingu_OBC_Setup/scripts/* /usr/local/bin/
+sudo cp ~/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable px4_comm
 sudo systemctl start px4_comm
