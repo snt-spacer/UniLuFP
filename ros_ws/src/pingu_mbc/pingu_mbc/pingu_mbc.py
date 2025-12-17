@@ -18,20 +18,29 @@ class PinguMBC(Node):
         # Declare parameters
         self.declare_parameter('urdf_file', 'pingu.urdf')
 
-        # Get parameters
+        # Setup parameters
+        VALVE_CMD_SIZE = 10
+        BEARING_CMD_SIZE = 2
+        THRUSTER_CMD_SIZE = 8
 
         # Setup motion capture QoS
         mocap_qos = rclpy.qos.QoSProfile(depth=10)
         mocap_qos.reliability = rclpy.qos.ReliabilityPolicy.BEST_EFFORT
 
-    def update_base_state():
+    def update_base_state(self):
         pass
 
-    def update_joint_state():
+    def update_joint_state(self):
         pass
 
-    def publish_thruster_commands():
-        pass
+    def publish_thruster_commands(self, commands):
+        msg = Float32MultiArray()
+        data_array = np.zeros(self.THRUSTER_CMD_SIZE, dtype=np.float32)
+        # The first 2 are for the bearing
+        data_array[self.BEARING_CMD_SIZE:] = commands[:self.THRUSTER_CMD_SIZE]
+        msg.data = data_array.tolist()
+        self.thruster_command_publisher.publish(msg)
+        self.get_logger().debug(f'Published thruster commands: {msg.data}')
 
     def control_callback(self):
         pass
