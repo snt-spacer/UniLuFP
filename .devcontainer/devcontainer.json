@@ -5,7 +5,8 @@
   },
   "runArgs": [
     "--privileged",
-    "--gpus", "all",
+    "--gpus",
+    "all",
     "--ipc=host",
     "--network=host"
   ],
@@ -23,7 +24,7 @@
       "type": "bind"
     },
     {
-      "source": "${localEnv:XAUTHORITY:-$HOME/.Xauthority}",
+      "source": "${localEnv:HOME}/.Xauthority",
       "target": "/root/.Xauthority",
       "type": "bind"
     },
