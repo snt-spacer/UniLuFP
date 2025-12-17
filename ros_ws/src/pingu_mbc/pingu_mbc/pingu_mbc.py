@@ -12,17 +12,22 @@ import numpy as np
 
 
 class PinguMBC(Node):
+    """Node for Model-Based Control of Pingu Air Floating Platform."""
+
     def __init__(self):
         super().__init__('pingu_mbc_node')
 
         # Declare parameters
         self.declare_parameter('urdf_file', 'pingu.urdf')
-        self.declare_parameter('nq', 3)  # x, y, yaw (options: j1, j2, ...)
+        self.declare_parameter('nx', 3)  # state variables (e.g., x, y, theta)
+        self.declare_parameter('nu', 8)  # control inputs (e.g., thrusters)
 
-        # Setup constants
+        # Setup parameters
         self.VALVE_CMD_SIZE = 10
         self.BEARING_CMD_SIZE = 2
         self.THRUSTER_CMD_SIZE = 8
+        self.nx = self.get_parameter('nx').get_parameter_value().integer_value
+        self.nu = self.get_parameter('nu').get_parameter_value().integer_value
 
         # Setup motion capture QoS
         mocap_qos = rclpy.qos.QoSProfile(depth=10)
@@ -37,7 +42,7 @@ class PinguMBC(Node):
         timer_period = .1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        self.get_logger().info('Pingu MPC node initialized.')
+        self.get_logger().info('Pingu MBC node initialized.')
 
     def update_base_state(self):
         pass
