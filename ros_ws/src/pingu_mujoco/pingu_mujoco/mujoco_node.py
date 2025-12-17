@@ -47,7 +47,7 @@ class MujocoSimNode(Node):
         self._lock = threading.Lock()
 
         # Register MuJoCo control callback (called inside mj_step)
-        mujoco.set_mjcb_control(self.mj_control_callback)
+        # mujoco.set_mjcb_control(self.mj_control_callback)
 
         # Headless stepping: timer-based
         self._timer = None
