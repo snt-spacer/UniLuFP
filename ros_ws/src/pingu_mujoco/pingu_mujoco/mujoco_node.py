@@ -25,6 +25,7 @@ class MujocoSimNode(Node):
         self.declare_parameter(
             "model_path", "/UniLuFP/ros_ws/src/mnt/pingu_description/mjcf/pingu.xml")
         self.declare_parameter("gui", True)
+        self.declare_parameter("control_callback", True)
         # try to keep wall-clock sync
         self.declare_parameter("realtime", True)
         # used for headless timer; 0 => use m.opt.timestep
@@ -47,7 +48,8 @@ class MujocoSimNode(Node):
         self._lock = threading.Lock()
 
         # Register MuJoCo control callback (called inside mj_step)
-        # mujoco.set_mjcb_control(self.mj_control_callback)
+        if self.get_parameter("control_callback").value:
+            mujoco.set_mjcb_control(self.mj_control_callback)
 
         # Headless stepping: timer-based
         self._timer = None
