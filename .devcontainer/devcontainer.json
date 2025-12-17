@@ -43,7 +43,8 @@
         "ms-python.vscode-pylance",
         "ms-python.python",
         "ms-vscode.cpptools",
-        "ms-vscode.cpptools-extension-pack"
+        "ms-vscode.cpptools-extension-pack",
+        "GitHub.copilot-chat"
       ]
     }
   },
