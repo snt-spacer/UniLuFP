@@ -27,6 +27,13 @@ class PinguMBC(Node):
         mocap_qos = rclpy.qos.QoSProfile(depth=10)
         mocap_qos.reliability = rclpy.qos.ReliabilityPolicy.BEST_EFFORT
 
+        # Setup timer
+        timer_period = .1  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.last_cmd_time = self.get_clock().now()
+
+        self.get_logger().info('Pingu MPC node initialized.')
+
     def update_base_state(self):
         pass
 
@@ -34,6 +41,9 @@ class PinguMBC(Node):
         pass
 
     def publish_thruster_commands(self, commands):
+        """
+        Publish thruster commands (0 to 1 PWM) to the ROS topic.
+        """
         msg = Float32MultiArray()
         data_array = np.zeros(self.THRUSTER_CMD_SIZE, dtype=np.float32)
         # The first 2 are for the bearing
@@ -42,8 +52,13 @@ class PinguMBC(Node):
         self.thruster_command_publisher.publish(msg)
         self.get_logger().debug(f'Published thruster commands: {msg.data}')
 
-    def control_callback(self):
+    def solve(self):
         pass
+
+    def timer_callback(self):
+        self.update_base_state()
+        self.update_joint_state()
+        self.solve()
 
 
 def main(args=None):
