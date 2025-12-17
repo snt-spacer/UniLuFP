@@ -22,12 +22,18 @@ class PinguMBC(Node):
         self.declare_parameter('nx', 3)  # state variables (e.g., x, y, theta)
         self.declare_parameter('nu', 8)  # control inputs (e.g., thrusters)
 
-        # Setup parameters
+        # Command sizes
         self.VALVE_CMD_SIZE = 10
         self.BEARING_CMD_SIZE = 2
         self.THRUSTER_CMD_SIZE = 8
+
+        # State variables
+        # dx = Ax + Bu, y = Cx
         self.nx = self.get_parameter('nx').get_parameter_value().integer_value
         self.nu = self.get_parameter('nu').get_parameter_value().integer_value
+        self.x = np.zeros(self.nx)  # current state
+        self.y = np.zeros(self.nx)  # target state
+        self.u = np.zeros(self.nu)  # control inputs
 
         # Setup motion capture QoS
         mocap_qos = rclpy.qos.QoSProfile(depth=10)
@@ -44,10 +50,10 @@ class PinguMBC(Node):
 
         self.get_logger().info('Pingu MBC node initialized.')
 
-    def update_base_state(self):
+    def update_state(self):
         pass
 
-    def update_joint_state(self):
+    def update_target(self):
         pass
 
     def publish_thruster_commands(self, commands):
@@ -66,7 +72,6 @@ class PinguMBC(Node):
         pass
 
     def timer_callback(self):
-        self.update_joint_state()
         self.solve()
         self.publish_thruster_commands(np.zeros(self.THRUSTER_CMD_SIZE))
 

@@ -44,7 +44,10 @@ COPY ./requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
-## Install acados
+
+# =========================
+# Acados
+# =========================
 WORKDIR /UniLuFP
 RUN git clone https://github.com/acados/acados.git \
  && cd acados \
@@ -57,6 +60,31 @@ RUN git clone https://github.com/acados/acados.git \
  && pip install ./interfaces/acados_template \
  && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/UniLuFP/acados/lib" \
  && export ACADOS_SOURCE_DIR="/UniLuFP/acados"
+
+# =========================
+# Pinocchio installation
+# =========================
+# Add robotpkg repository and install Pinocchio (C++ & Python bindings)
+RUN set -eux; \
+    mkdir -p /etc/apt/keyrings; \
+    curl -fsSL http://robotpkg.openrobots.org/packages/debian/robotpkg.asc -o /etc/apt/keyrings/robotpkg.asc; \
+    codename=$(lsb_release -cs); \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub ${codename} robotpkg" \
+      > /etc/apt/sources.list.d/robotpkg.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        robotpkg-eigen3 \
+        robotpkg-py3*-pinocchio; \
+    apt-get autoremove -y; \
+    rm -rf /var/lib/apt/lists/*
+
+# Environment Variables
+ENV PATH=/opt/openrobots/bin:$PATH \
+    PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH \
+    LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH \
+    PYTHONPATH=/opt/openrobots/lib/python3.10/site-packages:$PYTHONPATH \
+    CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
+
 
 ## ROS packages
 WORKDIR /UniLuFP/ros_ws/src
