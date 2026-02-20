@@ -181,3 +181,5 @@ ros_ws/log
 
 # VsCode
 .vscode/
+
+*csv

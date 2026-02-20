@@ -26,6 +26,7 @@ setup(
             'low_level_thruster_control = px4_simple.low_level_thruster_control:main',
             'twist_thruster_actuator = px4_simple.twist_thruster_actuator:main',
             'thruster_test = px4_simple.thruster_test:main',
+            'logger_thruster_test = px4_simple.logger_thruster_test:main',
         ],
     },
 )
