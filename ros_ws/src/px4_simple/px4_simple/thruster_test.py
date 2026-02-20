@@ -48,12 +48,12 @@ class MinimalPublisherPX4(Node):
         )
 
         # Subscribers
-        self.status_sub = self.create_subscription(
-            VehicleStatus,
-            f"{self.namespace_prefix}/fmu/out/vehicle_status",
-            self.vehicle_status_callback,
-            qos_profile_sub,
-        )
+        # self.status_sub = self.create_subscription(
+        #     VehicleStatus,
+        #     f"{self.namespace_prefix}/fmu/out/vehicle_status",
+        #     self.vehicle_status_callback,
+        #     qos_profile_sub,
+        # )
 
         self.cmd_vel_sub = self.create_subscription(
             Twist,
@@ -206,24 +206,24 @@ class MinimalPublisherPX4(Node):
         
         # if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
         thrust_command = np.zeros(12, dtype=np.float32)
-        thrust_command[0] = 1.0
+        thrust_command[0] = 0.1
 
         actuator_outputs_msg = ActuatorMotors()
         actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
         actuator_outputs_msg.control = thrust_command.flatten()
         self.publisher_direct_actuator.publish(actuator_outputs_msg)
         
-        wait_rate.sleep()
+        # wait_rate.sleep()
         
-        self.get_logger().info("Pub 2nd command")
+        # self.get_logger().info("Pub 2nd command")
         
-        thrust_command = np.zeros(12, dtype=np.float32)
-        thrust_command[1] = 0.0
+        # thrust_command = np.zeros(12, dtype=np.float32)
+        # thrust_command[1] = 0.0
 
-        actuator_outputs_msg = ActuatorMotors()
-        actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
-        actuator_outputs_msg.control = thrust_command.flatten()
-        self.publisher_direct_actuator.publish(actuator_outputs_msg)
+        # actuator_outputs_msg = ActuatorMotors()
+        # actuator_outputs_msg.timestamp = int(Clock().now().nanoseconds / 1000)
+        # actuator_outputs_msg.control = thrust_command.flatten()
+        # self.publisher_direct_actuator.publish(actuator_outputs_msg)
         
         # time.sleep(2)
         

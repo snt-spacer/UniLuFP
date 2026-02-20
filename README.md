@@ -1,5 +1,11 @@
 # UniLuFP
 
+### Test Thrusters
+It keeps thruster 7 always on and every 2 seconds keeps opening a new thruster from 0 to 8. 
+```
+ros2 launch px4_simple test_solenoid_valve_connection
+```
+
 [Notion](https://www.notion.so/Pingu-FP-1c7aaf8bff7f8098a08bc9bdcd53db11)
 
 ## Pixhawk setup

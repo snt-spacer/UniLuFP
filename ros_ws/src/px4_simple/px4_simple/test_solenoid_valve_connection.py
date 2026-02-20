@@ -78,7 +78,7 @@ class MinimalPublisherPX4(Node):
         timer_period = 0.1  # seconds
         self.timer = self.create_timer(timer_period, self.cmdloop_callback)
 
-        self.nav_state = VehicleStatus.NAVIGATION_STATE_MAX
+        self.nav_state = VehicleStatus.NAVIGATION_STATE_OFFBOARD
 
         # Enable direct actuator mode
         self.enable_offboard_control()
@@ -88,9 +88,13 @@ class MinimalPublisherPX4(Node):
         self.publish_direct_actuator_mode()
 
         # Enable arm
-        # self.arm()
+        self.arm()
 
         self.curr_time = 0
+        self.motor_index = 0
+        self.loop_counter = 0
+        
+        self.u_command = np.zeros((1, 8))
 
     def arm(self):
         self.get_logger().info("Arming vehicle")
@@ -132,7 +136,6 @@ class MinimalPublisherPX4(Node):
         )
 
     def vehicle_status_callback(self, msg):
-        # self.get_logger().info(msg.nav_state)
         self.nav_state = msg.nav_state
 
     def publish_vehicle_command(self, command, **params) -> None:
@@ -186,11 +189,10 @@ class MinimalPublisherPX4(Node):
         # u3 needs to be divided between 5 and 6
         # u4 needs to be divided between 7 and 8
         # positve component goes for the first, the negative for the second
-        thrust = u_command[0, :] / 1.5  # normalizes w.r.t. max thrust
-        # print("Thrust rates: ", thrust[0:4])
+        # thrust = u_command[0, :] / 1.5  # normalizes w.r.t. max thrust
+        # # print("Thrust rates: ", thrust[0:4])
 
-        thrust_command = np.zeros(12, dtype=np.float32)
-        thrust_command[6] = 1.0
+        # thrust_command = np.zeros(12, dtype=np.float32)
         # thrust_command[0] = 0.0 if thrust[0] <= 0.0 else thrust[0]
         # thrust_command[1] = 0.0 if thrust[0] >= 0.0 else -thrust[0]
 
@@ -202,34 +204,51 @@ class MinimalPublisherPX4(Node):
 
         # thrust_command[6] = 0.0 if thrust[3] <= 0.0 else thrust[3]
         # thrust_command[7] = 0.0 if thrust[3] >= 0.0 else -thrust[3]
-
+        
+        
+        thrust_command = np.zeros(12, dtype=np.float32)
+        
+        thrust_command[:8] = u_command.squeeze()
+        
         actuator_outputs_msg.control = thrust_command.flatten()
-        # self.get_logger().info(actuator_outputs_msg)
         self.publisher_direct_actuator.publish(actuator_outputs_msg)
 
     def cmdloop_callback(self):
     
         self.publish_direct_actuator_mode()
 
-        u_command = np.zeros((1, 8))
-        u_command[0, 6] = 1.0
+        
+        self.u_command[0, 6] = 1.0 #Thruster 7 always activated
+        # self.get_logger().info(f"{self.nav_state} Vehicles status: {VehicleStatus.NAVIGATION_STATE_OFFBOARD}")
         if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
-            self.publish_direct_actuator_setpoint(u_command)
+            self.publish_direct_actuator_setpoint(self.u_command)
+            
+        self.loop_counter += 1
+        if self.loop_counter >= 20:
+            self.loop_counter = 0
+            # Increment index and wrap around using modulo 8
+            self.motor_index = (self.motor_index+1) % 9
+            self.get_logger().info(f"Switching to motor index: {self.motor_index}")
+            
+            self.u_command = np.zeros((1, 8))
+            self.u_command[0, :self.motor_index] = 1.0
+            self.u_command[0, 6] = 1.0
+            if self.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD:
+                self.publish_direct_actuator_setpoint(self.u_command)
 
+        # Begin disarm sequence on external trigger
+        if self.shutdown_requested:
+            self.shutdown_counter += 1
 
-        # # Begin disarm sequence on external trigger
-        # if self.shutdown_requested:
-        #     self.shutdown_counter += 1
+            if self.shutdown_counter == 5:
+                self.enable_mannual_mode()
 
-        #     if self.shutdown_counter == 5:
-        #         self.enable_mannual_mode()
+            elif self.shutdown_counter == 10:
+                self.disarm()
 
-        #     elif self.shutdown_counter == 10:
-        #         self.disarm()
-
-        #     elif self.shutdown_counter > 20:
-        #         self.get_logger().info("Shutting down...")
-        #         rclpy.shutdown()
+            elif self.shutdown_counter > 20:
+                self.get_logger().info("Shutting down...")
+                rclpy.shutdown()
 
     def initiate_shutdown(self):
         if not self.shutdown_requested:
