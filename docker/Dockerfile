@@ -7,18 +7,25 @@ WORKDIR /UniLuFP
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
     python3-pip \
-    ros-humble-rclpy \
-    ros-humble-geometry-msgs \
-    ros-humble-joy \
-    ros-humble-ackermann-msgs \
-    ros-humble-hardware-interface \
-    ros-humble-teleop-twist-keyboard \
     ffmpeg \
     vim \
     git \
     byobu \
     build-essential \
     python3-vcstool \
+    usbutils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install ROS 2 packages
+RUN apt-get update && apt-get install -y \
+    ros-humble-rclpy \
+    ros-humble-geometry-msgs \
+    ros-humble-joy \
+    ros-humble-ackermann-msgs \
+    ros-humble-hardware-interface \
+    ros-humble-teleop-twist-keyboard \
+    ros-humble-rqt*\
+    ros-humble-rviz2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Source ROS 2 in every shell

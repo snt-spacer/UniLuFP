@@ -1,0 +1,9 @@
+source;share/pingu_cubo_low_level_controller/hook/pythonpath.ps1
+source;share/pingu_cubo_low_level_controller/hook/pythonpath.dsv
+source;share/pingu_cubo_low_level_controller/hook/pythonpath.sh
+source;share/pingu_cubo_low_level_controller/hook/ament_prefix_path.ps1
+source;share/pingu_cubo_low_level_controller/hook/ament_prefix_path.dsv
+source;share/pingu_cubo_low_level_controller/hook/ament_prefix_path.sh
+source;../../build/pingu_cubo_low_level_controller/share/pingu_cubo_low_level_controller/hook/pythonpath_develop.ps1
+source;../../build/pingu_cubo_low_level_controller/share/pingu_cubo_low_level_controller/hook/pythonpath_develop.dsv
+source;../../build/pingu_cubo_low_level_controller/share/pingu_cubo_low_level_controller/hook/pythonpath_develop.sh

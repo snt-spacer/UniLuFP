@@ -3,8 +3,19 @@
 ### Test Thrusters
 It keeps thruster 7 always on and every 2 seconds keeps opening a new thruster from 0 to 8. 
 ```
-ros2 launch px4_simple test_solenoid_valve_connection
+ros2 run px4_simple test_solenoid_valve_connection
 ```
+
+### Launch 
+`ros2 launch pingu_cubo_low_level_controller pingu_low_level_controller_individual_thruster_controll_launch.py`
+
+### Packages Descriptions
+- `pingu_cubo_low_level_controller`
+  - Umbrella launcher for the `joy`, `*cmd_mux`, and `low_level_controller` packages
+- `pingu_cmd_mux`
+    - Takes the inputs of the joy and sends it to the low level controller
+- `low_level_controller`
+  - Launches the low level controller of the Pingu or the Cubo.
 
 [Notion](https://www.notion.so/Pingu-FP-1c7aaf8bff7f8098a08bc9bdcd53db11)
 
