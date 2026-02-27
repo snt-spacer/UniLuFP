@@ -1,0 +1,1 @@
+/mnt/src/build/pingu_ros2_control/ament_cmake_core/pingu_ros2_controlConfig.cmake
