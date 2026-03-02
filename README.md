@@ -9,6 +9,10 @@ ros2 run px4_simple test_solenoid_valve_connection
 ### Launch 
 `ros2 launch pingu_cubo_low_level_controller pingu_low_level_controller_individual_thruster_controll_launch.py`
 
+Reaction wheel
+
+`ros2 topic pub /rw_velocity_controller/commands std_msgs/msg/Float64MultiArray "{data: [3.0]}"`
+
 ### Packages Descriptions
 - `pingu_cubo_low_level_controller`
   - Umbrella launcher for the `joy`, `*cmd_mux`, and `low_level_controller` packages
