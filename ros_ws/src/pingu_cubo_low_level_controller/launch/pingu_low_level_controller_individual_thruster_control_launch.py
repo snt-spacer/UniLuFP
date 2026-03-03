@@ -124,8 +124,41 @@ def generate_launch_description():
         output='screen',
         remappings=[
             ("/pingu_cmd_mux/joy_control_input", "/joy"),
-            ("/pingu_cmd_mux/cmd_mux_low_level_publisher", "/fp_low_level_controller/valves/input"),
         ],
+    )
+
+    # Pingu Manual Control Node
+    pingu_manual_control_node = Node(
+        package='cmd_mux',
+        executable='pingu_manual_control',
+        name='pingu_manual_control',
+        output='screen',
+    )
+
+    # Pingu Low-Level Controller
+    config_file = PathJoinSubstitution(
+        [
+            package,
+            "config",
+            "pingu_config.yaml",
+        ]
+    )
+    pingu_low_level_controller_node = Node(
+        package='pingu_cubo_low_level_controller',
+        executable='pingu_low_level_controller_node',
+        name='pingu_low_level_controller_node',
+        parameters=[
+            {
+                "config_file": config_file,
+            }
+        ],
+        output='both',
+    )
+    thruster_to_px4_node = Node(
+        package='pingu_cubo_low_level_controller',
+        executable='minimal_thruster_publisher_px4_node',
+        name='minimal_thruster_publisher_px4_node',
+        output='both',
     )
 
     # Pingu Arms and Reaction Wheel
@@ -166,34 +199,14 @@ def generate_launch_description():
             'robot_controllers_path': robot_controllers
         }
     )
-
-    # rw_controller_arg = DeclareLaunchArgument(
-    #     'rw_controller',
-    #     default_value='rw_effort_controller',
-    # )
-    # ls.add_action(rw_controller_arg)
-
-    # pingu_ros2_control_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         PathJoinSubstitution([
-    #             FindPackageShare('pingu_ros2_control'),
-    #             'launch',
-    #             'pingu.launch.py',
-    #         ])
-    #     ),
-    #     launch_arguments={
-    #         'gui': 'false',
-    #         'left_arm': 'false',
-    #         'right_arm': 'false',
-    #         'controllers': LaunchConfiguration('rw_controller'),
-    #     }.items(),
-    # )
-    # ls.add_action(pingu_ros2_control_launch)
     
     nodes_list = [
         joy_node,
         pingu_cmd_mux_ns_arg,
         pingu_cmd_mux_node,
+        pingu_manual_control_node,
+        pingu_low_level_controller_node,
+        thruster_to_px4_node,
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
