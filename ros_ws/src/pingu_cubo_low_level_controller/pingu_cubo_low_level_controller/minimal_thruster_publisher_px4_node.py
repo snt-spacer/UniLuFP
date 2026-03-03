@@ -10,7 +10,7 @@ from rclpy.qos import (
 )
 
 from nav_msgs.msg import Path, Odometry
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float64MultiArray, Bool
 from geometry_msgs.msg import PoseStamped
 from visualization_msgs.msg import Marker
 
@@ -21,7 +21,6 @@ from px4_msgs.msg import VehicleCommand
 
 
 import time
-import threading
 
 
 class MinimalThrusterPublisherPX4(Node):
@@ -30,7 +29,7 @@ class MinimalThrusterPublisherPX4(Node):
     """
 
     def __init__(self):
-        super().__init__("minimal_thruster_publisher_to_px4")
+        super().__init__("minimal_thruster_publisher_to_px4_node")
         
         # Get namespace
         self.namespace = self.declare_parameter('namespace', '').value
@@ -60,10 +59,17 @@ class MinimalThrusterPublisherPX4(Node):
         )
         
         self.command_sub = self.create_subscription(
-            Float32MultiArray, 
+            Float64MultiArray, 
             f"{self.namespace_prefix}/minimal_thruster_command_to_px4", 
             self.process_command_callback, 
             10
+        )
+
+        self.disarmed_sub = self.create_subscription(
+            Bool,
+            f"{self.namespace_prefix}/disarmed",
+            self.disarmed_callback,
+            10,
         )
 
         # Publishers
@@ -196,11 +202,15 @@ class MinimalThrusterPublisherPX4(Node):
         actuator_outputs_msg.control = thrust_command.flatten()
         self.publisher_direct_actuator.publish(actuator_outputs_msg)
         
-    def process_command_callback(self, msg: Float32MultiArray):
+    def process_command_callback(self, msg: Float64MultiArray):
         # Convert the incoming command to a numpy array
         command_array = np.array(msg.data, dtype=np.float32).reshape(1, -1)
         self.u_command = command_array
         self.get_logger().info(f"Received command: {command_array}")
+
+    def disarmed_callback(self, msg: Bool):
+        if msg.data:
+            self.initiate_shutdown()
 
     def cmdloop_callback(self):
     
@@ -234,14 +244,14 @@ def main(args=None):
 
     spacecraft_low_level_controller = MinimalThrusterPublisherPX4()
 
-    def shutdown_trigger():
-        input("Press [Enter] to disarm and shutdown...\n")
+    try:
+        rclpy.spin(spacecraft_low_level_controller)
+    except KeyboardInterrupt:
+        spacecraft_low_level_controller.get_logger().info("Keyboard interrupt received, disarming PX4 and shutting down...")
         spacecraft_low_level_controller.initiate_shutdown()
-
-    threading.Thread(target=shutdown_trigger).start()
-
-    rclpy.spin(spacecraft_low_level_controller)
-    spacecraft_low_level_controller.destroy_node()
+        time.sleep(3)  # Give some time for the disarm signal to be sent before shutting down
+    finally:
+        spacecraft_low_level_controller.destroy_node()
 
 if __name__ == "__main__":
     main()

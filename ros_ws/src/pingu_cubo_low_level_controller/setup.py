@@ -28,7 +28,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'minimal_thruster_publisher_px4 = pingu_cubo_low_level_controller.minimal_thruster_publisher_px4:main',
+            'minimal_thruster_publisher_px4_node = pingu_cubo_low_level_controller.minimal_thruster_publisher_px4_node:main',
+            'pingu_low_level_controller_node = pingu_cubo_low_level_controller.pingu_low_level_controller_node:main',
         ],
     },
 )
