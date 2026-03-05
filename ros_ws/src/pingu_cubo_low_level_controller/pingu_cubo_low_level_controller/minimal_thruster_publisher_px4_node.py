@@ -65,10 +65,16 @@ class MinimalThrusterPublisherPX4(Node):
             10
         )
 
-        self.disarmed_sub = self.create_subscription(
+        self.disarm_sub = self.create_subscription(
             Bool,
-            f"{self.namespace_prefix}/disarmed",
-            self.disarmed_callback,
+            f"{self.namespace_prefix}/disarm",
+            self.disarm_callback,
+            10,
+        )
+        self.arm_sub = self.create_subscription(
+            Bool,
+            f"{self.namespace_prefix}/arm",
+            self.arm_callback,
             10,
         )
 
@@ -124,6 +130,22 @@ class MinimalThrusterPublisherPX4(Node):
             VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM,
             param1 = 0.0
         )
+
+    def disarm_callback(self, msg: Bool):
+        if msg.data:
+            self.initiate_shutdown()
+
+    def arm_callback(self, msg: Bool):
+        if msg.data:
+            # Enable direct actuator mode
+            self.enable_offboard_control()
+            # self.enable_direct_actuator_mode()
+
+            # Must be called before arming
+            self.publish_direct_actuator_mode()
+
+            # Enable arm
+            self.arm()
 
     def enable_offboard_control(self):
         self.get_logger().info("Enabling offboard control")
@@ -208,10 +230,6 @@ class MinimalThrusterPublisherPX4(Node):
         self.u_command = command_array
         self.get_logger().info(f"Received command: {command_array}")
 
-    def disarmed_callback(self, msg: Bool):
-        if msg.data:
-            self.initiate_shutdown()
-
     def cmdloop_callback(self):
     
         self.publish_direct_actuator_mode()
@@ -228,10 +246,11 @@ class MinimalThrusterPublisherPX4(Node):
 
             elif self.shutdown_counter == 10:
                 self.disarm()
+                self.shutdown_requested = False
 
-            elif self.shutdown_counter > 20:
-                self.get_logger().info("Shutting down...")
-                rclpy.shutdown()
+            # elif self.shutdown_counter > 20:
+            #     self.get_logger().info("Shutting down...")
+            #     rclpy.shutdown()
 
     def initiate_shutdown(self):
         if not self.shutdown_requested:
@@ -249,7 +268,6 @@ def main(args=None):
     except KeyboardInterrupt:
         spacecraft_low_level_controller.get_logger().info("Keyboard interrupt received, disarming PX4 and shutting down...")
         spacecraft_low_level_controller.initiate_shutdown()
-        time.sleep(3)  # Give some time for the disarm signal to be sent before shutting down
     finally:
         spacecraft_low_level_controller.destroy_node()
 

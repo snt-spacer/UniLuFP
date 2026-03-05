@@ -34,13 +34,19 @@ class PinguCmdMux(Node):
             "cmd_mux_disarm",
             10,
         )
+        self.arm_publisher = self.create_publisher(
+            Bool,
+            "cmd_mux_arm",
+            10,
+        )
 
         # Button state
         self._y_was_pressed = self._y_was_released = False
         self._permanent_y_press = self._permanent_y_release = False
-        self._disarm_pressed_counter = 0
+        self._disarm_pressed_counter = self._arm_pressed_counter = 0
         self._y = self._y_prev = 0
-        self._disarm_1 = self._disarm_1 = 0
+        self._disarm_1 = self._disarm_2 = 0
+        self._arm_1 = self._arm_2 = 0
 
         # Modes
         self._modes = ["manual", "autonomous"]
@@ -88,16 +94,28 @@ class PinguCmdMux(Node):
 
     def joy_callback(self, msg: Joy):
         self._buttons = msg.buttons
+        self._axes = msg.axes
+
+        # Arm Buttons
+        self._arm_1 = self._buttons[11]
+        self._arm_2 = self._buttons[13]
+        if self._arm_1 and self._arm_2:
+            self._arm_pressed_counter += 1
+        else:
+            self._arm_pressed_counter = 0
+
+        if self._arm_pressed_counter > 20:
+            self.arm_publisher.publish(Bool(data=True))
 
         # Disarm Buttons
-        self._disarm_1 = self._buttons[9]
-        self._disarm_2 = self._buttons[10]
+        self._disarm_1 = self._buttons[12]
+        self._disarm_2 = self._buttons[14]
         if self._disarm_1 and self._disarm_2:
             self._disarm_pressed_counter += 1
         else:
             self._disarm_pressed_counter = 0
 
-        if self._disarm_pressed_counter > 20:
+        if self._disarm_pressed_counter > 10:
             self.disarm_publisher.publish(Bool(data=True))
 
 

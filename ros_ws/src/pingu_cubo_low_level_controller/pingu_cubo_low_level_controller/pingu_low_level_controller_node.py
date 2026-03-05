@@ -76,6 +76,12 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
             self.disarm_callback,
             10,
         )
+        self.cmd_mux_arm = self.create_subscription(
+            Bool,
+            "pingu_cmd_mux/cmd_mux_arm",
+            self.arm_callback,
+            10,
+        )
         
         # Publisher
         self.thruster_publisher = self.create_publisher(
@@ -85,7 +91,12 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
         )
         self.disarm_publisher = self.create_publisher(
             Bool,
-            "disarmed",
+            "disarm",
+            10,
+        )
+        self.arm_publisher = self.create_publisher(
+            Bool,
+            "arm",
             10,
         )
         self._disarm_sent = False
@@ -95,6 +106,10 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
     def disarm_callback(self, msg: Bool):
         if msg.data:
             self.disarm_publisher.publish(Bool(data=True))
+    
+    def arm_callback(self, msg: Bool):
+        if msg.data:
+            self.arm_publisher.publish(Bool(data=True))
 
     def _refresh_active_controllers(self):
         if not self._controller_list_client.service_is_ready():

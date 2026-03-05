@@ -6,6 +6,8 @@ from sensor_msgs.msg import Joy
 
 import copy
 
+import numpy as np
+
 class PinguManualControl(Node):
     def __init__(self):
         super().__init__('manual_control_node')
@@ -55,61 +57,44 @@ class PinguManualControl(Node):
         self._buttons = msg.buttons
         self._axes = msg.axes
 
-        # Air bearings: X Button
+        thruster_cmd = np.zeros(15)
+
+        # --- Air Bearings: X Button (Toggle logic) ---
         self._prev_x = copy.copy(self._x)
         self._x = self._buttons[2]
-        self._x_was_pressed = self._prev_x == 0 and self._x == 1
+        self._x_was_pressed = (self._prev_x == 0 and self._x == 1)
+        
+        # Toggle the first index (index 0)
         if self._x_was_pressed:
-            self._permanent_x_press = True
-        self._x_was_released = self._prev_x == 1 and self._x == 0
-        if self._x_was_released:
-            self._permanent_x_release = True
+            self.air_bearing_active = not getattr(self, 'air_bearing_active', False)
 
-        if self.x_was_pressed:
-            if self._last_manual_cmd.data[0] == 0:
-                self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-                self.manual_control_publisher.publish(self._last_manual_cmd)
-            else:
-                self._last_manual_cmd = Float64MultiArray(data=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-                self.manual_control_publisher.publish(self._last_manual_cmd)
+        if getattr(self, 'air_bearing_active', False):
+            thruster_cmd[0] = 1
 
-        """
-        Lab Thruster configuration
-        """
-        # Left/Right: Left Trigger Axis 0
-        if self._axes[0] > 0.1: #L
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,1,0,0,0,0,1,0,0,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
-        elif self._axes[0] < -0.1: #R
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
-        else:
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
+        # Left/Right: Left Stick Horizontal (Axis 0)
+        if self._axes[0] > 0.1:   # Left
+            thruster_cmd[5] += self._axes[0]; thruster_cmd[8] += self._axes[0]
+        elif self._axes[0] < -0.1: # Right
+            thruster_cmd[4] += self._axes[0]; thruster_cmd[9] += self._axes[0]
 
-        # Forward/Backward: Left Trigger Axis 1
-        if self._axes[1] > 0.1: #F
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,1,0,0,0,0,1,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
-        elif self._axes[1] < -0.1: #B
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,0,1,0,0,1,0,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
-        else:
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
+        # Forward/Backward: Left Stick Vertical (Axis 1)
+        if self._axes[1] > 0.1:   # Forward
+            thruster_cmd[2] += self._axes[1]; thruster_cmd[7] += self._axes[1]
+        elif self._axes[1] < -0.1: # Backward
+            thruster_cmd[3] += self._axes[1]; thruster_cmd[6] += self._axes[1]
 
-        # Rotate CW/CCW: Right Trigger Axis 2
-        if self._axes[2] > 0.1: #CCW
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,1,0,0,0,1,0,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
-        elif self._axes[2] < -0.1: #CW
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,0,1,0,0,0,1,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
-        else:
-            self._last_manual_cmd = Float64MultiArray(data=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-            self.manual_control_publisher.publish(self._last_manual_cmd)
+        # Rotate CW/CCW: Right Stick Horizontal (Axis 2)
+        if self._axes[2] > 0.1:   # CCW
+            thruster_cmd[3] += self._axes[2]; thruster_cmd[5] += self._axes[2]; thruster_cmd[7] += self._axes[2]; thruster_cmd[9] += self._axes[2]
+        elif self._axes[2] < -0.1: # CW
+            thruster_cmd[2] += self._axes[2]; thruster_cmd[4] += self._axes[2]; thruster_cmd[6] += self._axes[2]; thruster_cmd[8] += self._axes[2]
 
-        # self.get_logger().info(f"Axes: {self._axes}")
+        # Clip values to stay within [-1, 1] and make all of the commands positive
+        thruster_cmd = np.abs(np.clip(thruster_cmd, -1.0, 1.0))
+
+        # Publish at the end
+        self._last_manual_cmd = Float64MultiArray(data=thruster_cmd.tolist())
+        self.manual_control_publisher.publish(self._last_manual_cmd)
         
     
 def main(args=None):
