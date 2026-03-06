@@ -54,11 +54,8 @@ COPY ./requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
-WORKDIR /UniLuFP
-
-# =========================
-# Acados
-# =========================
+## Install acados
+WORKDIR /mnt
 RUN git clone https://github.com/acados/acados.git \
  && cd acados \
  && git submodule update --recursive --init \
@@ -70,31 +67,6 @@ RUN git clone https://github.com/acados/acados.git \
  && pip install ./interfaces/acados_template \
  && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/mnt/acados/lib" \
  && export ACADOS_SOURCE_DIR="/mnt/acados"
-
-# =========================
-# Pinocchio installation
-# =========================
-# Add robotpkg repository and install Pinocchio (C++ & Python bindings)
-RUN set -eux; \
-    mkdir -p /etc/apt/keyrings; \
-    curl -fsSL http://robotpkg.openrobots.org/packages/debian/robotpkg.asc -o /etc/apt/keyrings/robotpkg.asc; \
-    codename=$(lsb_release -cs); \
-    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub ${codename} robotpkg" \
-      > /etc/apt/sources.list.d/robotpkg.list; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-        robotpkg-eigen3 \
-        robotpkg-py3*-pinocchio; \
-    apt-get autoremove -y; \
-    rm -rf /var/lib/apt/lists/*
-
-# Environment Variables
-ENV PATH=/opt/openrobots/bin:$PATH \
-    PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH \
-    LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH \
-    PYTHONPATH=/opt/openrobots/lib/python3.10/site-packages:$PYTHONPATH \
-    CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
-
 
 ## ROS packages
 WORKDIR /mnt/ros_ws/src
@@ -115,7 +87,7 @@ SHELL ["/bin/bash", "-c"]
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
 WORKDIR /mnt/ros_ws
-RUN . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --symlink-install
+RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install
 RUN echo "source /mnt/ros_ws/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /UniLuFP/ros_ws
