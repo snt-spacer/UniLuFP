@@ -11,7 +11,8 @@ docker run --name unilufp-ros-deploy-container -it \
     --device /dev/input:/dev/input \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v $HOME/.Xauthority:/root/.Xauthority \
-    -v ${PWD}/ros_ws/src:/mnt/src \
+    -v ${PWD}/ros_ws/src:/UniLuFP/ros_ws/src \
+    -v $HOME/RANS_DeployToRobot:/mnt/ros_ws/src/rans_deploy/RANS_DeployToRobot \
     -v /run/udev:/run/udev \
     -v /dev/bus/usb:/dev/bus/usb \
     -e DISPLAY=${DISPLAY} \
