@@ -13,7 +13,7 @@ class PinguManualControl(Node):
         super().__init__('manual_control_node')
 
         # Last cmds
-        self._last_manual_cmd = Float64MultiArray(data=[0,0,0,0,0,0,0,0,0,0]) # (air_bearing(on/off), thrusters(on/off), t1, t2, t3, t4, t5, t6, t7, t8)
+        self._last_manual_cmd = Float64MultiArray(data=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) # (air_bearing(on/off), thrusters(on/off), t1, t2, t3, t4, t5, t6, t7, t8, reaction wheel, shoulder 1, elbow 1, shoulder 2, elbow 2)
 
         # Button state
         self._x_was_pressed = self._x_was_released = False

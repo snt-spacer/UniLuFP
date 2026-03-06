@@ -2,7 +2,7 @@
 FROM ros:humble
 
 # Set the working directory to the main folder of your repository
-WORKDIR /UniLuFP
+WORKDIR /mnt
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
@@ -37,7 +37,7 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
 ## Install acados
-WORKDIR /UniLuFP
+WORKDIR /mnt
 RUN git clone https://github.com/acados/acados.git \
  && cd acados \
  && git submodule update --recursive --init \
@@ -47,11 +47,11 @@ RUN git clone https://github.com/acados/acados.git \
  && make install -j4 \
  && cd ../ \
  && pip install ./interfaces/acados_template \
- && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/UniLuFP/acados/lib" \
- && export ACADOS_SOURCE_DIR="/UniLuFP/acados"
+ && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/mnt/acados/lib" \
+ && export ACADOS_SOURCE_DIR="/mnt/acados"
 
 ## ROS packages
-WORKDIR /UniLuFP/ros_ws/src
+WORKDIR /mnt/ros_ws/src
 COPY ./repositories.yaml .
 RUN vcs import --input repositories.yaml --recursive .
 
@@ -68,9 +68,9 @@ RUN apt-get update && apt-get install -y \
 SHELL ["/bin/bash", "-c"]
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
-WORKDIR /UniLuFP/ros_ws
+WORKDIR /mnt/ros_ws
 RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install
-RUN echo "source /UniLuFP/ros_ws/install/setup.bash" >> ~/.bashrc
+RUN echo "source /mnt/ros_ws/install/setup.bash" >> ~/.bashrc
 
 # WORKDIR /
 # Default command
