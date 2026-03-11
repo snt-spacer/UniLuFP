@@ -51,16 +51,11 @@ COPY ./requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
-<<<<<<< akiyoshi/updateArmControllers
+WORKDIR /UniLuFP
 
 # =========================
 # Acados
 # =========================
-WORKDIR /UniLuFP
-=======
-## Install acados
-WORKDIR /mnt
->>>>>>> dev
 RUN git clone https://github.com/acados/acados.git \
  && cd acados \
  && git submodule update --recursive --init \
