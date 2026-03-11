@@ -115,9 +115,8 @@ WORKDIR /mnt/ros_ws
 RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install
 RUN echo "source /mnt/ros_ws/install/setup.bash" >> ~/.bashrc
 
-# WORKDIR /
+WORKDIR /UniLuFP/ros_ws
 # Default command
-# COPY ./ros_entrypoint.sh /
-# RUN chmod +x /ros_entrypoint.sh
-# ENTRYPOINT ["/ros_entrypoint.sh"]
+COPY ./ros_entrypoint.sh /
+ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
