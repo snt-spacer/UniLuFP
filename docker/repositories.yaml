@@ -7,10 +7,10 @@ repositories:
     type: git
     url: https://github.com/odriverobotics/ros_odrive.git
     version: main
-  # LevionArm:
-  #   type: git
-  #   url: https://github.com/aky-u/LevionArm.git
-  #   version: 6fcbd7dc9f4a89c809c0a021c1e12c9e61d07260
+  LevionArm:
+    type: git
+    url: https://github.com/aky-u/LevionArm.git
+    version: 6fcbd7dc9f4a89c809c0a021c1e12c9e61d07260
   ros2_control_gui:
     type: git
     url: https://github.com/aky-u/ros2_control_gui.git
