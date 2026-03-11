@@ -1,0 +1,4 @@
+pingu:
+  thruster_mode: "individual_thruster_control"
+  reaction_wheel: false
+  arms: true

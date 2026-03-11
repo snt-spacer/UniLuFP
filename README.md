@@ -1,13 +1,38 @@
 # UniLuFP
 
+### Test Thrusters
+It keeps thruster 7 always on and every 2 seconds keeps opening a new thruster from 0 to 8. 
+```
+ros2 run px4_simple test_solenoid_valve_connection
+```
+
+### Launch 
+`ros2 launch pingu_cubo_low_level_controller pingu_low_level_controller_individual_thruster_controll_launch.py`
+
+Reaction wheel
+
+`ros2 topic pub /rw_velocity_controller/commands std_msgs/msg/Float64MultiArray "{data: [3.0]}"`
+
+### Packages Descriptions
+- `pingu_cubo_low_level_controller`
+  - Umbrella launcher for the `joy`, `*cmd_mux`, and `low_level_controller` packages
+- `pingu_cmd_mux`
+    - Takes the inputs of the joy and sends it to the low level controller
+- `low_level_controller`
+  - Launches the low level controller of the Pingu or the Cubo.
+
 [Notion](https://www.notion.so/Pingu-FP-1c7aaf8bff7f8098a08bc9bdcd53db11)
 
 ## Pixhawk setup
 
 Inherited from [here](https://atmos.discower.io/pages/PX4/).
 
+Build QGC from [daily](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/releases/daily_builds.html#daily-builds)
+
 ```nsh
 param set UXRCE_DDS_AG_IP 170461697 # The int32 version of 10.41.10.1
+
+# Pingu: 192.168.88.159 -> 3232258207
 ```
 
 ## Jetson setup
@@ -140,8 +165,10 @@ sudo udevadm trigger
 ### Add the startup service
 
 ```bash
-chmod +x /home/spacer/UniLuFP/Pingu_OBC_Setup/scripts/**
-sudo cp $HOME/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
+chmod +x ~/UniLuFP/Pingu_OBC_Setup/scripts/**
+find ~/UniLuFP/Pingu_OBC_Setup/scripts -type f -exec chmod +x {} +
+sudo cp ~/UniLuFP/Pingu_OBC_Setup/scripts/* /usr/local/bin/
+sudo cp ~/UniLuFP/Pingu_OBC_Setup/services/* /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable px4_comm
 sudo systemctl start px4_comm

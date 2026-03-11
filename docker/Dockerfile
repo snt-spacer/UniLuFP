@@ -2,17 +2,11 @@
 FROM ros:humble
 
 # Set the working directory to the main folder of your repository
-WORKDIR /UniLuFP
+WORKDIR /mnt
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
     python3-pip \
-    ros-humble-rclpy \
-    ros-humble-geometry-msgs \
-    ros-humble-joy \
-    ros-humble-ackermann-msgs \
-    ros-humble-hardware-interface \
-    ros-humble-teleop-twist-keyboard \
     ffmpeg \
     vim \
     git \
@@ -20,6 +14,19 @@ RUN apt-get update && apt-get install -y \
     terminator \
     build-essential \
     python3-vcstool \
+    usbutils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install ROS 2 packages
+RUN apt-get update && apt-get install -y \
+    ros-humble-rclpy \
+    ros-humble-geometry-msgs \
+    ros-humble-joy \
+    ros-humble-ackermann-msgs \
+    ros-humble-hardware-interface \
+    ros-humble-teleop-twist-keyboard \
+    ros-humble-rqt*\
+    ros-humble-rviz2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install QT dependencies
@@ -44,11 +51,16 @@ COPY ./requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
+<<<<<<< akiyoshi/updateArmControllers
 
 # =========================
 # Acados
 # =========================
 WORKDIR /UniLuFP
+=======
+## Install acados
+WORKDIR /mnt
+>>>>>>> dev
 RUN git clone https://github.com/acados/acados.git \
  && cd acados \
  && git submodule update --recursive --init \
@@ -58,8 +70,8 @@ RUN git clone https://github.com/acados/acados.git \
  && make install -j4 \
  && cd ../ \
  && pip install ./interfaces/acados_template \
- && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/UniLuFP/acados/lib" \
- && export ACADOS_SOURCE_DIR="/UniLuFP/acados"
+ && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/mnt/acados/lib" \
+ && export ACADOS_SOURCE_DIR="/mnt/acados"
 
 # =========================
 # Pinocchio installation
@@ -87,7 +99,7 @@ ENV PATH=/opt/openrobots/bin:$PATH \
 
 
 ## ROS packages
-WORKDIR /UniLuFP/ros_ws/src
+WORKDIR /mnt/ros_ws/src
 COPY ./repositories.yaml .
 RUN vcs import --input repositories.yaml --recursive .
 
@@ -104,9 +116,9 @@ RUN apt-get update && apt-get install -y \
 SHELL ["/bin/bash", "-c"]
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
-WORKDIR /UniLuFP/ros_ws
+WORKDIR /mnt/ros_ws
 RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install
-RUN echo "source /UniLuFP/ros_ws/install/setup.bash" >> ~/.bashrc
+RUN echo "source /mnt/ros_ws/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /UniLuFP/ros_ws
 # Default command

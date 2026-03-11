@@ -11,7 +11,7 @@ from rclpy.qos import (
     QoSHistoryPolicy,
     QoSDurabilityPolicy,
 )
-from std_msgs.msg import Int16MultiArray, Float32MultiArray
+from std_msgs.msg import Int16MultiArray, Float64MultiArray
 import numpy as np
 
 from px4_msgs.msg import (
@@ -85,7 +85,7 @@ class PinguDirectValveControl(Node):
             self.vehicle_control_mode_callback,
             qos_profile_sub,
         )
-        self.subscriber = self.create_subscription(Float32MultiArray, self.get_param("topic_name"), self.valve_callback, 10)
+        self.subscriber = self.create_subscription(Float64MultiArray, self.get_param("topic_name"), self.valve_callback, 10)
 
         timer_period = 0.1  # seconds (10Hz)
         self.timer = self.create_timer(timer_period, self.offboard_loop)
@@ -189,7 +189,7 @@ class PinguDirectValveControl(Node):
         """
         Subscriber callback function.
         Args:
-            msg (std_msgs/Float32MultiArray): ros2 message.
+            msg (std_msgs/Float64MultiArray): ros2 message.
         """
         if len(msg.data) < 10:
             self.get_logger().error("Received message with insufficient data.")

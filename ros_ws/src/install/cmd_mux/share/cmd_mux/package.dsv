@@ -1,0 +1,9 @@
+source;share/cmd_mux/hook/pythonpath.ps1
+source;share/cmd_mux/hook/pythonpath.dsv
+source;share/cmd_mux/hook/pythonpath.sh
+source;share/cmd_mux/hook/ament_prefix_path.ps1
+source;share/cmd_mux/hook/ament_prefix_path.dsv
+source;share/cmd_mux/hook/ament_prefix_path.sh
+source;../../build/cmd_mux/share/cmd_mux/hook/pythonpath_develop.ps1
+source;../../build/cmd_mux/share/cmd_mux/hook/pythonpath_develop.dsv
+source;../../build/cmd_mux/share/cmd_mux/hook/pythonpath_develop.sh

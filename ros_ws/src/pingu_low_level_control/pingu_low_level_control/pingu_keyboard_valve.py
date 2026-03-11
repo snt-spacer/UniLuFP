@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float64MultiArray
 import sys, select, termios, tty
 import time
 
@@ -12,7 +12,7 @@ class KeyboardPublisher(Node):
     """
     def __init__(self):
         super().__init__('keyboard_publisher')
-        self.publisher_ = self.create_publisher(Float32MultiArray, 'spacer_pingu_floating_platform/pingu_valves/input', 10)
+        self.publisher_ = self.create_publisher(Float64MultiArray, 'spacer_pingu_floating_platform/pingu_valves/input', 10)
         self.timer = self.create_timer(1.0 / 50.0, self.timer_callback)  # 50Hz
 
         # Store key states
@@ -31,7 +31,7 @@ class KeyboardPublisher(Node):
             self.get_logger().info('Exiting keyboard listener.')
             rclpy.shutdown()
 
-        msg = Float32MultiArray()
+        msg = Float64MultiArray()
         msg.data = [self.key_state[k] for k in self.keys]
         self.publisher_.publish(msg)
             
