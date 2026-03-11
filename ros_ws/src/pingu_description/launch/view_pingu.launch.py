@@ -22,7 +22,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "joint_state_publisher_gui",
-            default_value="true",
+            default_value="false",
             description="Start joint_state_publisher_gui automatically with this launch file. \
         If set to false, joint topic should be published by real robot or \
         simulated robot.",

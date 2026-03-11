@@ -26,6 +26,8 @@ class PoseToTF(Node):
         t.transform.rotation = msg.pose.orientation
         self.br.sendTransform(t)
 
+        self.get_logger().info(f"Published transform for {t.child_frame_id} at time {t.header.stamp.sec}.{t.header.stamp.nanosec}")
+
 def main(args=None):
     rclpy.init(args=args)
     node = PoseToTF()

@@ -1,0 +1,56 @@
+{
+  "name": "unilufp-ros-deploy",
+  "build": {
+    "dockerfile": "../docker/Dockerfile"
+  },
+  "runArgs": [
+    "--privileged",
+    "--gpus",
+    "all",
+    "--ipc=host",
+    "--network=host"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder}/ros_ws/src/,target=/UniLuFP/ros_ws/src/mnt,type=bind",
+  "workspaceFolder": "/UniLuFP/ros_ws/",
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "ACCEPT_EULA": "Y",
+    "PRIVACY_CONSENT": "Y"
+  },
+  "mounts": [
+    {
+      "source": "/tmp/.X11-unix",
+      "target": "/tmp/.X11-unix",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.Xauthority",
+      "target": "/root/.Xauthority",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history",
+      "target": "/root/.bash_history",
+      "type": "bind"
+    }
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "donjayamanne.githistory",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "GitHub.copilot-chat"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/python:1": {}
+  }
+}

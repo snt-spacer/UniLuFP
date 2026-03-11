@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     git \
     byobu \
+    terminator \
     build-essential \
     python3-vcstool \
     usbutils \
@@ -28,6 +29,20 @@ RUN apt-get update && apt-get install -y \
     ros-humble-rviz2 \
     && rm -rf /var/lib/apt/lists/*
 
+# Install QT dependencies
+RUN apt-get update && apt-get install -y \
+    libxcb-xinerama0 \
+    libxcb-cursor0 \
+    libxkbcommon-x11-0 \
+    libxcb-icccm4 \
+    libxcb-image0 \
+    libxcb-keysyms1 \
+    libxcb-randr0 \
+    libxcb-render-util0 \
+    libxcb-xkb1 \
+    libx11-xcb1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Source ROS 2 in every shell
 SHELL ["/bin/bash", "-c"]
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
@@ -36,8 +51,16 @@ COPY ./requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
+<<<<<<< akiyoshi/updateArmControllers
+
+# =========================
+# Acados
+# =========================
+WORKDIR /UniLuFP
+=======
 ## Install acados
 WORKDIR /mnt
+>>>>>>> dev
 RUN git clone https://github.com/acados/acados.git \
  && cd acados \
  && git submodule update --recursive --init \
@@ -49,6 +72,31 @@ RUN git clone https://github.com/acados/acados.git \
  && pip install ./interfaces/acados_template \
  && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/mnt/acados/lib" \
  && export ACADOS_SOURCE_DIR="/mnt/acados"
+
+# =========================
+# Pinocchio installation
+# =========================
+# Add robotpkg repository and install Pinocchio (C++ & Python bindings)
+RUN set -eux; \
+    mkdir -p /etc/apt/keyrings; \
+    curl -fsSL http://robotpkg.openrobots.org/packages/debian/robotpkg.asc -o /etc/apt/keyrings/robotpkg.asc; \
+    codename=$(lsb_release -cs); \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub ${codename} robotpkg" \
+      > /etc/apt/sources.list.d/robotpkg.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        robotpkg-eigen3 \
+        robotpkg-py3*-pinocchio; \
+    apt-get autoremove -y; \
+    rm -rf /var/lib/apt/lists/*
+
+# Environment Variables
+ENV PATH=/opt/openrobots/bin:$PATH \
+    PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH \
+    LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH \
+    PYTHONPATH=/opt/openrobots/lib/python3.10/site-packages:$PYTHONPATH \
+    CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
+
 
 ## ROS packages
 WORKDIR /mnt/ros_ws/src
