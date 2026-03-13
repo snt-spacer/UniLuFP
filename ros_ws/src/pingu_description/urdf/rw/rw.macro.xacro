@@ -4,7 +4,15 @@
   <xacro:macro name="rw" params="parent prefix *origin">
 
   <!-- Base Link -->
-  <link name="${prefix}rw_base" />
+  <link name="${prefix}rw_base">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pingu_description/mesh/minimalist_motor_holder.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="levion_black"/>
+    </visual>
+  </link>
 
   <joint name="${prefix}rw_base_joint" type="fixed">
     <xacro:insert_block name="origin" />
@@ -17,14 +25,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <cylinder radius="0.1" length="0.008"/>
+        <mesh filename="package://pingu_description/mesh/minimalist_reaction_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="orange"/>
     </visual>
 
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="2.0"/>
+      <mass value="0.172"/>
       <inertia
         ixx="0.06" ixy="0.0" ixz="0.0"
         iyy="0.06" iyz="0.0"

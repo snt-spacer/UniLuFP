@@ -1,5 +1,7 @@
 # Use ROS2 Humble base image
-FROM ros:humble
+ARG ROS_DISTRO=humble
+
+FROM ros:${ROS_DISTRO}
 
 # Set the working directory to the main folder of your repository
 WORKDIR /mnt
@@ -19,14 +21,15 @@ RUN apt-get update && apt-get install -y \
 
 # Install ROS 2 packages
 RUN apt-get update && apt-get install -y \
-    ros-humble-rclpy \
-    ros-humble-geometry-msgs \
-    ros-humble-joy \
-    ros-humble-ackermann-msgs \
-    ros-humble-hardware-interface \
-    ros-humble-teleop-twist-keyboard \
-    ros-humble-rqt*\
-    ros-humble-rviz2 \
+    ros-${ROS_DISTRO}-rclpy \
+    ros-${ROS_DISTRO}-geometry-msgs \
+    ros-${ROS_DISTRO}-joy \
+    ros-${ROS_DISTRO}-ackermann-msgs \
+    ros-${ROS_DISTRO}-hardware-interface \
+    ros-${ROS_DISTRO}-teleop-twist-keyboard \
+    ros-${ROS_DISTRO}-rqt*\
+    ros-${ROS_DISTRO}-rviz2 \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
     && rm -rf /var/lib/apt/lists/*
 
 # Install QT dependencies
@@ -45,7 +48,7 @@ RUN apt-get update && apt-get install -y \
 
 # Source ROS 2 in every shell
 SHELL ["/bin/bash", "-c"]
-RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
 COPY ./requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
@@ -109,10 +112,10 @@ RUN apt-get update && apt-get install -y \
  
 # Source ROS2 setup
 SHELL ["/bin/bash", "-c"]
-RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
 WORKDIR /mnt/ros_ws
-RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --symlink-install
 RUN echo "source /mnt/ros_ws/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /UniLuFP/ros_ws

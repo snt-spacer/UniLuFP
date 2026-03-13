@@ -22,7 +22,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "joint_state_publisher_gui",
-            default_value="false",
+            default_value="true",
             description="Start joint_state_publisher_gui automatically with this launch file. \
         If set to false, joint topic should be published by real robot or \
         simulated robot.",
@@ -55,7 +55,7 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([package, "urdf", "pingu_v3.urdf.xacro"]),
+            PathJoinSubstitution([package, "urdf", "unilu_fp.urdf.xacro"]),
             " ",
             "prefix:=",
             prefix,
