@@ -1,4 +1,8 @@
-PySide6
-numpy<2
-qt6-tools
-mujoco
+numpy>=1.22.4,<2.0
+torch
+matplotlib
+pandas
+rl-games
+scipy
+skrl[torch]
+onnxruntime
