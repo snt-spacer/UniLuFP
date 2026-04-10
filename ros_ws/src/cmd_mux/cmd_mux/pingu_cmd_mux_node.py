@@ -89,8 +89,8 @@ class PinguCmdMux(Node):
     
     def autonomous_cmd_callback(self, msg: Float64MultiArray):
         self._last_autonomous_cmd = msg
-        print(f"Received autonomous command: {msg.data}, current mode: {self._current_mode}")
-        self.get_logger().info(f"Received autonomous command: {msg.data}, current mode: {self._current_mode}")
+        # print(f"Received autonomous command: {msg.data}, current mode: {self._current_mode}")
+        # self.get_logger().info(f"Received autonomous command: {msg.data}, current mode: {self._current_mode}")
         if self._current_mode == "autonomous":
             self.low_level_publisher.publish(msg)
 
