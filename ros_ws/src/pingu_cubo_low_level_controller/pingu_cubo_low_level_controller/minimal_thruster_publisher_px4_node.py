@@ -40,14 +40,14 @@ class MinimalThrusterPublisherPX4(Node):
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
             history=QoSHistoryPolicy.KEEP_LAST,
-            depth=0,
+            depth=1,
         )
 
         qos_profile_sub = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             durability=QoSDurabilityPolicy.VOLATILE,
             history=QoSHistoryPolicy.KEEP_LAST,
-            depth=0,
+            depth=1,
         )
 
         # Subscribers
@@ -228,7 +228,7 @@ class MinimalThrusterPublisherPX4(Node):
         # Convert the incoming command to a numpy array
         command_array = np.array(msg.data, dtype=np.float32).reshape(1, -1)
         self.u_command = command_array
-        self.get_logger().info(f"Received command: {command_array}")
+        # self.get_logger().info(f"Received command: {command_array}")
 
     def cmdloop_callback(self):
     

@@ -15,7 +15,7 @@ class PinguCmdMux(Node):
         super().__init__('pingu_cmd_mux_node')
 
         # Register params
-        self.declare_parameter('pub_topic_name', rclpy.Parameter.Type.STRING)
+        # self.declare_parameter('pub_topic_name', rclpy.Parameter.Type.STRING)
 
         # Last cmds
         self._last_manual_cmd = Float64MultiArray(data=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
@@ -89,6 +89,8 @@ class PinguCmdMux(Node):
     
     def autonomous_cmd_callback(self, msg: Float64MultiArray):
         self._last_autonomous_cmd = msg
+        print(f"Received autonomous command: {msg.data}, current mode: {self._current_mode}")
+        self.get_logger().info(f"Received autonomous command: {msg.data}, current mode: {self._current_mode}")
         if self._current_mode == "autonomous":
             self.low_level_publisher.publish(msg)
 

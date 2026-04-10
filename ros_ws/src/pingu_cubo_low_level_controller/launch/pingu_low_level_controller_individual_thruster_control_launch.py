@@ -4,6 +4,7 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.conditions import IfCondition
 from launch.actions import OpaqueFunction
 from launch.substitutions import (
     Command,
@@ -56,14 +57,14 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "left_arm",
-            default_value="false",
+            default_value="true",
             description="Enable left arm.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "right_arm",
-            default_value="false",
+            default_value="true",
             description="Enable right arm.",
         )
     )
@@ -71,7 +72,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "controllers",
-            default_value="rw_effort_controller",
+            default_value="rw_effort_controller, dual_arm_trajectory_controller",
             description="Comma-separated list of controllers to spawn. \
         Check the `pingu_controllers.yaml` file for available controllers. EX: [actuators_position_controller, actuators_velocity_controller, actuators_effort_controller, actuators_trajectory_controller, rw_velocity_controller, rw_effort_controller, dual_arm_position_controller...]."
         )
@@ -118,12 +119,12 @@ def generate_launch_description():
     # Pingu CMD MUX
     pingu_cmd_mux_node = Node(
         package='cmd_mux',
-        namespace=pingu_cmd_mux_ns,
+        # namespace=pingu_cmd_mux_ns,
         executable='pingu_cmd_mux',
         name='pingu_cmd_mux',
         output='screen',
         remappings=[
-            ("/pingu_cmd_mux/joy_control_input", "/joy"),
+            ("/joy_control_input", "/joy"),
         ],
     )
 
@@ -202,7 +203,7 @@ def generate_launch_description():
     
     nodes_list = [
         joy_node,
-        pingu_cmd_mux_ns_arg,
+        # pingu_cmd_mux_ns_arg,
         pingu_cmd_mux_node,
         pingu_manual_control_node,
         pingu_low_level_controller_node,

@@ -24,7 +24,7 @@ class PinguManualControl(Node):
         self._joy_sub = self.create_subscription(Joy, "joy", self.joy_callback, 1)
 
         # Register publisher
-        self.manual_control_publisher = self.create_publisher(Float64MultiArray, "pingu_cmd_mux/manual_control_input", 1)
+        self.manual_control_publisher = self.create_publisher(Float64MultiArray, "manual_control_input", 1)
 
 
     @property
