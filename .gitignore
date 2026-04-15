@@ -183,3 +183,5 @@ ros_ws/log
 .vscode/
 
 *csv
+
+ros_ws/src/LevionArm/*

@@ -6,3 +6,4 @@ rl-games
 scipy
 skrl[torch]
 onnxruntime
+tensordict

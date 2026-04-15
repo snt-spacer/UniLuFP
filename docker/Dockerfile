@@ -80,6 +80,19 @@ RUN git clone https://github.com/aky-u/LevionArm.git \
  && git submodule set-url leptrino_force_torque https://github.com/aky-u/leptrino_force_torque.git \
  && git submodule update --init --recursive
 
+
+## Reinforcement Learning
+ARG RSL_RL_DEV=true
+ARG RSL_RL_PATH="/root/rsl_rl"
+ARG RSL_RL_REMOTE="https://github.com/leggedrobotics/rsl_rl.git"
+ARG RSL_RL_BRANCH="main"
+ARG RSL_RL_COMMIT_SHA="91c7554e67f7f9c39fbcddf46fb42b82c07f4144" # rsl_rl v3.3.0
+RUN if [[ "${RSL_RL_DEV,,}" = true ]]; then \
+    git clone "${RSL_RL_REMOTE}" "${RSL_RL_PATH}" --branch "${RSL_RL_BRANCH}" && \
+    git -C "${RSL_RL_PATH}" reset --hard "${RSL_RL_COMMIT_SHA}" && \
+    python3 -m pip install --no-input --no-cache-dir --editable "${RSL_RL_PATH}" ; \
+    fi
+
 RUN apt-get update && apt-get install -y \
  && rosdep install --from-paths . --ignore-src -r -y
 
