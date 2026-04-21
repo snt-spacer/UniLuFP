@@ -3,6 +3,8 @@
 ### Test Thrusters
 It keeps thruster 7 always on and every 2 seconds keeps opening a new thruster from 0 to 8. 
 ```
+ros2 launch leptrino_force_torque leptrino.launch.py
+ros2 run px4_simple logger_thruster_test
 ros2 run px4_simple test_solenoid_valve_connection
 ```
 
