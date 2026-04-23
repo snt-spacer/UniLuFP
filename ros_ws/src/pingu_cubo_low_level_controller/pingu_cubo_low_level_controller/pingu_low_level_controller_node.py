@@ -72,9 +72,9 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
                 "right_shoulder_joint", "right_elbow_joint",
             ],
             "actuators_trajectory_controller": [
-                "rw_joint",
                 "left_shoulder_joint", "left_elbow_joint",
                 "right_shoulder_joint", "right_elbow_joint",
+                "rw_joint",
             ],
         }
 
@@ -271,7 +271,7 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
         if self._reaction_wheel_enabled:
             rw_controller = self._pick_active_controller(self._rw_controller_candidates)
             if rw_controller is not None:
-                reaction_wheel_command = cmd[-5]
+                reaction_wheel_command = cmd[-1]  # Last value is for reaction wheel
 
                 # self.get_logger().info(
                 #     f"Processed reaction wheel command for {rw_controller}: {reaction_wheel_command}"
@@ -280,7 +280,7 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
         
         # Publish to arms
         if self._arms_enabled:
-            arm_command = cmd[-4:]
+            arm_command = cmd[10:14]  # 4 values for arms
             dual_arm_controller = self._pick_active_controller(self._dual_arm_controller_candidates)
             if dual_arm_controller is not None:
                 if "trajectory" in dual_arm_controller:
