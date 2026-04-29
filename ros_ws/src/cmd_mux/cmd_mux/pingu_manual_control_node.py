@@ -71,17 +71,19 @@ class PinguManualControl(Node):
         if getattr(self, 'air_bearing_active', False):
             thruster_cmd[0] = 1
 
+        
+        # Forward/Backward: Left Stick Vertical (Axis 1)
+        if self._axes[0] > 0.1:   # Forward
+            thruster_cmd[2] += self._axes[1]; thruster_cmd[7] += self._axes[1]
+        elif self._axes[0] < -0.1: # Backward
+            thruster_cmd[3] += self._axes[1]; thruster_cmd[6] += self._axes[1]
+
         # Left/Right: Left Stick Horizontal (Axis 0)
-        if self._axes[0] > 0.1:   # Left
+        if self._axes[1] > 0.1:   # Left
             thruster_cmd[5] += self._axes[0]; thruster_cmd[8] += self._axes[0]
-        elif self._axes[0] < -0.1: # Right
+        elif self._axes[1] < -0.1: # Right
             thruster_cmd[4] += self._axes[0]; thruster_cmd[9] += self._axes[0]
 
-        # Forward/Backward: Left Stick Vertical (Axis 1)
-        if self._axes[1] > 0.1:   # Forward
-            thruster_cmd[2] += self._axes[1]; thruster_cmd[7] += self._axes[1]
-        elif self._axes[1] < -0.1: # Backward
-            thruster_cmd[3] += self._axes[1]; thruster_cmd[6] += self._axes[1]
 
         # Rotate CW/CCW: Right Stick Horizontal (Axis 2)
         if self._axes[2] > 0.1:   # CCW

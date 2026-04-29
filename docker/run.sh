@@ -1,6 +1,17 @@
 #!/bin/bash
 xhost +local:docker
 
+# sudo chmod 666 /dev/ttyUSB0
+# echo "Starting micro-ROS bridge..."
+# docker run -it -d --name microros-bridge --rm -v /dev:/dev --privileged --net=host microros/micro-ros-agent:humble serial --dev /dev/ttyUSB0
+# cleanup() {
+#     echo "Stopping micro-ROS bridge..."
+#     docker kill microros-bridge
+#     exit
+# }
+
+# trap cleanup SIGINT SIGTERM
+
 docker run --name unilufp-ros-deploy-container -it \
     --privileged \
     --runtime=nvidia \
@@ -19,3 +30,5 @@ docker run --name unilufp-ros-deploy-container -it \
     -e QT_X11_NO_MITSHM=1 \
     -e XAUTHORITY=/root/.Xauthority \
     unilufp-ros-deploy:latest
+
+# cleanup
