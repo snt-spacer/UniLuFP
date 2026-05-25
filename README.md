@@ -1,5 +1,22 @@
 # UniLuFP
 
+## Cloning the repository
+
+The repo uses git submodules for [LevionArm](https://github.com/aky-u/LevionArm.git) (with its own nested submodules `cubemars_hardware` and `leptrino_force_torque`) and [RANS_DeployToRobot](https://github.com/SpaceR-x-DreamLab-RL/RANS_DeployToRobot) (branch `Pingu_Cubo`). Both live under `ros_ws/src/` and are mounted into the Docker container at runtime — **they must be present on the host**.
+
+```bash
+git clone --recurse-submodules https://github.com/snt-spacer/UniLuFP.git
+```
+
+> [!NOTE]
+> If you already cloned without the flag, clone the submodules manually from inside the repo:
+> ```bash
+> git clone https://github.com/aky-u/LevionArm.git ros_ws/src/LevionArm --recurse-submodules
+> git clone -b Pingu_Cubo git@github.com:SpaceR-x-DreamLab-RL/RANS_DeployToRobot.git ros_ws/src/RANS_DeployToRobot
+> ```
+> Or simply run `git submodule update --init --recursive`.
+
+
 ### Test Thrusters
 It keeps thruster 7 always on and every 2 seconds keeps opening a new thruster from 0 to 8. 
 ```
@@ -7,8 +24,6 @@ ros2 launch leptrino_force_torque leptrino.launch.py
 ros2 run px4_simple logger_thruster_test
 ros2 run px4_simple test_solenoid_valve_connection
 ```
-
-
 
 ### Launch 
 ```bash
@@ -56,19 +71,6 @@ Set IP following [here](https://docs.px4.io/main/en/companion_computer/holybro_p
 ```host PC
 ssh spacer@192.168.177.210 # "177" can be changed.
 ```
-
-### Clone UniFP repository
-
-First clone this repo at into home directory.
-
-```bash
-git clone --recurse-submodules https://github.com/snt-spacer/UniLuFP.git
-```
-
-> [!NOTE]
-> If you have cloned without submodules, use the following command to clone submodules.
->
-> `git submodule update --init --recursive`
 
 ### Setup ethernet
 
@@ -200,13 +202,6 @@ echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 echo "source /home/spacer/fp_ws/install/setup.bash" >> ~/.bashrc
 ```
 
-### Levion arm setting
-
-```bash
-cd fp_ws/src
-ln -s ~/UniLuFP/LevionArm/
-```
-
 ### Trouble shoot
 
 - After running high-freq (100Hz) topic to pixhawk, micro-xrce killed. Even after reboot, still not active (after reloading daemon, get active)
@@ -221,14 +216,15 @@ ros2 run px4_ros_com offboard_control \
 
 ## Docker setup
 
-```
+```bash
 cd ~/UniLuFP
-./docker/build.sh
+./docker/build.sh   # build the image
+./docker/run.sh     # start the container
 ```
 
-## Getting Started
+`run.sh` mounts the submodules into the container over the fallback clones baked into the image, so any edits on the host are immediately visible inside. After editing, run `colcon build` inside the container.
 
-```
-./docker/run.sh
- ros2 run px4_simple test_solenoid_valve_connection --ros-args --param namespace:=spacer
-```
+| Host path | Container path |
+|---|---|
+| `ros_ws/src/LevionArm` | `/mnt/ros_ws/src/LevionArm` |
+| `ros_ws/src/RANS_DeployToRobot` | `/mnt/ros_ws/src/RANS_DeployToRobot` |

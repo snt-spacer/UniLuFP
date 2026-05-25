@@ -1,3 +1,7 @@
-[submodule "LevionArm/cubemars_hardware"]
-	path = LevionArm/cubemars_hardware
-	url = https://github.com/aky-u/cubemars_hardware.git
+[submodule "ros_ws/src/LevionArm"]
+	path = ros_ws/src/LevionArm
+	url = https://github.com/aky-u/LevionArm.git
+[submodule "ros_ws/src/RANS_DeployToRobot"]
+	path = ros_ws/src/RANS_DeployToRobot
+	url = git@github.com:SpaceR-x-DreamLab-RL/RANS_DeployToRobot.git
+	branch = Pingu_Cubo

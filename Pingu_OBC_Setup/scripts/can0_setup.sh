@@ -7,5 +7,5 @@ fi
 
 # Setup can
 modprobe mttcan
-ip link set can0 type can bitrate 1000000
+ip link set can0 type can bitrate 1000000 restart-ms 100
 ip link set can0 up
