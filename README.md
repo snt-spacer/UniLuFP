@@ -8,8 +8,17 @@ ros2 run px4_simple logger_thruster_test
 ros2 run px4_simple test_solenoid_valve_connection
 ```
 
+
+
 ### Launch 
-`ros2 launch pingu_cubo_low_level_controller pingu_low_level_controller_individual_thruster_controll_launch.py`
+```bash
+ros2 launch pingu_cubo_low_level_controller pingu_low_level_controller_individual_thruster_controll_launch.py
+```
+
+### LED with micro-ros
+```bash
+docker run -it  --name microros-bridge --rm -v /dev:/dev --privileged --net=host microros/micro-ros-agent:humble serial --dev /dev/ttyUSB0 
+```
 
 Reaction wheel
 
