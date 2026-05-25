@@ -185,3 +185,6 @@ ros_ws/log
 *csv
 
 ros_ws/src/LevionArm/*
+
+# Docker command history
+docker/.history/
