@@ -1,7 +1,20 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" &>/dev/null && pwd)"
 
-xhost +local:docker
+# X11 setup — works on the attached screen and over `ssh -X`.
+# Over plain SSH, DISPLAY is empty: fall back to the attached screen's X server
+# (auto-detected from /tmp/.X11-unix). The cookie for that GDM session lives in
+# /run/user/<uid>/gdm/Xauthority, NOT in ~/.Xauthority.
+DISPLAY="${DISPLAY:-:$(ls /tmp/.X11-unix 2>/dev/null | head -n1 | tr -d 'X')}"
+if [ -z "${XAUTHORITY}" ]; then
+    if [ -f "/run/user/$(id -u)/gdm/Xauthority" ]; then
+        XAUTHORITY="/run/user/$(id -u)/gdm/Xauthority"
+    else
+        XAUTHORITY="${HOME}/.Xauthority"
+    fi
+fi
+echo "Using DISPLAY=${DISPLAY}  XAUTHORITY=${XAUTHORITY}"
+DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" xhost +local:docker
 
 # sudo chmod 666 /dev/ttyUSB0
 # echo "Starting micro-ROS bridge..."
@@ -26,10 +39,9 @@ docker run --name unilufp-ros-deploy-container -it \
     --ipc host \
     --device /dev/input:/dev/input \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v $HOME/.Xauthority:/root/.Xauthority \
+    -v ${XAUTHORITY}:/root/.Xauthority \
     -v ${PWD}:/UniLuFP \
-    -v ${SCRIPT_DIR}/../ros_ws/src/LevionArm:/mnt/ros_ws/src/LevionArm \
-    -v ${SCRIPT_DIR}/../ros_ws/src/RANS_DeployToRobot:/mnt/ros_ws/src/RANS_DeployToRobot \
+    -v ${SCRIPT_DIR}/../../RANS_DeployToRobot:/mnt/ros_ws/src/RANS_DeployToRobot \
     -v /run/udev:/run/udev \
     -v /dev/bus/usb:/dev/bus/usb \
     -v "${SCRIPT_DIR}/.history:/history:rw" \

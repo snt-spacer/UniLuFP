@@ -1,14 +1,16 @@
 pingu:
   thruster_mode: "individual_thruster_control"
-  reaction_wheel: true
+  reaction_wheel: false
   arms: true
   # Position limits in radians for arm joints.
   # Order: [left_shoulder, left_elbow, right_shoulder, right_elbow]
   # Values mirrored from levion.property.xacro (elbow_lower/upper, shoulder_lower/upper).
   # Max speed for arm position slew-rate limiter (rad/s). 0.0 = disabled (instant/aggressive).
   arm_position_slew_rate: 2.5
+  # Must match the hardware/URDF limits in levion.property.xacro, or mapped
+  # joystick targets get rejected by the cubemars POSITION_LOOP limit filter.
   arm_position_limits:
-    - [-1.561, 1.561]   # left_shoulder  (±(π/2 - 0.01))
-    - [-2.614, -0.348]  # left_elbow     ([-2.615+0.01, -0.349-0.01]) ### (-0.359 + 0.349) * 572958 = -0.010 * 572958 = -5729
-    - [-1.561, 1.561]   # right_shoulder
-    - [0.365, 2.6]    # right_elbow    (mirrored left_elbow)
+    - [-1.5608, 1.5608]   # left_shoulder  (shoulder_lower/upper = ±(π/2 - 0.01))
+    - [-3.39, -1.21]      # left_elbow     (left_elbow_lower/upper = [-3.4+0.01, -1.2-0.01])
+    - [-1.5608, 1.5608]   # right_shoulder (mirrored shoulder)
+    - [1.51, 3.69]        # right_elbow    (right_elbow_lower/upper = [1.5+0.01, 3.7-0.01])

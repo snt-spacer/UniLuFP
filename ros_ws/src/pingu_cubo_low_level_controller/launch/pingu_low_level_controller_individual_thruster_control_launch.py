@@ -18,16 +18,20 @@ def parse_controller_names(context, controllers_str):
     value = controllers_str.perform(context)
     return [c.strip() for c in value.split(",") if c.strip()]
 
-def generate_controller_spawners(context, controllers_str, robot_controllers_path):
+def generate_controller_spawners(context, controllers_str, robot_controllers_path, inactive=False):
     controllers = parse_controller_names(context, controllers_str)
-    return [
-        Node(
+    spawners = []
+    for controller in controllers:
+        args = [controller, "--param-file", robot_controllers_path]
+        if inactive:
+            args.append("--inactive")
+        spawners.append(Node(
             package="controller_manager",
             executable="spawner",
-            arguments=[controller, "--param-file", robot_controllers_path],
+            arguments=args,
             output="screen"
-        ) for controller in controllers
-    ]
+        ))
+    return spawners
 
 def generate_launch_description():
     package = FindPackageShare("pingu_cubo_low_level_controller")
@@ -50,8 +54,8 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "hw_plugin",
             default_value='real',
-            description="Hardware plugin to use. Options: 'real' or 'mujoco`. \
-        'real' uses the real hardware, while 'mujoco' uses the Mujoco"
+            description="Hardware plugin to use. Options: 'real', 'mujoco', 'mit'. \
+        'real' uses the real hardware using LevionArms, 'mit' uses the MIT hardware from rsl, while 'mujoco' uses the Mujoco"
         )
     )
     declared_arguments.append(
@@ -68,13 +72,50 @@ def generate_launch_description():
             description="Enable right arm.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "left_shoulder",
+            default_value="true",
+            description="Enable the left shoulder motor (only loaded if left_arm is true).",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "left_elbow",
+            default_value="true",
+            description="Enable the left elbow motor (only loaded if left_arm is true).",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "right_shoulder",
+            default_value="true",
+            description="Enable the right shoulder motor (only loaded if right_arm is true).",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "right_elbow",
+            default_value="true",
+            description="Enable the right elbow motor (only loaded if right_arm is true).",
+        )
+    )
 
     declared_arguments.append(
         DeclareLaunchArgument(
             "controllers",
-            default_value="rw_effort_controller, dual_arm_trajectory_controller",
-            description="Comma-separated list of controllers to spawn. \
+            default_value="rw_effort_controller",
+            description="Comma-separated list of controllers to spawn active. \
         Check the `pingu_controllers.yaml` file for available controllers. EX: [actuators_position_controller, actuators_velocity_controller, actuators_effort_controller, actuators_trajectory_controller, rw_velocity_controller, rw_effort_controller, dual_arm_position_controller...]."
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "arm_controllers",
+            default_value="dual_arm_trajectory_controller",
+            description="Comma-separated list of arm controllers to spawn inactive. \
+        Activate later with: ros2 control switch_controllers --activate <name>. \
+        EX: dual_arm_trajectory_controller, dual_arm_position_controller, dual_arm_effort_controller, left_arm_effort_controller, left_arm_shoulder_effort_controller..."
         )
     )
 
@@ -83,7 +124,12 @@ def generate_launch_description():
     hw_plugin = LaunchConfiguration("hw_plugin")
     left_arm = LaunchConfiguration("left_arm")
     right_arm = LaunchConfiguration("right_arm")
+    left_shoulder = LaunchConfiguration("left_shoulder")
+    left_elbow = LaunchConfiguration("left_elbow")
+    right_shoulder = LaunchConfiguration("right_shoulder")
+    right_elbow = LaunchConfiguration("right_elbow")
     controllers = LaunchConfiguration("controllers")
+    arm_controllers = LaunchConfiguration("arm_controllers")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -103,7 +149,19 @@ def generate_launch_description():
             " ",
             "right_arm:=",
             right_arm,
-        ]   
+            " ",
+            "left_shoulder:=",
+            left_shoulder,
+            " ",
+            "left_elbow:=",
+            left_elbow,
+            " ",
+            "right_shoulder:=",
+            right_shoulder,
+            " ",
+            "right_elbow:=",
+            right_elbow,
+        ]
     )
     robot_description = {"robot_description": robot_description_content}
     pingu_cmd_mux_ns = LaunchConfiguration('pingu_cmd_mux_namespace')
@@ -192,7 +250,7 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    # Controller Spawners
+    # Controller Spawners (active)
     controller_spawners = OpaqueFunction(
         function=generate_controller_spawners,
         kwargs={
@@ -200,7 +258,17 @@ def generate_launch_description():
             'robot_controllers_path': robot_controllers
         }
     )
-    
+
+    # Arm controller spawners (inactive — activate later via ros2 control switch_controllers)
+    arm_controller_spawners = OpaqueFunction(
+        function=generate_controller_spawners,
+        kwargs={
+            'controllers_str': arm_controllers,
+            'robot_controllers_path': robot_controllers,
+            'inactive': False
+        }
+    )
+
     nodes_list = [
         joy_node,
         # pingu_cmd_mux_ns_arg,
@@ -212,5 +280,6 @@ def generate_launch_description():
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
         controller_spawners,
+        arm_controller_spawners
     ]
     return LaunchDescription(declared_arguments + nodes_list)

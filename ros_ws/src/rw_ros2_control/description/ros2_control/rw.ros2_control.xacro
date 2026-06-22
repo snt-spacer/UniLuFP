@@ -6,7 +6,8 @@
     <ros2_control name="${name}" type="system">
 
       <!-- Chose hardware interfaces -->
-      <xacro:if value="${hw_plugin == 'real'}">
+      <!-- rsl_servo only changes the ARM driver; the reaction wheel stays on ODrive -->
+      <xacro:if value="${hw_plugin == 'real' or hw_plugin == 'rsl_servo'}">
         <hardware>
           <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
           <param name="can">can0</param>

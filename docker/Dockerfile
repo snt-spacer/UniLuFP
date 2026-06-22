@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-teleop-twist-keyboard \
     ros-${ROS_DISTRO}-rqt*\
     ros-${ROS_DISTRO}-rviz2 \
+    ros-${ROS_DISTRO}-plotjuggler-ros \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     && rm -rf /var/lib/apt/lists/*
 
@@ -78,8 +79,24 @@ RUN git clone https://github.com/aky-u/LevionArm.git \
  && cd LevionArm \
  && git submodule update --init --recursive
 
+# CMake 3.28.6 built from source (installs to /usr/local, shadowing apt's 3.22).
+# Needed by the cubemars-ak-c-drivers demos (CMake >= 3.28); the repo itself is a
+# git submodule of UniLuFP at ros_ws/src/cubemars-ak-c-drivers, mounted at runtime.
+ARG CMAKE_VERSION=3.28.6
+RUN apt-get update && apt-get install -y build-essential libssl-dev wget \
+ && rm -rf /var/lib/apt/lists/* \
+ && cd /tmp \
+ && wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz \
+ && tar -zxf cmake-${CMAKE_VERSION}.tar.gz \
+ && cd cmake-${CMAKE_VERSION} \
+ && ./bootstrap --parallel=$(nproc) \
+ && make -j$(nproc) \
+ && make install \
+ && cd / && rm -rf /tmp/cmake-${CMAKE_VERSION}* \
+ && cmake --version
+
 # RANS_DeployToRobot — cloned here as fallback; run.sh mounts the repo submodule over this for development
-RUN git clone -b Pingu_Cubo git@github.com:SpaceR-x-DreamLab-RL/RANS_DeployToRobot.git RANS_DeployToRobot
+# RUN git clone -b Pingu_Cubo git@github.com:SpaceR-x-DreamLab-RL/RANS_DeployToRobot.git RANS_DeployToRobot
 
 
 ## Reinforcement Learning

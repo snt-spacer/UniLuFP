@@ -48,39 +48,53 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
             "rw_effort_controller",
             "rw_velocity_controller",
         ]
-        self._dual_arm_controller_candidates = [
-            "dual_arm_effort_controller",
-            "dual_arm_velocity_controller",
-            "dual_arm_trajectory_controller",
-            "dual_arm_position_controller",
-        ]
-        self._left_arm_controller_candidates = [
-            "left_arm_effort_controller",
-            "left_arm_velocity_controller",
-            "left_arm_position_controller",
-        ]
-        self._right_arm_controller_candidates = [
-            "right_arm_effort_controller",
-            "right_arm_velocity_controller",
-            "right_arm_position_controller",
-        ]
+        # Index of each joint in the 4-element arm command [LS, LE, RS, RE].
+        LS, LE, RS, RE = 0, 1, 2, 3
+        ls, le = "left_shoulder_joint", "left_elbow_joint"
+        rs, re = "right_shoulder_joint", "right_elbow_joint"
 
-        # Joint names for each trajectory controller (must match pingu_controllers.yaml)
-        self._trajectory_controller_joints = {
-            "dual_arm_trajectory_controller": [
-                "left_shoulder_joint", "left_elbow_joint",
-                "right_shoulder_joint", "right_elbow_joint",
-            ],
-            "actuators_trajectory_controller": [
-                "left_shoulder_joint", "left_elbow_joint",
-                "right_shoulder_joint", "right_elbow_joint",
-                "rw_joint",
-            ],
+        # Registry of every arm controller this node can drive.
+        #   name -> (indices into [LS, LE, RS, RE], joint names, kind)
+        # kind:
+        #   'trajectory'  -> JointTrajectory goal (command mapped [-1,1] -> joint limits)
+        #   'position'    -> Float64MultiArray on /commands (mapped to limits, slew-limited)
+        #   'passthrough' -> Float64MultiArray on /commands (raw [-1,1]; effort/velocity)
+        self._arm_controllers = {
+            # Dual arm (all four joints)
+            "dual_arm_trajectory_controller": ([LS, LE, RS, RE], [ls, le, rs, re], "trajectory"),
+            "dual_arm_position_controller":   ([LS, LE, RS, RE], [ls, le, rs, re], "position"),
+            "dual_arm_velocity_controller":   ([LS, LE, RS, RE], [ls, le, rs, re], "passthrough"),
+            "dual_arm_effort_controller":     ([LS, LE, RS, RE], [ls, le, rs, re], "passthrough"),
+            # Left arm (shoulder + elbow)
+            "left_arm_trajectory_controller": ([LS, LE], [ls, le], "trajectory"),
+            "left_arm_position_controller":   ([LS, LE], [ls, le], "position"),
+            "left_arm_velocity_controller":   ([LS, LE], [ls, le], "passthrough"),
+            "left_arm_effort_controller":     ([LS, LE], [ls, le], "passthrough"),
+            # Right arm (shoulder + elbow)
+            "right_arm_trajectory_controller": ([RS, RE], [rs, re], "trajectory"),
+            "right_arm_position_controller":   ([RS, RE], [rs, re], "position"),
+            "right_arm_velocity_controller":   ([RS, RE], [rs, re], "passthrough"),
+            "right_arm_effort_controller":     ([RS, RE], [rs, re], "passthrough"),
+            # Left single joint
+            "left_arm_shoulder_trajectory_controller": ([LS], [ls], "trajectory"),
+            "left_arm_shoulder_effort_controller":     ([LS], [ls], "passthrough"),
+            "left_arm_elbow_trajectory_controller":    ([LE], [le], "trajectory"),
+            "left_arm_elbow_effort_controller":        ([LE], [le], "passthrough"),
+            # Right single joint
+            "right_arm_shoulder_trajectory_controller": ([RS], [rs], "trajectory"),
+            "right_arm_shoulder_effort_controller":     ([RS], [rs], "passthrough"),
+            "right_arm_elbow_trajectory_controller":    ([RE], [re], "trajectory"),
+            "right_arm_elbow_effort_controller":        ([RE], [re], "passthrough"),
         }
 
         self._active_controllers = set()
         self._controller_publishers = {}
         self._trajectory_publishers = {}
+        self._impedance_desired_pub = self.create_publisher(
+            Float64MultiArray,
+            '/arm_impedance_controller/desired_position',
+            10,
+        )
 
         self._controller_list_client = self.create_client(
             ListControllers,
@@ -167,32 +181,41 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
                 return candidate
         return None
 
-    def _map_arm_positions(self, command, joint_slice):
-        """Map NN arm position commands from [-1, 1] to per-joint [lower, upper] limits."""
-        limits = self._arm_position_limits[joint_slice]
+    def _map_arm_positions(self, command, indices):
+        """Map normalized arm commands in [-1, 1] to each joint's [lower, upper] limit.
+        `indices` selects rows of self._arm_position_limits for the active joints."""
+        limits = self._arm_position_limits[indices]
         lower, upper = limits[:, 0], limits[:, 1]
-        return lower + (np.asarray(command) + 1.0) * (upper - lower) / 2.0
+        return lower + (np.asarray(command, dtype=np.float64) + 1.0) * (upper - lower) / 2.0
 
-    def _apply_arm_slew_rate(self, target: np.ndarray) -> np.ndarray:
-        """Clamp arm position commands to max slew rate (rad/s). Returns the limited command."""
+    def _ensure_arm_state(self):
+        if self._current_arm_position is None:
+            self._current_arm_position = np.zeros(4, dtype=np.float64)
+
+    def _apply_arm_slew_rate(self, indices, target: np.ndarray) -> np.ndarray:
+        """Clamp the active joints (selected by `indices`) to max slew rate (rad/s),
+        tracking a full 4-joint state so partial controllers don't disturb the others."""
         now = self.get_clock().now().nanoseconds * 1e-9
+        target = np.asarray(target, dtype=np.float64)
 
         if self._current_arm_position is None:
-            self._current_arm_position = target.copy()
+            self._current_arm_position = np.zeros(4, dtype=np.float64)
+            self._current_arm_position[indices] = target
             self._last_arm_cmd_time = now
-            return self._current_arm_position.copy()
+            return target.copy()
 
         dt = now - self._last_arm_cmd_time
         self._last_arm_cmd_time = now
 
+        cur = self._current_arm_position[indices]
         if dt <= 0.0 or self._arm_position_slew_rate <= 0.0:
-            self._current_arm_position = target.copy()
-            return self._current_arm_position.copy()
+            self._current_arm_position[indices] = target
+            return target.copy()
 
         max_delta = self._arm_position_slew_rate * dt
-        delta = np.clip(target - self._current_arm_position, -max_delta, max_delta)
-        self._current_arm_position += delta
-        return self._current_arm_position.copy()
+        cur = cur + np.clip(target - cur, -max_delta, max_delta)
+        self._current_arm_position[indices] = cur
+        return cur.copy()
 
     def _publish_to_controller(self, controller_name, command):
         if controller_name not in self._controller_publishers:
@@ -205,9 +228,9 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
         command_msg = Float64MultiArray(data=[float(value) for value in command])
         self._controller_publishers[controller_name].publish(command_msg)
 
-    def _publish_joint_trajectory(self, controller_name, joint_names, target: np.ndarray):
-        """Send a JointTrajectory goal. time_from_start is computed from the slew rate so
-        the controller interpolates at the same effective max speed as the slew-rate limiter."""
+    def _publish_joint_trajectory(self, controller_name, joint_names, indices, target: np.ndarray):
+        """Send a JointTrajectory goal for the active joints. time_from_start is computed from
+        the slew rate so the controller interpolates at the same effective max speed."""
         if controller_name not in self._trajectory_publishers:
             self._trajectory_publishers[controller_name] = self.create_publisher(
                 JointTrajectory,
@@ -215,9 +238,12 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
                 10,
             )
 
+        self._ensure_arm_state()
+        target = np.asarray(target, dtype=np.float64)
+
         # Compute how long the move should take based on the slew rate.
-        if self._current_arm_position is not None and self._arm_position_slew_rate > 0.0:
-            max_dist = float(np.max(np.abs(target - self._current_arm_position)))
+        if self._arm_position_slew_rate > 0.0:
+            max_dist = float(np.max(np.abs(target - self._current_arm_position[indices])))
             duration_sec = max(max_dist / self._arm_position_slew_rate, 0.05)
         else:
             duration_sec = 1.0
@@ -228,6 +254,9 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
 
         point = JointTrajectoryPoint()
         point.positions = [float(p) for p in target]
+        # Explicit velocity limit so the JTC validates against URDF <limit velocity> and
+        # interpolates at a bounded speed rather than as fast as the motor allows.
+        point.velocities = [float(self._arm_position_slew_rate)] * len(joint_names)
         point.time_from_start = RosDuration(
             sec=int(duration_sec),
             nanosec=int((duration_sec % 1.0) * 1e9),
@@ -236,7 +265,7 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
         self._trajectory_publishers[controller_name].publish(msg)
 
         # Track the target so the next call can compute a correct duration.
-        self._current_arm_position = target.copy()
+        self._current_arm_position[indices] = target
 
     # def send_disarm_signal(self):
     #     if self._disarm_sent:
@@ -258,7 +287,7 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
             return
 
         # self.get_logger().debug(f"Received cmd_mux_low_level command: {cmd}")
-        print(f"Received cmd_mux_low_level command: {cmd}")
+        # print(f"Received cmd_mux_low_level command: {cmd}")
 
         # Publish the thruster command
         self.thruster_command = cmd[2:10] # TODO: First two values are for airbearings and thrusters
@@ -278,46 +307,25 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
                 # )
                 self._publish_to_controller(rw_controller, [reaction_wheel_command])
         
-        # Publish to arms
+        # Publish to arms — drive every active arm controller with its own joint slice.
+        # This supports dual-arm, per-arm, and single-joint (shoulder/elbow) controllers,
+        # in trajectory, position, or effort/velocity form.
         if self._arms_enabled:
-            arm_command = cmd[10:14]  # 4 values for arms
-            dual_arm_controller = self._pick_active_controller(self._dual_arm_controller_candidates)
-            if dual_arm_controller is not None:
-                if "trajectory" in dual_arm_controller:
-                    arm_command = self._map_arm_positions(arm_command, slice(None))
-                    joint_names = self._trajectory_controller_joints[dual_arm_controller]
-                    self._publish_joint_trajectory(dual_arm_controller, joint_names, arm_command)
-                elif "position" in dual_arm_controller:
-                    arm_command = self._map_arm_positions(arm_command, slice(None))
-                    arm_command = self._apply_arm_slew_rate(arm_command)
-                    self._publish_to_controller(dual_arm_controller, arm_command)
-                else:
-                    self._publish_to_controller(dual_arm_controller, arm_command)
-            else:
-                left_arm_controller = self._pick_active_controller(self._left_arm_controller_candidates)
-                right_arm_controller = self._pick_active_controller(self._right_arm_controller_candidates)
+            arm_command = cmd[10:14]  # [left_shoulder, left_elbow, right_shoulder, right_elbow] in [-1, 1]
+            for name, (indices, joint_names, kind) in self._arm_controllers.items():
+                if name not in self._active_controllers:
+                    continue
 
-                if left_arm_controller is not None:
-                    left_cmd = arm_command[:2]
-                    if "position" in left_arm_controller:
-                        left_cmd = self._map_arm_positions(left_cmd, slice(0, 2))
-                        left_cmd = self._apply_arm_slew_rate(
-                            np.concatenate([left_cmd, self._current_arm_position[2:] if self._current_arm_position is not None else np.zeros(2)])
-                        )[:2]
-
-                    # self.get_logger().info(f"Left Arms command {left_cmd}")
-                    self._publish_to_controller(left_arm_controller, left_cmd)
-
-                if right_arm_controller is not None:
-                    right_cmd = arm_command[2:4]
-                    if "position" in right_arm_controller:
-                        right_cmd = self._map_arm_positions(right_cmd, slice(2, 4))
-                        right_cmd = self._apply_arm_slew_rate(
-                            np.concatenate([self._current_arm_position[:2] if self._current_arm_position is not None else np.zeros(2), right_cmd])
-                        )[2:]
-
-                    # self.get_logger().info(f"Right Arms command {right_cmd}")
-                    self._publish_to_controller(right_arm_controller, right_cmd)
+                sub_cmd = arm_command[indices]
+                if kind == "trajectory":
+                    target = self._map_arm_positions(sub_cmd, indices)
+                    self._publish_joint_trajectory(name, joint_names, indices, target)
+                elif kind == "position":
+                    target = self._map_arm_positions(sub_cmd, indices)
+                    target = self._apply_arm_slew_rate(indices, target)
+                    self._publish_to_controller(name, target)
+                else:  # passthrough: effort / velocity get the raw [-1, 1] command
+                    self._publish_to_controller(name, sub_cmd)
         
 
 def main(args=None):

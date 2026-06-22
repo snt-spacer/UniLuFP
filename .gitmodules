@@ -5,3 +5,6 @@
 	path = ros_ws/src/RANS_DeployToRobot
 	url = git@github.com:SpaceR-x-DreamLab-RL/RANS_DeployToRobot.git
 	branch = Pingu_Cubo
+[submodule "ros_ws/src/cubemars-ak-c-drivers"]
+	path = ros_ws/src/cubemars-ak-c-drivers
+	url = https://github.com/leggedrobotics/cubemars-ak-c-drivers.git

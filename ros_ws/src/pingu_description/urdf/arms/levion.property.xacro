@@ -13,8 +13,8 @@
 
   <!-- Default -->
   <xacro:property name="default_joint_position_limit" value="${PI/2-SAFETY_OFFSET}"/>
-  <xacro:property name="default_joint_velocity_limit" value="10"/>
-  <xacro:property name="default_joint_effort_limit" value="10"/>
+  <xacro:property name="default_joint_velocity_limit" value="1.0"/>
+  <xacro:property name="default_joint_effort_limit" value="0.5"/>
 
   <xacro:property name="shoulder_lower" value="-${default_joint_position_limit}"/>
   <xacro:property name="shoulder_upper" value="${default_joint_position_limit}"/>

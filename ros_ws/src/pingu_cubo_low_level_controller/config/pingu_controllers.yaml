@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 200 # Hz
+    update_rate: 200 # Hz Caped to 200
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -43,7 +43,7 @@ controller_manager:
     dual_arm_effort_controller:
       type: forward_command_controller/ForwardCommandController
 
-    ## Lest arm
+    ## Left arm
     left_arm_position_controller:
       type: forward_command_controller/ForwardCommandController
       
@@ -51,6 +51,21 @@ controller_manager:
       type: forward_command_controller/ForwardCommandController
 
     left_arm_effort_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    left_arm_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    left_arm_shoulder_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    left_arm_elbow_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    left_arm_shoulder_effort_controller:
+      type: forward_command_controller/ForwardCommandController
+    
+    left_arm_elbow_effort_controller:
       type: forward_command_controller/ForwardCommandController
 
     ## Right arm
@@ -61,6 +76,21 @@ controller_manager:
       type: forward_command_controller/ForwardCommandController
 
     right_arm_effort_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    right_arm_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    right_arm_shoulder_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    right_arm_elbow_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    right_arm_shoulder_effort_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    right_arm_elbow_effort_controller:
       type: forward_command_controller/ForwardCommandController
 
 #-------------------------------------------------------------
@@ -179,12 +209,35 @@ dual_arm_trajectory_controller:
       - position
       - velocity
 
+    # Crucial for smoothness: This creates continuous velocity and 
+    # acceleration profiles between waypoints, eliminating jerky transitions.
+    interpolation_method: splines
+
     allow_partial_joints_goal: false
     open_loop_control: true
     allow_integration_in_goal_trajectories: true
     constraints:
       stopped_velocity_tolerance: 0.01
-      goal_time: 0.0
+      goal_time: 0.5
+
+    #   left_shoulder_joint:
+    #     trajectory: 0.1
+    #     goal: 0.05
+    #   left_elbow_joint:
+    #     trajectory: 0.1
+    #     goal: 0.05
+    #   right_shoulder_joint:
+    #     trajectory: 0.1
+    #     goal: 0.05
+    #   right_elbow_joint:
+    #     trajectory: 0.1
+    #     goal: 0.05
+
+    # gains:
+    #   left_shoulder_joint:  { p: 5.0, i: 0.0, d: 1.0 }
+    #   left_elbow_joint:     { p: 5.0, i: 0.0, d: 1.0 }
+    #   right_shoulder_joint: { p: 5.0, i: 0.0, d: 1.0 }
+    #   right_elbow_joint:    { p: 5.0, i: 0.0, d: 1.0 }
 
 dual_arm_position_controller:
   ros__parameters:
@@ -213,12 +266,15 @@ dual_arm_effort_controller:
       - right_elbow_joint
     interface_name: effort
 
-## Lest arm
+## Left arm
 fts_broadcaster:
   ros__parameters:
     sensor_name: leptrino_fts
     frame_id: tool_link
 
+##################################
+#  Left arm controllers configuration #
+##################################
 left_arm_position_controller:
   ros__parameters:
     joints:
@@ -240,7 +296,85 @@ left_arm_effort_controller:
       - left_elbow_joint
     interface_name: effort
 
-## Right arm
+##################################
+#  Left arm trajectory controller #
+##################################
+left_arm_trajectory_controller:
+  ros__parameters:
+    joints:
+      - left_shoulder_joint
+      - left_elbow_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    interpolation_method: splines
+    allow_partial_joints_goal: false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
+
+left_arm_shoulder_trajectory_controller:
+  ros__parameters:
+    joints:
+      - left_shoulder_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    interpolation_method: splines
+    allow_partial_joints_goal: false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
+
+left_arm_elbow_trajectory_controller:
+  ros__parameters:
+    joints:
+      - left_elbow_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    interpolation_method: splines
+    allow_partial_joints_goal: false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
+
+#################################
+#  Left arm effort controller #
+#################################
+left_arm_shoulder_effort_controller:
+  ros__parameters:
+    joints:
+      - left_shoulder_joint
+    interface_name: effort
+    state_interfaces:
+      - position
+      - velocity
+
+left_arm_elbow_effort_controller:
+  ros__parameters:
+    joints:
+      - left_elbow_joint
+    interface_name: effort
+    state_interfaces:
+      - position
+      - velocity
+
+##################################
+#  Right arm controllers configuration #
+##################################
 right_arm_position_controller:
   ros__parameters:
     joints:
@@ -261,3 +395,79 @@ right_arm_effort_controller:
       - right_shoulder_joint
       - right_elbow_joint
     interface_name: effort
+
+####################################
+#  Right arm trajectory controller #
+####################################
+right_arm_trajectory_controller:
+  ros__parameters:
+    joints:
+      - right_shoulder_joint
+      - right_elbow_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    interpolation_method: splines
+    allow_partial_joints_goal: false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
+
+right_arm_shoulder_trajectory_controller:
+  ros__parameters:
+    joints:
+      - right_shoulder_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    interpolation_method: splines
+    allow_partial_joints_goal: false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
+
+right_arm_elbow_trajectory_controller:
+  ros__parameters:
+    joints:
+      - right_elbow_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    interpolation_method: splines
+    allow_partial_joints_goal: false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
+
+################################
+#  Right arm effort controller #
+################################
+right_arm_shoulder_effort_controller:
+  ros__parameters:
+    joints:
+      - right_shoulder_joint
+    interface_name: effort
+    state_interfaces:
+      - position
+      - velocity
+
+right_arm_elbow_effort_controller:
+  ros__parameters:
+    joints:
+      - right_elbow_joint
+    interface_name: effort
+    state_interfaces:
+      - position
+      - velocity

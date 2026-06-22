@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:macro name="levion_system" params="name prefix left_arm:=true right_arm:=false hw_plugin:='real'"> <!-- real/mujoco-->
+<xacro:macro name="levion_system" params="name prefix left_arm:=true right_arm:=false hw_plugin:='real'"> <!-- real/mit/mujoco/gazebo -->
 
 <!-- include macros -->
 <xacro:include filename="arms/ak80_8.macros.xacro"/>
+<xacro:include filename="$(find cubemars_mit_hardware)/ros2_control/ak80_8_mit.macros.xacro"/>
 
 <xacro:include filename="arms/levion.property.xacro"/>
 
@@ -12,6 +13,12 @@
   <xacro:if value="${hw_plugin == 'real'}">
     <hardware>
       <plugin>cubemars_hardware/CubeMarsSystemHardware</plugin>
+      <param name="can_interface">can0</param>
+    </hardware>
+  </xacro:if>
+  <xacro:if value="${hw_plugin == 'mit'}">
+    <hardware>
+      <plugin>cubemars_mit_hardware/MITHardwareInterface</plugin>
       <param name="can_interface">can0</param>
     </hardware>
   </xacro:if>
@@ -26,12 +33,11 @@
     </hardware>
   </xacro:if>
 
-  <!-- Left arm -->
-  <xacro:if value="${left_arm}">
-
+  <!-- Left arm (servo mode) -->
+  <xacro:if value="${left_arm and hw_plugin != 'mit'}">
     <xacro:ak80_8_ros2_control
       joint_name="${prefix}left_shoulder_joint"
-      can_id="104"
+      can_id="204"
       pos_min="${left_shoulder_lower}"
       pos_max="${left_shoulder_upper}"
       vel_limit="${left_shoulder_velocity_limit}"
@@ -48,12 +54,30 @@
       enc_off="${left_elbow_enc_offset}"/>
   </xacro:if>
 
-  <!-- Right arm -->
-  <xacro:if value="${right_arm}">
+  <!-- Left arm (MIT mode) -->
+  <xacro:if value="${left_arm and hw_plugin == 'mit'}">
+    <xacro:ak80_8_mit_ros2_control
+      joint_name="${prefix}left_shoulder_joint"
+      can_id="204"
+      pos_min="${left_shoulder_lower}"
+      pos_max="${left_shoulder_upper}"
+      vel_limit="${left_shoulder_velocity_limit}"
+      effort_limit="${left_shoulder_effort_limit}"/>
 
+    <xacro:ak80_8_mit_ros2_control
+      joint_name="${prefix}left_elbow_joint"
+      can_id="105"
+      pos_min="${left_elbow_lower}"
+      pos_max="${left_elbow_upper}"
+      vel_limit="${left_elbow_velocity_limit}"
+      effort_limit="${left_elbow_effort_limit}"/>
+  </xacro:if>
+
+  <!-- Right arm (servo mode) -->
+  <xacro:if value="${right_arm and hw_plugin != 'mit'}">
     <xacro:ak80_8_ros2_control
       joint_name="${prefix}right_shoulder_joint"
-      can_id="204"
+      can_id="104"
       pos_min="${right_shoulder_lower}"
       pos_max="${right_shoulder_upper}"
       vel_limit="${right_shoulder_velocity_limit}"
@@ -68,6 +92,25 @@
       vel_limit="${right_elbow_velocity_limit}"
       effort_limit="${right_elbow_effort_limit}"
       enc_off="${right_elbow_enc_offset}"/>
+  </xacro:if>
+
+  <!-- Right arm (MIT mode) -->
+  <xacro:if value="${right_arm and hw_plugin == 'mit'}">
+    <xacro:ak80_8_mit_ros2_control
+      joint_name="${prefix}right_shoulder_joint"
+      can_id="104"
+      pos_min="${right_shoulder_lower}"
+      pos_max="${right_shoulder_upper}"
+      vel_limit="${right_shoulder_velocity_limit}"
+      effort_limit="${right_shoulder_effort_limit}"/>
+
+    <xacro:ak80_8_mit_ros2_control
+      joint_name="${prefix}right_elbow_joint"
+      can_id="205"
+      pos_min="${right_elbow_lower}"
+      pos_max="${right_elbow_upper}"
+      vel_limit="${right_elbow_velocity_limit}"
+      effort_limit="${right_elbow_effort_limit}"/>
   </xacro:if>
 
 </ros2_control>
