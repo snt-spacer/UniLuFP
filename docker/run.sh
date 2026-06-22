@@ -41,7 +41,6 @@ docker run --name unilufp-ros-deploy-container -it \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v ${XAUTHORITY}:/root/.Xauthority \
     -v ${PWD}:/UniLuFP \
-    -v ${SCRIPT_DIR}/../../RANS_DeployToRobot:/mnt/ros_ws/src/RANS_DeployToRobot \
     -v /run/udev:/run/udev \
     -v /dev/bus/usb:/dev/bus/usb \
     -v "${SCRIPT_DIR}/.history:/history:rw" \

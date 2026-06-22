@@ -1,6 +1,6 @@
 pingu:
   thruster_mode: "individual_thruster_control"
-  reaction_wheel: false
+  reaction_wheel: true
   arms: true
   # Position limits in radians for arm joints.
   # Order: [left_shoulder, left_elbow, right_shoulder, right_elbow]
