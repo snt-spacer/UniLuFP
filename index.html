@@ -5,516 +5,1052 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <!-- Primary Meta Tags -->
-  <!-- TODO: Replace with your paper title and author names -->
-  <meta name="title" content="PAPER_TITLE - AUTHOR_NAMES">
-  <!-- TODO: Write a compelling 150-160 character description of your research -->
-  <meta name="description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
-  <!-- TODO: Add 5-10 relevant keywords for your research area -->
-  <meta name="keywords" content="KEYWORD1, KEYWORD2, KEYWORD3, machine learning, computer vision, AI">
-  <!-- TODO: List all authors -->
-  <meta name="author" content="FIRST_AUTHOR_NAME, SECOND_AUTHOR_NAME">
+  <meta name="title" content="PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator">
+  <meta name="description" content="PINGU: A reconfigurable planar micro-gravity platform co-integrating eight cold-gas thrusters, a reaction wheel, and two force/torque-sensed robotic arms on a single air-bearing chassis.">
+  <meta name="keywords" content="PINGU, Space Robotics, Air-Bearing, Microgravity, Spacecraft Emulator, Reinforcement Learning, Sim-to-Real, Robotic Arms">
+  <meta name="author" content="Anonymous Authors">
   <meta name="robots" content="index, follow">
   <meta name="language" content="English">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
-  <!-- TODO: Replace with your institution or lab name -->
-  <meta property="og:site_name" content="INSTITUTION_OR_LAB_NAME">
-  <!-- TODO: Same as paper title above -->
-  <meta property="og:title" content="PAPER_TITLE">
-  <!-- TODO: Same as description above -->
-  <meta property="og:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
-  <!-- TODO: Replace with your actual website URL -->
-  <meta property="og:url" content="https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE">
-  <!-- TODO: Create a 1200x630px preview image and update path -->
-  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="PAPER_TITLE - Research Preview">
-  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
-  <meta property="article:author" content="FIRST_AUTHOR_NAME">
-  <meta property="article:section" content="Research">
-  <meta property="article:tag" content="KEYWORD1">
-  <meta property="article:tag" content="KEYWORD2">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <!-- TODO: Replace with your lab/institution Twitter handle -->
-  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
-  <!-- TODO: Replace with first author's Twitter handle -->
-  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
-  <!-- TODO: Same as paper title above -->
-  <meta name="twitter:title" content="PAPER_TITLE">
-  <!-- TODO: Same as description above -->
-  <meta name="twitter:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
-  <!-- TODO: Same as social preview image above -->
-  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
-  <meta name="twitter:image:alt" content="PAPER_TITLE - Research Preview">
-
-  <!-- Academic/Research Specific -->
-  <meta name="citation_title" content="PAPER_TITLE">
-  <meta name="citation_author" content="FIRST_AUTHOR_LAST, FIRST_AUTHOR_FIRST">
-  <meta name="citation_author" content="SECOND_AUTHOR_LAST, SECOND_AUTHOR_FIRST">
-  <meta name="citation_publication_date" content="2024">
-  <meta name="citation_conference_title" content="CONFERENCE_NAME">
-  <meta name="citation_pdf_url" content="https://YOUR_DOMAIN.com/static/pdfs/paper.pdf">
+  <meta property="og:site_name" content="PINGU Space Research">
+  <meta property="og:title" content="PINGU: Multi-Actuator Spacecraft Emulator">
+  <meta property="og:description" content="A reconfigurable planar micro-gravity platform unifying thruster, reaction-wheel, and robotic-arm actuation for on-orbit docking, stabilization, and manipulation.">
+  <meta property="og:image" content="static/images/pingu_overview_v2.png">
   
-  <!-- Additional SEO -->
+  <!-- Academic Citation -->
+  <meta name="citation_title" content="PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator">
+  <meta name="citation_author" content="Anonymous">
+  <meta name="citation_publication_date" content="2026">
+  
   <meta name="theme-color" content="#2563eb">
-  <meta name="msapplication-TileColor" content="#2563eb">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   
-  <!-- Preconnect for performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://ajax.googleapis.com">
-  <link rel="preconnect" href="https://documentcloud.adobe.com">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-
-
-  <!-- TODO: Replace with your paper title and authors -->
-  <title>PAPER_TITLE - AUTHOR_NAMES | Academic Research</title>
+  <title>PINGU: Multi-Actuator Air-Bearing Spacecraft Emulator</title>
   
-  <!-- Favicon and App Icons -->
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="static/images/simp_v4.png">
   
-  <!-- Critical CSS - Load synchronously -->
+  <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   
-  <!-- Non-critical CSS - Load asynchronously -->
-  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Fallback for browsers that don't support preload -->
-  <noscript>
-    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
-    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  </noscript>
-  
-  <!-- Fonts - Optimized loading -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Defer non-critical JavaScript -->
+  <!-- JavaScript -->
   <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/bulma-carousel.min.js"></script>
-  <script defer src="static/js/bulma-slider.min.js"></script>
   <script defer src="static/js/index.js"></script>
-  
-  <!-- Structured Data for Academic Papers -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ScholarlyArticle",
-    "headline": "PAPER_TITLE",
-    "description": "BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS",
-    "author": [
-      {
-        "@type": "Person",
-        "name": "FIRST_AUTHOR_NAME",
-        "affiliation": {
-          "@type": "Organization",
-          "name": "INSTITUTION_NAME"
-        }
-      },
-      {
-        "@type": "Person",
-        "name": "SECOND_AUTHOR_NAME",
-        "affiliation": {
-          "@type": "Organization",
-          "name": "INSTITUTION_NAME"
-        }
-      }
-    ],
-    "datePublished": "2024-01-01",
-    "publisher": {
-      "@type": "Organization",
-      "name": "CONFERENCE_OR_JOURNAL_NAME"
-    },
-    "url": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE",
-    "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
-    "keywords": ["KEYWORD1", "KEYWORD2", "KEYWORD3", "machine learning", "computer vision"],
-    "abstract": "FULL_ABSTRACT_TEXT_HERE",
-    "citation": "BIBTEX_CITATION_HERE",
-    "isAccessibleForFree": true,
-    "license": "https://creativecommons.org/licenses/by/4.0/",
-    "mainEntity": {
-      "@type": "WebPage",
-      "@id": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE"
-    },
-    "about": [
-      {
-        "@type": "Thing",
-        "name": "RESEARCH_AREA_1"
-      },
-      {
-        "@type": "Thing", 
-        "name": "RESEARCH_AREA_2"
-      }
-    ]
-  }
-  </script>
-  
-  <!-- Website/Organization Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "INSTITUTION_OR_LAB_NAME",
-    "url": "https://YOUR_INSTITUTION_WEBSITE.com",
-    "logo": "https://YOUR_DOMAIN.com/static/images/favicon.ico",
-    "sameAs": [
-      "https://twitter.com/YOUR_TWITTER_HANDLE",
-      "https://github.com/YOUR_GITHUB_USERNAME"
-    ]
-  }
-  </script>
+
+  <style>
+    /* Premium Theme Overrides & Custom Styles */
+    :root {
+      --primary-color: #1e40af; /* Deep Royal Navy */
+      --primary-glow: rgba(30, 64, 175, 0.15);
+      --accent-color: #06b6d4;  /* Electric Cyan */
+      --dark-bg: #0f172a;       /* Slate 900 */
+      --card-bg: #ffffff;
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: #334155;
+    }
+
+    .title, .subtitle, .publication-title {
+      font-family: var(--font-title);
+      font-weight: 700;
+    }
+
+    .hero-body {
+      padding: 3.5rem 1.5rem 2rem 1.5rem;
+    }
+
+    .hero.landing-hero {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%), url('static/images/lsa260112_3115.jpg') no-repeat center center;
+      background-size: cover;
+      background-attachment: scroll;
+    }
+
+    /* Gradient Header Accent */
+    .publication-title {
+      background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.15));
+      line-height: 1.2;
+      font-size: 2.8rem !important;
+      margin-bottom: 1.5rem !important;
+    }
+
+    .hero.teaser-hero {
+      background-color: var(--background-secondary);
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Key features tag pill */
+    .feature-tag {
+      background: rgba(30, 64, 175, 0.08);
+      color: var(--primary-color);
+      font-weight: 600;
+      padding: 0.35rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.25rem;
+    }
+
+    /* Interactive Feature Grid Cards */
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.75rem;
+      height: 100%;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent-color);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(30,64,175,0.1) 0%, rgba(6,182,212,0.1) 100%);
+      padding: 0.75rem;
+      border-radius: 12px;
+    }
+
+    /* Tab Layout Styling */
+    .tabs.is-toggle-custom {
+      margin-bottom: 2rem;
+    }
+    
+    .tabs.is-toggle-custom ul {
+      border-bottom: none;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .tabs.is-toggle-custom li a {
+      border: 1px solid var(--border-color) !important;
+      border-radius: 30px !important;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: var(--transition);
+      color: var(--text-secondary);
+      background-color: var(--background-secondary);
+    }
+
+    .tabs.is-toggle-custom li.is-active a {
+      background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%) !important;
+      color: white !important;
+      border-color: transparent !important;
+      box-shadow: 0 4px 10px rgba(30, 64, 175, 0.25);
+    }
+
+    .tabs.is-toggle-custom li a:hover {
+      background-color: var(--background-accent);
+      border-color: var(--primary-color) !important;
+      color: var(--primary-color);
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-pane.is-active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Image & Video Containers */
+    .media-container {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    .media-container img {
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: var(--border-radius);
+    }
+
+    .media-container video {
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    /* Sub-section headings */
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+      text-align: center;
+      color: var(--text-primary);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #1e40af 0%, #06b6d4 100%);
+      border-radius: 2px;
+    }
+
+    .section-title.no-bar {
+      padding-bottom: 0;
+    }
+
+    .section-title.no-bar::after {
+      display: none;
+    }
+
+    /* Results Table Tuning */
+    .table-container {
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .table thead th {
+      background-color: var(--background-secondary);
+      color: var(--text-primary) !important;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .table td, .table th {
+      vertical-align: middle;
+      font-size: 0.9rem;
+    }
+
+    .table tr.highlighted {
+      background-color: rgba(6, 182, 212, 0.05);
+      font-weight: 600;
+    }
+
+    .val-ci {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-left: 2px;
+    }
+
+    /* Abstract Card */
+    .abstract-box {
+      background: var(--background-secondary);
+      border-left: 5px solid var(--primary-color);
+      padding: 2rem;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    /* Scroll to top icon adjustment */
+    .scroll-to-top {
+      background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+    }
+
+    .scroll-to-top:hover {
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+    }
+
+    /* Navigation Bar Styling */
+    .navbar {
+      background-color: #ffffff !important;
+    }
+
+    .navbar-brand {
+      padding-left: 1.5rem;
+    }
+
+    .navbar-link {
+      color: var(--text-primary) !important;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar-link:hover {
+      color: var(--primary-color) !important;
+    }
+
+    .navbar-dropdown {
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      border-top: 2px solid var(--primary-color);
+      border-radius: 4px;
+    }
+
+    .navbar-dropdown .navbar-item {
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      padding: 0.75rem 1rem;
+    }
+
+    .navbar-dropdown .navbar-item:hover {
+      background-color: var(--primary-glow);
+      color: var(--primary-color);
+    }
+
+    .navbar-dropdown .navbar-item .icon {
+      color: var(--primary-color);
+    }
+
+    .navbar-end {
+      padding-right: 1.5rem;
+    }
+  </style>
 </head>
 <body>
-
 
   <!-- Scroll to Top Button -->
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
     <i class="fas fa-chevron-up"></i>
   </button>
 
-  <!-- More Works Dropdown -->
-  <div class="more-works-container">
-    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
-      <i class="fas fa-flask"></i>
-      More Works
-      <i class="fas fa-chevron-down dropdown-arrow"></i>
-    </button>
-    <div class="more-works-dropdown" id="moreWorksDropdown">
-      <div class="dropdown-header">
-        <h4>More Works from Our Lab</h4>
-        <button class="close-btn" onclick="toggleMoreWorks()">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="works-list">
-        <!-- TODO: Replace with your lab's related works -->
-        <a href="https://arxiv.org/abs/PAPER_ID_1" class="work-item" target="_blank">
-          <div class="work-info">
-            <!-- TODO: Replace with actual paper title -->
-            <h5>Paper Title 1</h5>
-            <!-- TODO: Replace with brief description -->
-            <p>Brief description of the work and its main contribution.</p>
-            <!-- TODO: Replace with venue and year -->
-            <span class="work-venue">Conference/Journal 2024</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-        <!-- TODO: Add more related works or remove extra items -->
-        <a href="https://arxiv.org/abs/PAPER_ID_2" class="work-item" target="_blank">
-          <div class="work-info">
-            <h5>Paper Title 2</h5>
-            <p>Brief description of the work and its main contribution.</p>
-            <span class="work-venue">Conference/Journal 2023</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-        <a href="https://arxiv.org/abs/PAPER_ID_3" class="work-item" target="_blank">
-          <div class="work-info">
-            <h5>Paper Title 3</h5>
-            <p>Brief description of the work and its main contribution.</p>
-            <span class="work-venue">Conference/Journal 2023</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-
   <main id="main-content">
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
-            <!-- TODO: Replace with your paper title -->
-            <h1 class="title is-1 publication-title">Academic Project Page</h1>
-            <div class="is-size-5 publication-authors">
-              <!-- TODO: Replace with your paper authors and their personal links -->
-              <span class="author-block">
-                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">First Author</a><sup>*</sup>,</span>
-                <span class="author-block">
-                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Second Author</a><sup>*</sup>,</span>
-                  <span class="author-block">
-                    <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Third Author</a>
-                  </span>
-                  </div>
 
-                  <div class="is-size-5 publication-authors">
-                    <!-- TODO: Replace with your institution and conference/journal info -->
-                    <span class="author-block">Institution Name<br>Conference name and year</span>
-                    <!-- TODO: Remove this line if no equal contribution -->
-                    <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
-                  </div>
-
-                  <div class="column has-text-centered">
-                    <div class="publication-links">
-                         <!-- TODO: Update with your arXiv paper ID -->
-                      <span class="link-block">
-                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
-                        class="external-link button is-normal is-rounded is-dark">
-                        <span class="icon">
-                          <i class="fas fa-file-pdf"></i>
-                        </span>
-                        <span>Paper</span>
-                      </a>
-                    </span>
-
-                    <!-- TODO: Add your supplementary material PDF or remove this section -->
-                    <span class="link-block">
-                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
-                      class="external-link button is-normal is-rounded is-dark">
-                      <span class="icon">
-                        <i class="fas fa-file-pdf"></i>
-                      </span>
-                      <span>Supplementary</span>
-                    </a>
-                  </span>
-
-                  <!-- TODO: Replace with your GitHub repository URL -->
-                  <span class="link-block">
-                    <a href="https://github.com/YOUR REPO HERE" target="_blank"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-github"></i>
-                    </span>
-                    <span>Code</span>
-                  </a>
-                </span>
-
-                <!-- TODO: Update with your arXiv paper ID -->
-                <span class="link-block">
-                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
-                  class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
+    <!-- Navigation Bar with Project Dropdown -->
+    <nav class="navbar" role="navigation" aria-label="main navigation" style="background-color: #ffffff; border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+      <div class="navbar-brand">
+        <div class="navbar-item">
+          <strong style="font-size: 1.1rem; color: var(--primary-color);">PINGU</strong>
+        </div>
+      </div>
+      <div class="navbar-menu">
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <span class="icon"><i class="fas fa-cube"></i></span>
+              <span>Other Projects</span>
+            </a>
+            <div class="navbar-dropdown is-right">
+              <a class="navbar-item" href="https://snt-spacer.github.io/RoboRAN-Website/" target="_blank">
+                <span class="icon"><i class="fas fa-robot"></i></span>
+                <span>RoboRAN</span>
+              </a>
+              <a class="navbar-item" href="https://andrejorsula.github.io/space_robotics_bench/" target="_blank">
+                <span class="icon"><i class="fas fa-vr-cardboard"></i></span>
+                <span>Space Robotics Bench</span>
+              </a>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </nav>
 
+    <!-- Title and Meta Section -->
+    <section class="hero landing-hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <span class="tag is-info is-light is-medium" style="font-weight: 600; margin-bottom: 1rem;">Under Review (2026)</span>
+              
+              <h1 class="title publication-title">PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator</h1>
+              
+              <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
+                <span class="author-block">Anonymous Authors</span>
+              </div>
 
-<!-- Teaser video-->
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <!-- TODO: Replace with your teaser video -->
-      <video poster="" id="tree" autoplay controls muted loop height="100%" preload="metadata">
-        <!-- TODO: Add your video file path here -->
-        <source src="static/videos/banner_video.mp4" type="video/mp4">
-      </video>
-      <!-- TODO: Replace with your video description -->
-      <h2 class="subtitle has-text-centered">
-        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
-      </h2>
-    </div>
-  </div>
-</section>
-<!-- End teaser video -->
+              <div class="is-size-5 publication-authors" style="margin-bottom: 1.5rem;">
+                <span class="author-block" style="color: var(--text-secondary); font-size: 1.1rem;">Paper ID [Add ID Here]</span>
+              </div>
 
-<!-- Paper abstract -->
-<section class="section hero is-light">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <!-- TODO: Replace with your paper abstract -->
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper tellus sed ante aliquam tempus. Etiam porttitor urna feugiat nibh elementum, et tempor dolor mattis. Donec accumsan enim augue, a vulputate nisi sodales sit amet. Proin bibendum ex eget mauris cursus euismod nec et nibh. Maecenas ac gravida ante, nec cursus dui. Vivamus purus nibh, placerat ac purus eget, sagittis vestibulum metus. Sed vestibulum bibendum lectus gravida commodo. Pellentesque auctor leo vitae sagittis suscipit.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- End paper abstract -->
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <!-- Paper Link -->
+                  <span class="link-block">
+                    <a href="static/pdfs/paper.pdf" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                      <span>Paper</span>
+                    </a>
+                  </span>
 
+                  <!-- ArXiv Link -->
+                  <span class="link-block">
+                    <a href="https://arxiv.org/" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="ai ai-arxiv"></i></span>
+                      <span>ArXiv</span>
+                    </a>
+                  </span>
 
-<!-- Image carousel -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-       <div class="item">
-        <!-- TODO: Replace with your research result images -->
-        <img src="static/images/carousel1.jpg" alt="First research result visualization" loading="lazy"/>
-        <!-- TODO: Replace with description of this result -->
-        <h2 class="subtitle has-text-centered">
-          First image description.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel2.jpg" alt="Second research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-          Second image description.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel3.jpg" alt="Third research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-         Third image description.
-       </h2>
-     </div>
-     <div class="item">
-      <!-- Your image here -->
-      <img src="static/images/carousel4.jpg" alt="Fourth research result visualization" loading="lazy"/>
-      <h2 class="subtitle has-text-centered">
-        Fourth image description.
-      </h2>
-    </div>
-  </div>
-</div>
-</div>
-</section>
-<!-- End image carousel -->
+                  <!-- GitHub Code Link -->
+                  <span class="link-block">
+                    <a href="https://github.com/" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fab fa-github"></i></span>
+                      <span>Code</span>
+                    </a>
+                  </span>
 
+                  <!-- Demos Scroll Link -->
+                  <span class="link-block">
+                    <a href="#experiments" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fas fa-play-circle"></i></span>
+                      <span>Task Demos</span>
+                    </a>
+                  </span>
 
-
-
-<!-- Youtube video -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <!-- Paper video. -->
-      <h2 class="title is-3">Video Presentation</h2>
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          
-          <div class="publication-video">
-            <!-- TODO: Replace with your YouTube video ID -->
-            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                  <!-- Hugging Face Models Link -->
+                  <span class="link-block">
+                    <a href="https://huggingface.co/" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon" style="vertical-align: middle; font-size: 20px;">🤗</span>
+                      <span style="vertical-align: middle;">Models</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-<!-- End youtube video -->
+    </section>
 
-
-<!-- Video carousel -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title is-3">Another Carousel</h2>
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-video1">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video1" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video2">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video2" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel2.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video3">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video3" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel3.mp4" type="video/mp4">
-          </video>
+    <!-- Teaser Banner Section -->
+    <section class="hero teaser-hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-vcentered">
+          <!-- Left side: Platform Overview Image -->
+          <div class="column is-6">
+            <div class="media-container" style="background: white;">
+              <img src="static/images/pingu_overview_v2.png" alt="PINGU Platform Overview" class="teaser-img">
+            </div>
+          </div>
+          <!-- Right side: Teaser Video and Quick highlights -->
+          <div class="column is-6">
+            <div class="media-container">
+              <video id="teaser-video" autoplay controls muted loop height="100%">
+                <source src="static/videos/stabilization.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-<!-- End video carousel -->
+    </section>
 
+    <!-- Paper Abstract Section -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-five-sixths">
+            <h2 class="section-title">Abstract</h2>
+            <div class="abstract-box">
+              We present <strong>PINGU</strong>, a reconfigurable planar micro-gravity platform designed to unify thruster, reaction-wheel, and robotic-arm actuation for research in orbital docking, stabilization, and manipulation. PINGU addresses the limitations of single-purpose testbeds by co-integrating eight cold-gas thrusters, a reaction wheel, and two force/torque-sensed robotic arms on a single air-bearing chassis, exposed through a unified ROS 2 actuator-abstraction layer that lets classical optimal controllers and learned policies be swapped on the same hardware without modification, specifically to bridge the gap between classical optimal control and reinforcement learning. 
+              <br><br>
+              We characterize every actuator and validate the platform across four benchmark tasks: point-to-pose navigation, dynamic disturbance rejection under arm-induced center-of-mass shifts, reaction-wheel momentum stabilization, and force-controlled docking, deploying both a classical LQR baseline and sim-to-real PPO policies trained with domain randomization. Experimental results confirm PINGU’s effectiveness as a high-fidelity, reproducible, and versatile environment for developing and benchmarking the next generation of autonomous proximity operations.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- Key Innovation Pillars -->
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <h2 class="section-title">Key Capabilities</h2>
+        <div class="columns is-multiline">
+          <!-- Pillar 1 -->
+          <div class="column is-4">
+            <div class="feature-card">
+              <span class="feature-icon"><i class="fas fa-cogs"></i></span>
+              <h3 class="title is-5" style="margin-top:0.5rem; margin-bottom:0.75rem;">Heterogeneous Actuation</h3>
+              <p class="content is-small" style="font-size:0.9rem;">Co-integrates an 8-thruster planar RCS, a high-torque brushless reaction wheel, and dual 2-DOF LevionArms with 6-axis force/torque wrist sensors on a single chassis.</p>
+            </div>
+          </div>
+          <!-- Pillar 2 -->
+          <div class="column is-4">
+            <div class="feature-card">
+              <span class="feature-icon"><i class="fas fa-network-wired"></i></span>
+              <h3 class="title is-5" style="margin-top:0.5rem; margin-bottom:0.75rem;">Unified ROS 2 Stack</h3>
+              <p class="content is-small" style="font-size:0.9rem;">Exposes all hardware through a hardware-abstraction command multiplexer, allowing model-based (PID, LQR, MPC) and learned (PPO) policies to swap seamlessly.</p>
+            </div>
+          </div>
+          <!-- Pillar 3 -->
+          <div class="column is-4">
+            <div class="feature-card">
+              <span class="feature-icon"><i class="fas fa-vr-cardboard"></i></span>
+              <h3 class="title is-5" style="margin-top:0.5rem; margin-bottom:0.75rem;">Sim-to-Real Twin</h3>
+              <p class="content is-small" style="font-size:0.9rem;">Supported by a parallelized GPU simulation inside Isaac Lab (Space Robotics Bench) with extensive domain randomization over mass, inertia, and external forces.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-
-
-
-<!-- Paper poster -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title">Poster</h2>
-
-      <!-- TODO: Replace with your poster PDF -->
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
-          </iframe>
+    <!-- Platform Hardware Design & Assembly Section -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <h2 class="section-title">System & Mechanical Design</h2>
         
-      </div>
-    </div>
-  </section>
-<!--End paper poster -->
-
-
-
-<!--BibTex citation -->
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <div class="bibtex-header">
-        <h2 class="title">BibTeX</h2>
-        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
-          <i class="fas fa-copy"></i>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre id="bibtex-code"><code>@article{YourPaperKey2024,
-  title={Your Paper Title Here},
-  author={First Author and Second Author and Third Author},
-  journal={Conference/Journal Name},
-  year={2024},
-  url={https://your-domain.com/your-project-page}
-}</code></pre>
-    </div>
-</section>
-<!--End BibTex citation -->
-
-
-  <footer class="footer">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-
+        <div class="content has-text-justified">
           <p>
-            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
+            PINGU features a vertically-layered, modular chassis (40cm x 40cm x 65cm) constructed from aluminum T-slot extrusions and polycarbonate panels. The system is split into four distinct functional layers designed to isolate structural, pneumatic, electronic, and robotic subsystems:
           </p>
+        </div>
+
+        <div class="columns is-vcentered" style="margin-bottom: 3rem;">
+          <div class="column is-6">
+            <div class="media-container" style="background:white; border:none; box-shadow:none;">
+              <img src="static/images/system&characterization/Simple Assembly Drawing 1.png" alt="Mechanical Stack Assembly Diagram">
+            </div>
+            <p class="has-text-centered is-size-7" style="color:var(--text-secondary); margin-top:0.5rem;">
+              <strong>Figure 1. Mechanical Stack:</strong> (1) Pneumatic base with porous-graphite air bearings; (2) Actuation mid-section with reaction wheel and motors; (3) Power section; (4) Payload deck with sensors and robotic arms.
+            </p>
+          </div>
+          <div class="column is-6">
+            <h4 class="title is-5"><i class="fas fa-layer-group"></i> Four Stacked Layers</h4>
+            <div class="content" style="font-size:0.95rem;">
+              <ul>
+                <li><strong>Pneumatic Base:</strong> Carries three 150mm flat round porous-graphite air bearings arranged in an equilateral triangle. Using a 5-bar regulated supply, they sustain a 6&mu;m aerostatic gap, supporting up to 1360 kg total load.</li>
+                <li><strong>Actuation Mid-Section:</strong> Houses the 8 cold-gas thruster solenoid valves, the 20cm diameter reaction wheel (metal-blended PLA disk with AMT212B encoder), and dual CubeMars AK80-8 motors.</li>
+                <li><strong>Power Section:</strong> Integrates dual isolated LiPo domains to isolate sensitive control hardware from high-current motor transients.</li>
+                <li><strong>Payload Deck:</strong> Holds the Jetson computing stack and exteroceptive sensor board.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="columns is-vcentered">
+          <div class="column is-6">
+            <h4 class="title is-5"><i class="fas fa-bolt"></i> Dual-Domain Electronics & Sensing</h4>
+            <div class="content" style="font-size:0.95rem;">
+              <p>
+                A Holybro Pixhawk Jetson Baseboard integrates a Pixhawk 6C flight controller and an NVIDIA Jetson Orin NX. 
+              </p>
+              <ul>
+                <li><strong>Control Domain (Battery 1, 24V Regulated):</strong> Powers computing, exteroceptive sensors, and thruster solenoids.</li>
+                <li><strong>Actuation Domain (Battery 2, 22.2V Direct):</strong> Powers ODrive S1 motor controllers and CubeMars CAN-FD actuators.</li>
+                <li><strong>Exteroceptive Sensor Suite:</strong> Includes an Intel RealSense D455 RGB-D camera, FLIR Firefly camera, Prophesee Event camera, and Livox Mid-range LiDAR, linked via onboard Gigabit Ethernet.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="media-container" style="background:white; border:none; box-shadow:none;">
+              <img src="static/images/system&characterization/electrical_connections.png" alt="PINGU Electronics Block Diagram">
+            </div>
+            <p class="has-text-centered is-size-7" style="color:var(--text-secondary); margin-top:0.5rem;">
+              <strong>Figure 2. Electronics Architecture:</strong> Split power domain routing with CAN bus communication lines and Ethernet signal paths.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actuator Characterization Section -->
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <h2 class="section-title">Actuator Characterization</h2>
+        <div class="content has-text-justified">
+          <p>
+            To build a high-fidelity digital twin and enable accurate control, we characterized both the thrusters and reaction wheel assemblies.
+          </p>
+        </div>
+
+        <div class="columns">
+          <!-- Thrusters -->
+          <div class="column is-6">
+            <div class="media-container" style="background:white;">
+              <img src="static/images/system&characterization/thruster_charact.png" alt="Thruster characterization plots">
+            </div>
+            <h4 class="title is-5" style="margin-top:1rem; margin-bottom:0.5rem;">Thruster Manifold Coupling</h4>
+            <p class="is-size-7" style="color:var(--text-secondary);">
+              <strong>Thruster box and pressure drop:</strong> Solenoids fire up to 500Hz (modulated at 10Hz in software). Firing multiple valves concurrently causes a drop in individual thrust output due to sharing the same supply manifold, which must be randomizing-modeled.
+            </p>
+          </div>
+          <!-- Reaction Wheel -->
+          <div class="column is-6">
+            <div class="media-container" style="background:white;">
+              <img src="static/images/system&characterization/rw_charact.png" alt="Reaction wheel characterization plots">
+            </div>
+            <h4 class="title is-5" style="margin-top:1rem; margin-bottom:0.5rem;">Reaction Wheel Envelope</h4>
+            <p class="is-size-7" style="color:var(--text-secondary);">
+              <strong>Reaction wheel torque envelope:</strong> The 20cm metal-blended PLA disk delivers continuous, non-impulsive attitude torque. The measured torque-speed envelope characterizes the operational control authority limit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Software Stack & Simulation Section -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <h2 class="section-title">Software Stack & Simulation</h2>
+        
+        <div class="columns is-vcentered">
+          <div class="column is-6">
+            <h4 class="title is-5"><i class="fas fa-server"></i> Two-Workspace ROS 2 Layer</h4>
+            <p class="content is-small" style="font-size:0.95rem;">
+              PINGU runs a dual ROS 2 workspace architecture to strictly isolate drivers from controllers:
+              <br><br>
+              <strong>Low-Level Workspace:</strong> Runs hardware-facing nodes. Solenoid thruster inputs map directly to PX4 offboard actuator motors, and robotic arm/reaction wheel joints communicate with `ros2_control` over the shared CAN-FD bus.
+              <br><br>
+              <strong>Controller-Deployment Workspace:</strong> Runs a high-level RoboRAN task node. It preprocessing sensor telemetry, runs a 10Hz inference loop on PPO policies (MLP/GRU) via ONNX, or routes PID/LQR commands, feeding a safe command multiplexer.
+            </p>
+          </div>
+          <div class="column is-6">
+            <div class="media-container" style="background:white; border:none; box-shadow:none;">
+              <img src="static/images/software/ros2_nodes.png" alt="ROS 2 Node Graph diagram">
+            </div>
+            <p class="has-text-centered is-size-7" style="color:var(--text-secondary); margin-top:0.5rem;">
+              <strong>Figure 3. Node Graph:</strong> The state processor, observation formatter, inference runner, and low-level controllers linked via ROS 2.
+            </p>
+          </div>
+        </div>
+
+        <div class="columns is-vcentered" style="margin-top: 3rem;">
+          <div class="column is-6">
+            <div class="media-container">
+              <img src="static/images/srb_ZeroG_lab_1.png" alt="Space Robotics Bench digital twin in Isaac Lab">
+            </div>
+            <p class="has-text-centered is-size-7" style="color:var(--text-secondary); margin-top:0.5rem;">
+              <strong>Figure 4. Parallelized Digital Twin:</strong> Space Robotics Bench (SRB) environment running thousands of instances simultaneously inside Isaac Lab.
+            </p>
+          </div>
+          <div class="column is-6">
+            <h4 class="title is-5"><i class="fas fa-clone"></i> Space Robotics Bench (Digital Twin)</h4>
+            <p class="content is-small" style="font-size:0.95rem;">
+              The digital twin is implemented within the <strong>Space Robotics Bench (SRB)</strong> on top of NVIDIA Isaac Lab and Isaac Sim. 
+              <br><br>
+              It models multi-body dynamics, binary thruster characteristics, reaction wheel speed limits, and the active 2-DOF LevionArms. 
+              Massively parallel rollouts on a single GPU enable quick reinforcement learning training. 
+              To close the sim-to-real gap, domain randomization is applied to base mass (&plusmn;5kg), horizontal Center-of-Mass offset (0.1m), and constant external bias wrench (representing table tilt and thruster imbalance).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experimental Evaluation (Interactive Tabs) -->
+    <section class="section hero is-light" id="experiments">
+      <div class="container is-max-desktop">
+        <h2 class="section-title">Experimental Tasks & Videos</h2>
+        <div class="content has-text-centered" style="margin-bottom: 2rem;">
+          <p>Select a task below to view details, experimental results, and real hardware videos.</p>
+        </div>
+
+        <!-- Custom Tabs Navigation -->
+        <div class="tabs is-toggle is-toggle-rounded is-centered is-toggle-custom">
+          <ul>
+            <li class="is-active" data-tab="tab-nav">
+              <a>
+                <span class="icon"><i class="fas fa-route"></i></span>
+                <span>Point Navigation</span>
+              </a>
+            </li>
+            <li data-tab="tab-dist">
+              <a>
+                <span class="icon"><i class="fas fa-wind"></i></span>
+                <span>Disturbance Rejection</span>
+              </a>
+            </li>
+            <li data-tab="tab-rw">
+              <a>
+                <span class="icon"><i class="fas fa-sync-alt"></i></span>
+                <span>Momentum Stabilization</span>
+              </a>
+            </li>
+            <li data-tab="tab-dock">
+              <a>
+                <span class="icon"><i class="fas fa-anchor"></i></span>
+                <span>Force-Controlled Docking</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tab Content Panes -->
+        <div class="tab-content">
+          
+          <!-- Pane 1: Point-to-Pose Navigation -->
+          <div id="tab-nav" class="tab-pane is-active">
+            <div class="columns">
+              <div class="column is-6">
+                <div class="media-container" style="background:white;">
+                  <img src="static/images/experiments/Point_Pose_Nav.png" alt="Point to pose navigation trajectory">
+                </div>
+                <p class="is-size-7 has-text-centered" style="color:var(--text-secondary); margin-top:0.5rem;">
+                  <strong>Point-to-Pose Navigation:</strong> Trajectories from 4 random starting states converging to target (left), and error plots (right).
+                </p>
+              </div>
+              <div class="column is-6">
+                <h4 class="title is-4">Point-to-Pose Navigation</h4>
+                <p class="content is-small" style="font-size:0.95rem;">
+                  The foundational maneuver requires navigating to a target coordinate and heading using three actuator subsets: <em>thrusters only</em>, <em>thrusters + reaction wheel</em>, and <em>all actuators</em> (with active arms). Static arm poses (Side, Rest, Closed) test varying inertial conditions.
+                </p>
+                <div class="table-container" style="margin-top: 1rem;">
+                  <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead>
+                      <tr>
+                        <th>Configuration</th>
+                        <th>Method</th>
+                        <th>Position Error [m] &darr;</th>
+                        <th>Heading Error [rad] &darr;</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="highlighted">
+                        <td>All Actuators</td>
+                        <td>PPO (Real)</td>
+                        <td>0.0081<span class="val-ci">&plusmn;0.0006</span></td>
+                        <td>0.0257<span class="val-ci">&plusmn;0.0146</span></td>
+                      </tr>
+                      <tr>
+                        <td rowspan="2">Thruster + RW (Side)</td>
+                        <td>PPO (Real)</td>
+                        <td>0.0547<span class="val-ci">&plusmn;0.0422</span></td>
+                        <td>0.0275<span class="val-ci">&plusmn;0.0154</span></td>
+                      </tr>
+                      <tr>
+                        <td>LQR (Real)</td>
+                        <td>0.0970<span class="val-ci">&plusmn;0.0574</span></td>
+                        <td>0.0306<span class="val-ci">&plusmn;0.0111</span></td>
+                      </tr>
+                      <tr>
+                        <td rowspan="2">Thruster Only (Side)</td>
+                        <td>PPO (Real)</td>
+                        <td>0.0241<span class="val-ci">&plusmn;0.0160</span></td>
+                        <td>0.0335<span class="val-ci">&plusmn;0.0155</span></td>
+                      </tr>
+                      <tr>
+                        <td>LQR (Real)</td>
+                        <td>0.0830<span class="val-ci">&plusmn;0.0248</span></td>
+                        <td>0.0229<span class="val-ci">&plusmn;0.0234</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 2: Dynamic Disturbance Rejection -->
+          <div id="tab-dist" class="tab-pane">
+            <div class="columns">
+              <div class="column is-6">
+                <div class="media-container">
+                  <video id="dist-video" controls muted loop style="width: 100%;">
+                    <source src="static/videos/dynamic_disturbance.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <p class="is-size-7 has-text-centered" style="color:var(--text-secondary); margin-top:0.5rem;">
+                  <strong>Hardware Video:</strong> PINGU correcting translation/heading while arms oscillate autonomously.
+                </p>
+              </div>
+              <div class="column is-6">
+                <h4 class="title is-4">Dynamic Disturbance Rejection</h4>
+                <p class="content is-small" style="font-size:0.95rem;">
+                  The two robotic arms oscillate autonomously at &plusmn;0.8 rad, displacing the Center of Mass (CoM). Because arm motion is unobserved by the controller, it represents an exogenous dynamic perturbation that must be rejected implicitly from base feedback.
+                </p>
+                <div class="table-container" style="margin-top: 1rem;">
+                  <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead>
+                      <tr>
+                        <th>Method</th>
+                        <th>Deployment</th>
+                        <th>Position Error [m] &darr;</th>
+                        <th>Heading Error [rad] &darr;</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>PPO-GRU</td>
+                        <td>Simulation (Sim)</td>
+                        <td>0.0070<span class="val-ci">&plusmn;0.0054</span></td>
+                        <td>0.0074<span class="val-ci">&plusmn;0.0108</span></td>
+                      </tr>
+                      <tr>
+                        <td>PPO-GRU + DR</td>
+                        <td>Sim + Rand (Sim)</td>
+                        <td>0.0156<span class="val-ci">&plusmn;0.0161</span></td>
+                        <td>0.0340<span class="val-ci">&plusmn;0.0574</span></td>
+                      </tr>
+                      <tr class="highlighted">
+                        <td>PPO-GRU + DR</td>
+                        <td>Real Hardware</td>
+                        <td>0.0889<span class="val-ci">&plusmn;0.0889</span></td>
+                        <td>0.0346<span class="val-ci">&plusmn;0.0179</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+            
+            <div class="columns" style="margin-top: 2rem;">
+              <div class="column is-12">
+                <div class="media-container" style="background:white;">
+                  <img src="static/images/experiments/dynamic_dist_reject.png" alt="Dynamic Disturbance Rejection plot" style="max-height: 250px; width:100%; object-fit:contain;">
+                </div>
+                <p class="is-size-7 has-text-center" style="color:var(--text-secondary); margin-top:0.5rem; text-align:center;">
+                  <strong>Figure 5. Telemetry:</strong> Error profiles and commanded joint position oscillations over a 60s trial.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 3: Reaction Wheel Momentum Stabilization -->
+          <div id="tab-rw" class="tab-pane">
+            <div class="columns">
+              <div class="column is-6">
+                <div class="columns is-gapless">
+                  <div class="column is-6" style="padding: 2px !important;">
+                    <div class="media-container" style="padding: 0.5rem;">
+                      <video id="stabilize-video" controls muted loop style="height: 180px; object-fit: cover; width: 100%;">
+                        <source src="static/videos/stabilization.mp4" type="video/mp4">
+                      </video>
+                      <span class="is-size-7 has-text-centered" style="margin-top: 2px; font-weight: 600;">Base Stabilization</span>
+                    </div>
+                  </div>
+                  <div class="column is-6" style="padding: 2px !important;">
+                    <div class="media-container" style="padding: 0.5rem;">
+                      <video id="reaction-wheel-video" controls muted loop style="height: 180px; object-fit: cover; width: 100%;">
+                        <source src="static/videos/reaction wheel.mp4" type="video/mp4">
+                      </video>
+                      <span class="is-size-7 has-text-centered" style="margin-top: 2px; font-weight: 600;">Reaction Wheel Spin</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="is-size-7 has-text-centered" style="color:var(--text-secondary); margin-top:0.5rem;">
+                  <strong>Reaction Wheel Stabilization:</strong> Left shows base stabilization; Right shows reaction wheel assembly operating.
+                </p>
+              </div>
+              <div class="column is-6">
+                <h4 class="title is-4">Momentum Dumping & Stabilization</h4>
+                <p class="content is-small" style="font-size:0.95rem;">
+                  PINGU is spun with a random initial angular rate between 0.1 to 0.5 rad/s. The task is to stabilize the base's attitude using only the reaction wheel. This is evaluated under different arm poses to test wheel response under varying base moments of inertia.
+                </p>
+                <div class="table-container" style="margin-top: 1rem;">
+                  <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead>
+                      <tr>
+                        <th>Arm Configuration</th>
+                        <th>Deployment</th>
+                        <th>Residual Yaw Rate [rad/s] &darr;</th>
+                        <th>Half-time t<sub>1/2</sub> [s] &darr;</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="2">Side (Asymmetric)</td>
+                        <td>Simulation</td>
+                        <td>0.0429<span class="val-ci">&plusmn;0.0148</span></td>
+                        <td>4.0773<span class="val-ci">&plusmn;4.7499</span></td>
+                      </tr>
+                      <tr class="highlighted">
+                        <td>Real Hardware</td>
+                        <td>0.0594<span class="val-ci">&plusmn;0.0304</span></td>
+                        <td>4.8450<span class="val-ci">&plusmn;1.8730</span></td>
+                      </tr>
+                      <tr>
+                        <td rowspan="2">Rest (Max Inertia)</td>
+                        <td>Simulation</td>
+                        <td>0.0467<span class="val-ci">&plusmn;0.0153</span></td>
+                        <td>3.7975<span class="val-ci">&plusmn;1.6068</span></td>
+                      </tr>
+                      <tr class="highlighted">
+                        <td>Real Hardware</td>
+                        <td>0.0228<span class="val-ci">&plusmn;0.0229</span></td>
+                        <td>6.3770<span class="val-ci">&plusmn;4.9410</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <div class="columns" style="margin-top: 2rem;">
+              <div class="column is-12">
+                <div class="media-container" style="background:white;">
+                  <img src="static/images/experiments/stabilization.png" alt="Stabilization plots" style="max-height: 250px; width:100%; object-fit:contain;">
+                </div>
+                <p class="is-size-7 has-text-center" style="color:var(--text-secondary); margin-top:0.5rem; text-align:center;">
+                  <strong>Figure 6. Telemetry:</strong> Angular velocity decay profile (top) and commanded wheel brake torque (bottom) across four runs.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 4: Force-Controlled Docking -->
+          <div id="tab-dock" class="tab-pane">
+            <div class="columns">
+              <div class="column is-12">
+                <h4 class="title is-4">Force-Controlled Docking</h4>
+                <p class="content is-small" style="font-size:0.95rem; margin-bottom: 2rem;">
+                  This integrates PINGU's full stack:
+                  <br><br>
+                  1. The onboard RealSense D455 camera detects a wall-mounted ArUco marker to estimate the target pose relative to the robot.
+                  <br>
+                  2. The PPO point-to-pose controller drives the platform towards the docking wall.
+                  <br>
+                  3. Leptrino six-axis F/T sensors on the wrists register the contact onset.
+                  <br>
+                  4. Base propulsion stops, letting momentum carry the robot. The contact is safely damped by joint-space virtual spring-damper impedance loops in the LevionArms, absorbing kinetic energy without base rebound.
+                </p>
+              </div>
+            </div>
+
+            <div class="columns is-multiline">
+              <!-- Docking Approach Video -->
+              <div class="column is-4">
+                <div class="media-container" style="padding: 0.5rem;">
+                  <video id="dock-approach" controls muted loop style="height:180px; object-fit:cover; width: 100%;">
+                    <source src="static/videos/docking.mp4" type="video/mp4">
+                  </video>
+                  <span class="is-size-7 has-text-centered" style="margin-top: 0.5rem; font-weight: 600; display: block;">Docking Approach</span>
+                </div>
+              </div>
+              <!-- ArUco Visual Tracker Video -->
+              <div class="column is-4">
+                <div class="media-container" style="padding: 0.5rem;">
+                  <video id="dock-aruco" controls muted loop style="height:180px; object-fit:cover; width: 100%;">
+                    <source src="static/videos/aruco.mp4" type="video/mp4">
+                  </video>
+                  <span class="is-size-7 has-text-centered" style="margin-top: 0.5rem; font-weight: 600; display: block;">ArUco Visual Tracker</span>
+                </div>
+              </div>
+              <!-- Wall Contact Video -->
+              <div class="column is-4">
+                <div class="media-container" style="padding: 0.5rem;">
+                  <video id="dock-wall" controls muted loop style="height:180px; object-fit:cover; width: 100%;">
+                    <source src="static/videos/docking_wall.mp4" type="video/mp4">
+                  </video>
+                  <span class="is-size-7 has-text-centered" style="margin-top: 0.5rem; font-weight: 600; display: block;">Wall Docking Contact</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns" style="margin-top: 2rem;">
+              <div class="column is-12">
+                <div class="media-container" style="background:white;">
+                  <img src="static/images/experiments/force_Controlled_Docking.png" alt="Docking forces plots" style="max-height: 300px;">
+                </div>
+                <p class="is-size-7 has-text-centered" style="color:var(--text-secondary); margin-top:0.5rem;">
+                  <strong>Figure 7. Contact Forces:</strong> Telemetry showing F/T contact force spikes during compliance damping and linear velocity decay.
+                </p>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
-    </div>
-  </div>
-</footer>
+    </section>
 
-<!-- Statcounter tracking code -->
-  
-<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+    <!-- BibTeX Citation Section -->
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <div class="bibtex-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--border-color); padding-bottom:0.5rem; margin-bottom:1rem;">
+          <h2 class="title" style="margin-bottom:0;">BibTeX</h2>
+          <button class="copy-bibtex-btn button is-small is-light" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+            <span class="icon"><i class="fas fa-copy"></i></span>
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+        <pre id="bibtex-code" style="background-color: var(--background-secondary); border-radius: var(--border-radius); padding: 1.5rem; border: 1px solid var(--border-color);"><code style="font-family:monospace; color:var(--text-primary);">@article{anonymous2026pingu,
+  title={PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator},
+  author={Anonymous Authors},
+  journal={Under Review},
+  year={2026},
+  url={https://github.com/eliahuhorwitz/Academic-project-page-template}
+}</code></pre>
+      </div>
+    </section>
 
-    <!-- End of Statcounter Code -->
+    <!-- Footer -->
+    <footer class="footer" style="padding: 3rem 1.5rem 3rem; background-color: var(--background-secondary); border-top: 1px solid var(--border-color);">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8 has-text-centered">
+            <div class="content">
+              <p>
+                This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+                <br>
+                The source code of this website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
 
-  </body>
-  </html>
+  </main>
+
+  <script>
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabLinks = document.querySelectorAll('.tabs li');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+
+      tabLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          // Remove active class from all links
+          tabLinks.forEach(l => l.classList.remove('is-active'));
+          // Add active class to clicked link
+          link.classList.add('is-active');
+          
+          // Hide all panes
+          tabPanes.forEach(pane => pane.classList.remove('is-active'));
+          // Show clicked pane
+          const target = link.getAttribute('data-tab');
+          const targetPane = document.getElementById(target);
+          if (targetPane) {
+            targetPane.classList.add('is-active');
+            
+            // Reload and play videos inside the activated tab
+            const videos = targetPane.querySelectorAll('video');
+            videos.forEach(v => {
+              v.load();
+              v.play().catch(e => console.log('Autoplay prevented:', e));
+            });
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
