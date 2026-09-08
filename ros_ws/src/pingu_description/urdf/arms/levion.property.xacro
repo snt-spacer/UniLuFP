@@ -19,8 +19,10 @@
   <xacro:property name="shoulder_lower" value="-${default_joint_position_limit}"/>
   <xacro:property name="shoulder_upper" value="${default_joint_position_limit}"/>
   <xacro:property name="shoulder_enc_offset" value="0"/>
-  <xacro:property name="elbow_lower" value="${-2.615+SAFETY_OFFSET}"/>
-  <xacro:property name="elbow_upper" value="${-0.349-SAFETY_OFFSET}"/>
+  <!-- Elbow limits must match pingu_config.yaml arm_position_limits (the source
+       of truth used by the low-level mapper). They are NOT left/right symmetric,
+       so each side is defined explicitly below. enc_off is a separate encoder-zero
+       calibration and is intentionally left unchanged. -->
   <xacro:property name="elbow_enc_offset" value="0.349"/>
 
   <!-- Left joints -->
@@ -29,8 +31,8 @@
   <xacro:property name="left_shoulder_velocity_limit" value="${default_joint_velocity_limit}"/>
   <xacro:property name="left_shoulder_effort_limit" value="${default_joint_effort_limit}"/>
   <xacro:property name="left_shoulder_enc_offset" value="${shoulder_enc_offset}"/>
-  <xacro:property name="left_elbow_lower" value="${elbow_lower}"/>
-  <xacro:property name="left_elbow_upper" value="${elbow_upper}"/>
+  <xacro:property name="left_elbow_lower" value="${-3.4+SAFETY_OFFSET}"/>
+  <xacro:property name="left_elbow_upper" value="${-1.2-SAFETY_OFFSET}"/>
   <xacro:property name="left_elbow_velocity_limit" value="${default_joint_velocity_limit}"/>
   <xacro:property name="left_elbow_effort_limit" value="${default_joint_effort_limit}"/>
   <xacro:property name="left_elbow_enc_offset" value="${elbow_enc_offset}"/>
@@ -41,8 +43,8 @@
   <xacro:property name="right_shoulder_velocity_limit" value="${default_joint_velocity_limit}"/>
   <xacro:property name="right_shoulder_effort_limit" value="${default_joint_effort_limit}"/>
   <xacro:property name="right_shoulder_enc_offset" value="${-shoulder_enc_offset}"/>
-  <xacro:property name="right_elbow_lower" value="${-elbow_upper}"/>
-  <xacro:property name="right_elbow_upper" value="${-elbow_lower}"/>
+  <xacro:property name="right_elbow_lower" value="${1.5+SAFETY_OFFSET}"/>
+  <xacro:property name="right_elbow_upper" value="${3.7-SAFETY_OFFSET}"/>
   <xacro:property name="right_elbow_velocity_limit" value="${default_joint_velocity_limit}"/>
   <xacro:property name="right_elbow_effort_limit" value="${default_joint_effort_limit}"/>
   <xacro:property name="right_elbow_enc_offset" value="${-elbow_enc_offset}"/>

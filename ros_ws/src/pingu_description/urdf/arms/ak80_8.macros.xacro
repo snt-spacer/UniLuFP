@@ -34,6 +34,8 @@
       <param name="pos_limit_min">${pos_min}</param>
       <param name="pos_limit_max">${pos_max}</param>
       <param name="enc_off">${enc_off}</param>
+      <!-- hardware-side slew-rate cap on position commands [rad/s] -->
+      <param name="max_velocity">${vel_limit}</param>
     </joint>
   </xacro:macro>
 </robot>

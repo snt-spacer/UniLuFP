@@ -186,7 +186,10 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
         `indices` selects rows of self._arm_position_limits for the active joints."""
         limits = self._arm_position_limits[indices]
         lower, upper = limits[:, 0], limits[:, 1]
-        return lower + (np.asarray(command, dtype=np.float64) + 1.0) * (upper - lower) / 2.0
+        # Clamp the normalized command to [-1, 1] first so a stray out-of-range
+        # input can never be mapped to a position outside the joint limits.
+        command = np.clip(np.asarray(command, dtype=np.float64), -1.0, 1.0)
+        return lower + (command + 1.0) * (upper - lower) / 2.0
 
     def _ensure_arm_state(self):
         if self._current_arm_position is None:
@@ -254,9 +257,11 @@ class PinguLowLevelControllerIndividualThrusterControl(Node):
 
         point = JointTrajectoryPoint()
         point.positions = [float(p) for p in target]
-        # Explicit velocity limit so the JTC validates against URDF <limit velocity> and
-        # interpolates at a bounded speed rather than as fast as the motor allows.
-        point.velocities = [float(self._arm_position_slew_rate)] * len(joint_names)
+        # Terminal velocity MUST be zero: this is a single-waypoint goal, so a
+        # non-zero end velocity makes the spline arrive still moving and overshoot
+        # past the target (and potentially past the joint limit). The bounded
+        # approach speed is already enforced via time_from_start (slew rate).
+        point.velocities = [0.0] * len(joint_names)
         point.time_from_start = RosDuration(
             sec=int(duration_sec),
             nanosec=int((duration_sec % 1.0) * 1e9),
