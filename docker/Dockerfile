@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-rviz2 \
     ros-${ROS_DISTRO}-plotjuggler-ros \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-vrpn-mocap \
     && rm -rf /var/lib/apt/lists/*
 
 # Install QT dependencies
@@ -56,18 +57,18 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Github repositories
 ## Install acados
-WORKDIR /mnt
-RUN git clone https://github.com/acados/acados.git \
- && cd acados \
- && git submodule update --recursive --init \
- && mkdir -p build \
- && cd build \
- && cmake -DACADOS_WITH_QPOASES=ON .. \
- && make install -j4 \
- && cd ../ \
- && pip install ./interfaces/acados_template \
- && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/mnt/acados/lib" \
- && export ACADOS_SOURCE_DIR="/mnt/acados"
+# WORKDIR /mnt
+# RUN git clone https://github.com/acados/acados.git \
+#  && cd acados \
+#  && git submodule update --recursive --init \
+#  && mkdir -p build \
+#  && cd build \
+#  && cmake -DACADOS_WITH_QPOASES=ON .. \
+#  && make install -j4 \
+#  && cd ../ \
+#  && pip install ./interfaces/acados_template \
+#  && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/mnt/acados/lib" \
+#  && export ACADOS_SOURCE_DIR="/mnt/acados"
 
 ## ROS packages
 WORKDIR /mnt/ros_ws/src
@@ -118,6 +119,14 @@ RUN apt-get update && apt-get install -y \
 # Source ROS2 setup
 SHELL ["/bin/bash", "-c"]
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+
+# Pin a self-consistent setuptools/packaging pair for ament_python builds.
+# The requirements.txt install pulls setuptools>=71 into /usr/local, which de-vendored
+# `packaging` and calls canonicalize_version(strip_trailing_zero=...) against the external
+# packaging. Ubuntu 22.04's apt packaging (21.3) lacks that kwarg, so every ament_python
+# package (ros2_control_gui, joy_gui, ...) crashes during colcon build. Keeping setuptools<71
+# (which still vendors a compatible packaging) and a modern packaging avoids both paths.
+RUN python3 -m pip install --no-cache-dir "setuptools<71" "packaging>=23.2"
 
 WORKDIR /mnt/ros_ws
 RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install
