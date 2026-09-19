@@ -1,0 +1,80 @@
+<mujoco model="pingu">
+<compiler angle="radian" />
+<option integrator="RK4" timestep="0.01" gravity="0 0 0" />
+
+  <asset>
+    <mesh name="base_link" content_type="model/stl" file="assets/base_link.stl" />
+    <mesh name="rw_base" content_type="model/stl" file="assets/rw_base.stl" />
+    <mesh name="Link0" content_type="model/stl" file="assets/Link0.STL" />
+    <mesh name="Link1" content_type="model/stl" file="assets/Link1.STL" />
+    <mesh name="Link2" content_type="model/stl" file="assets/Link2.STL" />
+  </asset>
+
+  <worldbody>
+    <geom name="floor" type="plane" pos="0 0 0" size="5 5 0.1" rgba="0.8 0.9 0.8 1" contype="1" conaffinity="1" friction="0.0 0.0 0.0" solref="0.01 1" solimp="0.9 0.95 0.001" />
+    <light name="main_light" pos="0 0 3" dir="0 0 -1" diffuse="1 1 1" specular="0.3 0.3 0.3" />
+
+    <body name="base_link" pos="0 0 0.2875">
+      <inertial pos="0.00735391 0 0.326792" quat="0.999937 0 0.01122 0" mass="25" diaginertia="0.746873 0.745436 0.577163" />
+
+      <site name="thruster_1" pos="0.23884271247461908 0.0 0.3" quat="1.0 0 0 0.0" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+      <site name="thruster_2" pos="0.23884271247461908 0.0 0.3" quat="6.123233995736766e-17 0 0 1.0" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+      <site name="thruster_3" pos="1.4624898166585693e-17 0.23884271247461908 0.3" quat="-0.7071067811865475 0 0 0.7071067811865476" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+      <site name="thruster_4" pos="1.4624898166585693e-17 0.23884271247461908 0.3" quat="0.7071067811865476 0 0 0.7071067811865475" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+      <site name="thruster_5" pos="-0.23884271247461908 2.9249796333171387e-17 0.3" quat="-1.0 0 0 1.2246467991473532e-16" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+      <site name="thruster_6" pos="-0.23884271247461908 2.9249796333171387e-17 0.3" quat="6.123233995736766e-17 0 0 1.0" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+      <site name="thruster_7" pos="-4.3874694499757074e-17 -0.23884271247461908 0.3" quat="-0.7071067811865475 0 0 0.7071067811865476" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+      <site name="thruster_8" pos="-4.3874694499757074e-17 -0.23884271247461908 0.3" quat="-0.7071067811865477 0 0 -0.7071067811865475" size="0.02 0.04 0.01" type="box" rgba="1 0 0 0.8" />
+
+      <!-- Planar -->
+      <joint name="x_slide" type="slide" axis="1 0 0" damping="0.0" frictionloss="0.0"/>
+      <joint name="y_slide" type="slide" axis="0 1 0" damping="0.0" frictionloss="0.0"/>
+      <joint name="yaw_hinge" type="hinge" axis="0 0 1" damping="0.0" frictionloss="0.0"/>
+
+      <geom quat="0.92388 0 0 0.382683" type="mesh" rgba="0 0 0 0.5" mesh="base_link" friction="0.0 0.0 0.0" solref="0.01 1" solimp="0.9 0.95 0.001" />
+      <geom pos="0 0 0.2875" quat="1 0 0 0" type="mesh" mesh="rw_base" />
+      <geom pos="0.183848 0.183848 0.3475" quat="0.92388 0 0 0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0" />
+      <geom pos="0.183848 -0.183848 0.3475" quat="0.92388 0 0 -0.382683" type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link0" />
+      <body name="rw_rotor" pos="0 0 0.3375">
+        <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="2" diaginertia="0.1 0.06 0.06" />
+        <joint name="rw_joint" pos="0 0 0" axis="0 0 1" range="-1000000000 1000000000" actuatorfrcrange="-10 10" damping="0.5" frictionloss="0.5" />
+        <geom size="0.1 0.025" type="cylinder" />
+      </body>
+      <body name="left_link1" pos="0.183848 0.183848 0.3914" quat="0.92388 0 0 0.382683">
+        <inertial pos="0.05 0 0" mass="0.6" diaginertia="0.0006 0.0006 0.0006" />
+        <joint name="left_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1" />
+        <body name="left_link2" pos="0.32 0 0.04685">
+          <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
+          <joint name="left_elbow_joint" pos="0 0 0" axis="0 0 1" range="-2.615 -0.349" actuatorfrcrange="-10 10" />
+          <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2" />
+        </body>
+      </body>
+      <body name="right_link1" pos="0.183848 -0.183848 0.3914" quat="0.92388 0 0 -0.382683">
+        <inertial pos="0.05 0 0" mass="0.6" diaginertia="0.0006 0.0006 0.0006" />
+        <joint name="right_shoulder_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+        <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link1" />
+        <body name="right_link2" pos="0.32 0 0.04685">
+          <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001" />
+          <joint name="right_elbow_joint" pos="0 0 0" axis="0 0 1" range="0.349 2.615" actuatorfrcrange="-10 10" />
+          <geom type="mesh" rgba="0.3 0.3 0.3 1" mesh="Link2" />
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <general name="thruster_1" site="thruster_1" ctrlrange="0 1" gear="0 1" />
+    <general name="thruster_2" site="thruster_2" ctrlrange="0 1" gear="0 1" />
+    <general name="thruster_3" site="thruster_3" ctrlrange="0 1" gear="0 1" />
+    <general name="thruster_4" site="thruster_4" ctrlrange="0 1" gear="0 1" />
+    <general name="thruster_5" site="thruster_5" ctrlrange="0 1" gear="0 1" />
+    <general name="thruster_6" site="thruster_6" ctrlrange="0 1" gear="0 1" />
+    <general name="thruster_7" site="thruster_7" ctrlrange="0 1" gear="0 1" />
+    <general name="thruster_8" site="thruster_8" ctrlrange="0 1" gear="0 1" />
+    <motor name="rw_joint_actuator" joint="rw_joint" ctrlrange="-1 1" />
+    <motor name="left_shoulder_joint_actuator" joint="left_shoulder_joint" ctrlrange="-1 1" />
+    <motor name="left_elbow_joint_actuator" joint="left_elbow_joint" ctrlrange="-1 1" />
+    <motor name="right_shoulder_joint_actuator" joint="right_shoulder_joint" ctrlrange="-1 1" />
+    <motor name="right_elbow_joint_actuator" joint="right_elbow_joint" ctrlrange="-1 1" />
+  </actuator>
+</mujoco>

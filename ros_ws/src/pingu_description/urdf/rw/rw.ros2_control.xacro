@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="rw_system" params="name prefix hw_plugin:=real"> <!-- real/mujoco -->
+
+    <ros2_control name="${name}" type="system">
+
+      <!-- Chose hardware interfaces -->
+      <xacro:if value="${hw_plugin == 'real'}">
+        <hardware>
+          <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
+          <param name="can">can0</param>
+        </hardware>
+      </xacro:if>
+      <xacro:if value="${hw_plugin == 'mujoco'}">
+        <hardware>
+          <plugin>mujoco_ros2_control/MujocoSystem</plugin>
+        </hardware>
+      </xacro:if>
+      <xacro:if value="${hw_plugin == 'gazebo'}">
+        <hardware>
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+      </xacro:if>
+
+      <joint name="${prefix}rw_joint">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+
+        <command_interface name="velocity">
+          <param name="min">-10</param>
+          <param name="max">10</param>
+        </command_interface>
+
+        <command_interface name="effort">
+          <param name="min">-10</param>
+          <param name="max">10</param>
+        </command_interface>
+
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+
+        <param name="node_id">0</param>
+      </joint>
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>

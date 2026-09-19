@@ -1,0 +1,17 @@
+repositories:
+  px4_msgs:
+    type: git
+    url: https://github.com/DISCOWER/px4_msgs.git
+    version: main
+  px4_mpc:
+    type: git
+    url: https://github.com/DISCOWER/px4-mpc.git
+    version: master
+  ros_odrive:
+    type: git
+    url: https://github.com/odriverobotics/ros_odrive.git
+    version: main
+  ros2_control_gui:
+    type: git
+    url: https://github.com/aky-u/ros2_control_gui.git
+    version: main

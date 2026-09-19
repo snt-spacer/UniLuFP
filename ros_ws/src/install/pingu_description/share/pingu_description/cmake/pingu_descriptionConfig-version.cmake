@@ -1,0 +1,1 @@
+/mnt/src/build/pingu_description/ament_cmake_core/pingu_descriptionConfig-version.cmake

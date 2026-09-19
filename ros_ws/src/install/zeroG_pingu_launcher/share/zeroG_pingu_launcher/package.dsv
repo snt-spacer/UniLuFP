@@ -1,0 +1,9 @@
+source;share/zeroG_pingu_launcher/hook/pythonpath.ps1
+source;share/zeroG_pingu_launcher/hook/pythonpath.dsv
+source;share/zeroG_pingu_launcher/hook/pythonpath.sh
+source;share/zeroG_pingu_launcher/hook/ament_prefix_path.ps1
+source;share/zeroG_pingu_launcher/hook/ament_prefix_path.dsv
+source;share/zeroG_pingu_launcher/hook/ament_prefix_path.sh
+source;../../build/zeroG_pingu_launcher/share/zeroG_pingu_launcher/hook/pythonpath_develop.ps1
+source;../../build/zeroG_pingu_launcher/share/zeroG_pingu_launcher/hook/pythonpath_develop.dsv
+source;../../build/zeroG_pingu_launcher/share/zeroG_pingu_launcher/hook/pythonpath_develop.sh

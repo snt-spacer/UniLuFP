@@ -1,0 +1,9 @@
+source;share/px4_simple/hook/pythonpath.ps1
+source;share/px4_simple/hook/pythonpath.dsv
+source;share/px4_simple/hook/pythonpath.sh
+source;share/px4_simple/hook/ament_prefix_path.ps1
+source;share/px4_simple/hook/ament_prefix_path.dsv
+source;share/px4_simple/hook/ament_prefix_path.sh
+source;../../build/px4_simple/share/px4_simple/hook/pythonpath_develop.ps1
+source;../../build/px4_simple/share/px4_simple/hook/pythonpath_develop.dsv
+source;../../build/px4_simple/share/px4_simple/hook/pythonpath_develop.sh

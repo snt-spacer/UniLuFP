@@ -1,0 +1,9 @@
+numpy>=1.22.4,<2.0
+torch
+matplotlib
+pandas
+rl-games
+scipy
+skrl[torch]
+onnxruntime
+tensordict

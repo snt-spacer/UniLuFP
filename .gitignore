@@ -172,3 +172,19 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# ROS 
+ros_ws/install
+ros_ws/build
+ros_ws/log
+
+# VsCode
+.vscode/
+
+*csv
+
+ros_ws/src/LevionArm/*
+
+# Docker command history
+docker/.history/
