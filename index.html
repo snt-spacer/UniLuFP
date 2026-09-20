@@ -5,28 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <!-- Primary Meta Tags -->
-  <meta name="title" content="PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator">
+  <meta name="title" content="PINGU: Extending Air-Bearing Spacecraft Emulators with Open-Source Actuators and Learned Control for Contact-Rich Proximity Operations">
   <meta name="description" content="PINGU: A reconfigurable planar micro-gravity platform co-integrating eight cold-gas thrusters, a reaction wheel, and two force/torque-sensed robotic arms on a single air-bearing chassis.">
   <meta name="keywords" content="PINGU, Space Robotics, Air-Bearing, Microgravity, Spacecraft Emulator, Reinforcement Learning, Sim-to-Real, Robotic Arms">
-  <meta name="author" content="Anonymous Authors">
+  <meta name="author" content="Ricard Marsal I Castan, Akiyoshi Uchida, Aman Arora, Pedro Lima, Matteo El-Hariry, Anrej Orsula, Francesco Grella, Antoine Richard, Cedric Pradalier, Miguel A. Olivarez-Mendez">
   <meta name="robots" content="index, follow">
   <meta name="language" content="English">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PINGU Space Research">
-  <meta property="og:title" content="PINGU: Multi-Actuator Spacecraft Emulator">
-  <meta property="og:description" content="A reconfigurable planar micro-gravity platform unifying thruster, reaction-wheel, and robotic-arm actuation for on-orbit docking, stabilization, and manipulation.">
+  <meta property="og:title" content="PINGU: Extending Air-Bearing Spacecraft Emulators with Open-Source Actuators and Learned Control for Contact-Rich Proximity Operations">
+  <meta property="og:description" content="A reconfigurable planar micro-gravity platform unifying thruster, reaction-wheel, and robotic-arm actuation for on-orbit docking, stabilization, and manipulation, build on top of ATMOS.">
   <meta property="og:image" content="static/images/pingu_overview_v2.png">
   
   <!-- Academic Citation -->
-  <meta name="citation_title" content="PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator">
-  <meta name="citation_author" content="Anonymous">
+  <meta name="citation_title" content="PINGU: Extending Air-Bearing Spacecraft Emulators with Open-Source Actuators and Learned Control for Contact-Rich Proximity Operations">
+  <meta name="citation_author" content="Ricard Marsal I Castan, Akiyoshi Uchida, Aman Arora, Pedro Lima, Matteo El-Hariry, Anrej Orsula, Francesco Grella, Antoine Richard, Cedric Pradalier, Miguel A. Olivarez-Mendez">
   <meta name="citation_publication_date" content="2026">
   
   <meta name="theme-color" content="#2563eb">
   
-  <title>PINGU: Multi-Actuator Air-Bearing Spacecraft Emulator</title>
+  <title>PINGU: Extending Air-Bearing Spacecraft Emulators with Open-Source Actuators and Learned Control for Contact-Rich Proximity Operations</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="static/images/simp_v4.png">
@@ -390,10 +390,28 @@
             <div class="column has-text-centered">
               <span class="tag is-info is-light is-medium" style="font-weight: 600; margin-bottom: 1rem;">Under Review (2026)</span>
               
-              <h1 class="title publication-title">PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator</h1>
+              <h1 class="title publication-title">PINGU: Extending Air-Bearing Spacecraft Emulators with Open-Source Actuators and Learned Control for Contact-Rich Proximity Operations</h1>
               
               <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
-                <span class="author-block">Anonymous Authors</span>
+                <span class="author-block">
+                  <a href="https://www.linkedin.com/in/ricard-marsal-44ba63155/" target="_blank" rel="noopener noreferrer">Ricard Marsal I Castan</a><sup>1</sup>,
+                  <a href="https://www.linkedin.com/in/akiyoshi-uchida-9093ab316/" target="_blank" rel="noopener noreferrer">Akiyoshi Uchida</a><sup>2</sup>,
+                  <a href="https://aman-arora.space/" target="_blank" rel="noopener noreferrer">Aman Arora</a><sup>1</sup>,
+                  <a href="https://www.linkedin.com/in/pedro-g-lima/" target="_blank" rel="noopener noreferrer">Pedro Lima</a><sup>1</sup>,
+                  <a href="https://www.linkedin.com/in/matteo-el-hariry-045877ba/" target="_blank" rel="noopener noreferrer">Matteo El-Hariry</a><sup>1</sup>,
+                  <a href="https://andrejorsula.github.io/" target="_blank" rel="noopener noreferrer">Anrej Orsula</a><sup>1</sup>,
+                  <a href="https://www.linkedin.com/in/francesco-grella/" target="_blank" rel="noopener noreferrer">Francesco Grella</a><sup>1</sup>,
+                  <a href="https://www.linkedin.com/in/antoine-richard-32429a122/" target="_blank" rel="noopener noreferrer">Antoine Richard</a><sup>1</sup>,
+                  <a href="https://dream.georgiatech-metz.fr/" target="_blank" rel="noopener noreferrer">Cedric Pradalier</a><sup>3</sup>,
+                  <a href="https://www.spacer.lu/" target="_blank" rel="noopener noreferrer">Miguel A. Olivarez-Mendez</a><sup>1</sup>
+                </span>
+              </div>
+
+              <!-- Affiliation legend underneath -->
+              <div class="is-size-6 publication-authors">
+                <span class="author-block"><sup>1</sup>University of Luxembourg</span>
+                <span class="author-block"><sup>2</sup>Tohoku University</span>
+                <span class="author-block"><sup>3</sup>Georgia Institute of Technology</span>
               </div>
 
               <div class="is-size-5 publication-authors" style="margin-bottom: 1.5rem;">
@@ -478,9 +496,7 @@
           <div class="column is-five-sixths">
             <h2 class="section-title">Abstract</h2>
             <div class="abstract-box">
-              We present <strong>PINGU</strong>, a reconfigurable planar micro-gravity platform designed to unify thruster, reaction-wheel, and robotic-arm actuation for research in orbital docking, stabilization, and manipulation. PINGU addresses the limitations of single-purpose testbeds by co-integrating eight cold-gas thrusters, a reaction wheel, and two force/torque-sensed robotic arms on a single air-bearing chassis, exposed through a unified ROS 2 actuator-abstraction layer that lets classical optimal controllers and learned policies be swapped on the same hardware without modification, specifically to bridge the gap between classical optimal control and reinforcement learning. 
-              <br><br>
-              We characterize every actuator and validate the platform across four benchmark tasks: point-to-pose navigation, dynamic disturbance rejection under arm-induced center-of-mass shifts, reaction-wheel momentum stabilization, and force-controlled docking, deploying both a classical LQR baseline and sim-to-real PPO policies trained with domain randomization. Experimental results confirm PINGU’s effectiveness as a high-fidelity, reproducible, and versatile environment for developing and benchmarking the next generation of autonomous proximity operations.
+              Low-cost planar air-bearing testbeds have matured into a standard proxy for free-flying spacecraft GNC, but they remain largely thruster-only and are rarely equipped for contact-rich, inertia-coupled manipulation. Building on the open-source ATMOS testbed, we contribute a reaction wheel and two force/torque-sensed robotic arms (LEVION) with interchangeable end-effectors, integrated as first-class control actuators through a unified ROS 2 abstraction layer. On top of the software stack we build a reinforcement-learning training environment and digital twin, and a controller that exploits these added degrees of freedom, letting classical optimal controllers and learned policies be swapped on the same hardware without modification. We validate the integrated system, <strong>PINGU</strong>, across four benchmark tasks: point-to-pose navigation (classical LQR vs. sim-to-real PPO), dynamic disturbance rejection under arm-induced center-of-mass shifts, reaction-wheel momentum stabilization, and force-controlled docking. The results show that these additions extend an ATMOS-class emulator into the contact-rich regime and bridge classical optimal control and reinforcement learning on one reproducible platform.
             </div>
           </div>
         </div>
@@ -991,7 +1007,7 @@
           </button>
         </div>
         <pre id="bibtex-code" style="background-color: var(--background-secondary); border-radius: var(--border-radius); padding: 1.5rem; border: 1px solid var(--border-color);"><code style="font-family:monospace; color:var(--text-primary);">@article{anonymous2026pingu,
-  title={PINGU: Design, Characterization, and Validation of a Multi-Actuator Air-Bearing Spacecraft Emulator},
+  title={PINGU: Extending Air-Bearing Spacecraft Emulators with Open-Source Actuators and Learned Control for Contact-Rich Proximity Operations},
   author={Anonymous Authors},
   journal={Under Review},
   year={2026},
